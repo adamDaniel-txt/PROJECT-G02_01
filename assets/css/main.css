@@ -1394,40 +1394,6 @@ section,
   min-width: 70px;
   text-align: right;
 }
-/*--------------------------------------------------------------
-# Specials Section
---------------------------------------------------------------*/
-.specials {
-  overflow: hidden;
-}
-
-.specials .nav-tabs {
-  border: 0;
-}
-
-.specials .nav-link {
-  border: 0;
-  padding: 12px 15px;
-  transition: 0.3s;
-  color: var(--heading-color);
-  border-radius: 0;
-  border-right: 2px solid var(--accent-color);
-  font-weight: 600;
-  font-size: 15px;
-}
-
-.specials .nav-link:hover {
-  color: var(--accent-color);
-}
-
-.specials .nav-link.active {
-  color: var(--contrast-color);
-  background-color: var(--accent-color);
-}
-
-.specials .tab-pane.active {
-  animation: fadeIn 0.5s ease-out;
-}
 
 /*--------------------------------------------------------------
 # Reviews Section
@@ -1614,110 +1580,6 @@ section,
 }
 
 /*--------------------------------------------------------------
-# Gallery Section
---------------------------------------------------------------*/
-.gallery .gallery-item {
-  overflow: hidden;
-  border-right: 3px solid var(--background-color);
-  border-bottom: 3px solid var(--background-color);
-}
-
-.gallery .gallery-item img {
-  transition: all ease-in-out 0.4s;
-}
-
-.gallery .gallery-item:hover img {
-  transform: scale(1.1);
-}
-
-/*--------------------------------------------------------------
-# Chefs Section
---------------------------------------------------------------*/
-.chefs {
-  --default-color: #ffffff;
-  --contrast-color: #ffffff;
-}
-
-.chefs .member {
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.chefs .member .member-info {
-  opacity: 0;
-  position: absolute;
-  bottom: 0;
-  top: 0;
-  left: 0;
-  right: 0;
-  transition: 0.2s;
-}
-
-.chefs .member .member-info-content {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 10px;
-  transition: bottom 0.4s;
-}
-
-.chefs .member .member-info-content h4 {
-  color: var(--contrast-color);
-  font-weight: 700;
-  margin-bottom: 2px;
-  font-size: 18px;
-}
-
-.chefs .member .member-info-content span {
-  font-style: italic;
-  display: block;
-  font-size: 13px;
-}
-
-.chefs .member .social {
-  position: absolute;
-  left: 0;
-  bottom: -38px;
-  right: 0;
-  height: 48px;
-  transition: bottom ease-in-out 0.4s;
-  text-align: center;
-}
-
-.chefs .member .social a {
-  transition: color 0.3s;
-  color: color-mix(in srgb, var(--default-color), transparent 20%);
-  margin: 0 10px;
-  display: inline-block;
-}
-
-.chefs .member .social a:hover {
-  color: var(--accent-color);
-}
-
-.chefs .member .social i {
-  font-size: 18px;
-  margin: 0 2px;
-}
-
-.chefs .member:hover .member-info {
-  background: linear-gradient(0deg, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.8) 20%, rgba(255, 255, 255, 0) 100%);
-  opacity: 1;
-  transition: 0.4s;
-}
-
-.chefs .member:hover .member-info-content {
-  bottom: 60px;
-  transition: bottom 0.4s;
-}
-
-.chefs .member:hover .social {
-  bottom: 0;
-  transition: bottom ease-in-out 0.4s;
-}
-
-/*--------------------------------------------------------------
 # Contact Section
 --------------------------------------------------------------*/
 .contact {
@@ -1727,6 +1589,20 @@ section,
 
 .contact .info-item+.info-item {
   margin-top: 40px;
+}
+
+.contact .row.align-items-center {
+  align-items: stretch;
+}
+
+.contact iframe {
+  height: 400px;
+}
+
+@media (max-width: 991px) {
+  .contact .order-2 {
+    margin-top: 40px;
+  }
 }
 
 .contact .info-item i {
@@ -1741,6 +1617,7 @@ section,
   border-radius: 4px;
   transition: all 0.3s ease-in-out;
   margin-right: 15px;
+  margin-top: 20px;
 }
 
 .contact .info-item h3 {
