@@ -11,7 +11,7 @@
 }
 
 /* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
-:root { 
+:root {
   --background-color: #0c0b09; /* Background color for the entire website, including individual sections */
   --default-color: rgba(255, 255, 255, 0.7); /* Default color used for the majority of the text content across the entire website */
   --heading-color: #ffffff; /* Color for headings, subheadings and title throughout the website */
@@ -397,7 +397,7 @@ header .icon-cart,
   border: 2px solid #000;  /* Helps it pop on dark backgrounds */
   z-index: 10;
 }
-  
+
   .navmenu ul {
     margin: 0;
     padding: 0;
@@ -623,6 +623,55 @@ header .icon-cart,
   .mobile-nav-active .navmenu>ul {
     display: block;
   }
+}
+
+/*--------------------------------------------------------------
+# Global Dropdown
+--------------------------------------------------------------*/
+
+/* Style ALL dropdown menus */
+.dropdown-menu {
+    background-color: var(--nav-dropdown-background-color) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 4px !important;
+    padding: 8px 0 !important;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Style ALL dropdown items */
+.dropdown-item {
+    color: var(--nav-dropdown-color) !important;
+    padding: 10px 20px !important;
+    transition: all 0.3s ease !important;
+}
+
+/* Hover states for ALL dropdown items */
+.dropdown-item:hover,
+.dropdown-item:focus,
+.dropdown-item:active {
+    background-color: transparent !important;
+    color: var(--nav-dropdown-hover-color) !important;
+}
+
+/* Active state for dropdown items */
+.dropdown-item.active,
+.dropdown-item:active {
+    background-color: rgba(205, 164, 94, 0.1) !important;
+}
+
+/* Dropdown dividers */
+.dropdown-divider {
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    margin: 8px 0 !important;
+}
+
+/* Dropdown headers */
+.dropdown-header {
+    color: rgba(255, 255, 255, 0.7) !important;
+    font-size: 0.85rem !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    padding: 8px 20px !important;
 }
 
 /*--------------------------------------------------------------
