@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($user && hash('sha256', $password) === $user['password']) {
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['role_id'] = $user['role_id'];
-        header('Location: index.html');
+        header('Location: index.php');
         exit();
     } else {
         echo " test";
