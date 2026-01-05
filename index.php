@@ -80,20 +80,6 @@ $userRole = $_SESSION['role'] ?? null; // Assuming you store role in session
             <!-- <li><a href="#chefs">Chefs</a></li> -->
             <li><a href="#gallery">Gallery</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li class="dropdown"><a href="#"><i class="bi bi-person-circle fs-3 toggle-dropdown"></i></a>
-              <ul>
-                <?php if (!$isLoggedIn): ?>
-                    <li><a href="login.php">Sign In/Sign Up</a></li>
-                <?php else: ?>
-                    <li><a href="logout.php">Logout</a></li>
-                    <!-- <li><span>Welcome, <?php echo htmlspecialchars($_SESSION['username']); ?></span></li> -->
-
-                    <?php if (in_array($role_id, [1, 2])): ?>
-                        <li><a href="#">Dashboard</a></li>
-                    <?php endif; ?>
-                <?php endif; ?>
-              </ul>
-            </li>
           </ul>
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
@@ -103,6 +89,22 @@ $userRole = $_SESSION['role'] ?? null; // Assuming you store role in session
                   <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
             </svg>
             <span>0</span>
+        </div>
+
+        <div class="dropdown">
+            <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-person-circle fs-3"></i>
+            </a>
+            <div class="dropdown-menu">
+                <?php if (!$isLoggedIn): ?>
+                    <a class="dropdown-item" href="login.php">Sign In/Sign Up</a>
+                <?php else: ?>
+                    <a class="dropdown-item" href="logout.php">Logout</a>
+                    <?php if (in_array($role_id, [1, 2])): ?>
+                        <a class="dropdown-item" href="dashboard.php">Dashboard</a>
+                    <?php endif; ?>
+                <?php endif; ?>
+            </div>
         </div>
 
       <!--<a class="btn-give-feedback d-none d-xl-block" href="#give-feedback">Book a Table</a>-->
@@ -317,31 +319,31 @@ $userRole = $_SESSION['role'] ?? null; // Assuming you store role in session
       <div class="container" data-aos="fade-up" data-aos-delay="100">
 
         <div class="swiper init-swiper" data-speed="600" data-delay="5000" data-breakpoints="{ &quot;320&quot;: { &quot;slidesPerView&quot;: 1, &quot;spaceBetween&quot;: 40 }, &quot;1200&quot;: { &quot;slidesPerView&quot;: 3, &quot;spaceBetween&quot;: 40 } }">
-          <script type="application/json" class="swiper-config">
-            {
-              "loop": true,
-              "speed": 600,
-              "autoplay": {
-                "delay": 5000
-              },
-              "slidesPerView": "auto",
-              "pagination": {
-                "el": ".swiper-pagination",
-                "type": "bullets",
-                "clickable": true
-              },
-              "breakpoints": {
-                "320": {
-                  "slidesPerView": 1,
-                  "spaceBetween": 40
-                },
-                "1200": {
-                  "slidesPerView": 3,
-                  "spaceBetween": 20
-                }
-              }
-            }
-          </script>
+<script type="application/json" class="swiper-config">
+{
+    "loop": true,
+        "speed": 600,
+        "autoplay": {
+        "delay": 5000
+},
+    "slidesPerView": "auto",
+    "pagination": {
+    "el": ".swiper-pagination",
+        "type": "bullets",
+        "clickable": true
+},
+    "breakpoints": {
+    "320": {
+    "slidesPerView": 1,
+        "spaceBetween": 40
+},
+    "1200": {
+    "slidesPerView": 3,
+        "spaceBetween": 20
+}
+}
+}
+</script>
           <div class="swiper-wrapper">
 
             <div class="swiper-slide">
@@ -797,26 +799,26 @@ $userRole = $_SESSION['role'] ?? null; // Assuming you store role in session
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
 
-  <script>
+<script>
 let cart = [];
 const cartCount = document.querySelector('.icon-cart span');
 const addButtons = document.querySelectorAll('.btn-add-to-cart');
 
 addButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const name = btn.dataset.name;
-    const price = parseFloat(btn.dataset.price);
+btn.addEventListener('click', () => {
+const name = btn.dataset.name;
+const price = parseFloat(btn.dataset.price);
 
-    const existingItem = cart.find(item => item.name === name);
-    if (existingItem) {
-      existingItem.quantity += 1;
-    } else {
-      cart.push({ name, price, quantity: 1 });
-    }
+const existingItem = cart.find(item => item.name === name);
+if (existingItem) {
+    existingItem.quantity += 1;
+} else {
+    cart.push({ name, price, quantity: 1 });
+}
 
-    cartCount.textContent = cart.reduce((total, item) => total + item.quantity, 0);
-    alert(`${name} added to cart!`); // Optional feedback
-  });
+cartCount.textContent = cart.reduce((total, item) => total + item.quantity, 0);
+alert(`${name} added to cart!`); // Optional feedback
+});
 });
 </script>
 
@@ -829,36 +831,36 @@ const cartItemsContainer = document.getElementById('cart-items');
 const cartTotal = document.getElementById('cart-total');
 
 document.querySelector('.icon-cart').addEventListener('click', () => {
-  cartSidebar.classList.add('open');
-  cartOverlay.classList.add('open');
-  updateCartDisplay();
+cartSidebar.classList.add('open');
+cartOverlay.classList.add('open');
+updateCartDisplay();
 });
 
 document.getElementById('close-cart').addEventListener('click', closeCart);
 cartOverlay.addEventListener('click', closeCart);
 
 function closeCart() {
-  cartSidebar.classList.remove('open');
-  cartOverlay.classList.remove('open');
+    cartSidebar.classList.remove('open');
+    cartOverlay.classList.remove('open');
 }
 
 function updateCartDisplay() {
-  cartItemsContainer.innerHTML = '';
-  if (cart.length === 0) {
-    cartItemsContainer.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
-    cartTotal.textContent = '$0.00';
-    cartCount.textContent = '0';
-    return;
-  }
+    cartItemsContainer.innerHTML = '';
+    if (cart.length === 0) {
+        cartItemsContainer.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
+        cartTotal.textContent = '$0.00';
+        cartCount.textContent = '0';
+        return;
+    }
 
-  let total = 0;
-  let totalItems = 0;
+    let total = 0;
+    let totalItems = 0;
 
-  cart.forEach((item, index) => {
+    cart.forEach((item, index) => {
     const itemEl = document.createElement('div');
     itemEl.classList.add('cart-item');
     itemEl.innerHTML = `
-      <div class="cart-item-info">
+        <div class="cart-item-info">
         <strong>${item.name}</strong><br>
         <small>$${item.price.toFixed(2)} each</small>
       </div>
@@ -873,31 +875,31 @@ function updateCartDisplay() {
 
     total += item.price * item.quantity;
     totalItems += item.quantity;
-  });
+    });
 
-  cartTotal.textContent = '$' + total.toFixed(2);
-  cartCount.textContent = totalItems;
+    cartTotal.textContent = '$' + total.toFixed(2);
+    cartCount.textContent = totalItems;
 }
 
 // Delegate Reviews for quantity buttons (since they are created dynamically)
 cartItemsContainer.addEventListener('click', (e) => {
-  if (e.target.classList.contains('qty-btn')) {
+if (e.target.classList.contains('qty-btn')) {
     const index = parseInt(e.target.dataset.index);
     const item = cart[index];
 
     if (e.target.classList.contains('plus')) {
-      item.quantity += 1;
+        item.quantity += 1;
     } else if (e.target.classList.contains('minus')) {
-      if (item.quantity > 1) {
-        item.quantity -= 1;
-      } else {
-        // Remove item if quantity reaches 0
-        cart.splice(index, 1);
-      }
+        if (item.quantity > 1) {
+            item.quantity -= 1;
+        } else {
+            // Remove item if quantity reaches 0
+            cart.splice(index, 1);
+        }
     }
 
     updateCartDisplay(); // Refresh the cart view
-  }
+}
 });
 
 </script>
