@@ -1266,91 +1266,98 @@ section,
 /*--------------------------------------------------------------
 # Menu Section
 --------------------------------------------------------------*/
-.menu {
-  background-color: color-mix(in srgb, var(--background-color) 90%, white 5%);
-}
-
-.menu .menu-filters {
-  padding: 0;
+/* ==================== MENU GRID LAYOUT ==================== */
+#menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 30px;
+  padding: 60px 0;
   margin: 0 auto;
-  list-style: none;
-  text-align: center;
-  border-radius: 50px;
 }
 
-.menu .menu-filters li {
-  color: var(--default-color);
-  margin-bottom: 10px;
-  cursor: pointer;
-  display: inline-block;
-  padding: 8px 12px 10px 12px;
-  font-size: 16px;
-  font-weight: 500;
-  line-height: 1;
-  transition: all ease-in-out 0.3s;
-  font-family: var(--heading-font);
-}
-
-.menu .menu-filters li:hover,
-.menu .menu-filters li.filter-active {
-  color: var(--accent-color);
-}
-
-.menu .menu-filters li:last-child {
-  margin-right: 0;
-}
-
-.menu-item-card .card {
-  background-color: var(--surface-color); /* Dark gray box */
-  border: none;
-  border-radius: 10px;
-  transition: transform 0.3s, box-shadow 0.3s;
+#menu-grid .menu-item-card {
+  width: 100%;
   height: 100%;
 }
 
-.menu-item-card .card:hover {
-  transform: translateY(-10px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+/* Card Styling */
+#menu-grid .card {
+  background-color: var(--surface-color);
+  border: none;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
-.menu-item-card img {
-  height: 250px;
+#menu-grid .card:hover {
+  transform: translateY(-12px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+/* Product Image */
+#menu-grid .card img {
+  width: 100%;
+  height: 280px;
   object-fit: cover;
-  border-radius: 10px;
+  background-color: #333; /* Fallback if image fails to load */
 }
 
-.menu-item-card h4 {
+/* Card Body - Text & Button */
+#menu-grid .card-body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 25px;
+  text-align: center;
+}
+
+#menu-grid .card-body h4 {
   color: var(--heading-color);
-  margin-bottom: 10px;
-}
-
-.menu-item-card .price {
-  color: var(--accent-color); /* Gold */
   font-size: 1.5rem;
-  font-weight: bold;
-  margin-bottom: 15px;
+  margin: 0 0 10px 0;
+  font-weight: 600;
 }
 
-.btn-add-to-cart {
+#menu-grid .card-body .price {
+  color: var(--accent-color);
+  font-size: 1.8rem;
+  font-weight: bold;
+  margin: 15px 0 20px 0;
+}
+
+/* Add to Cart Button */
+#menu-grid .btn-add-to-cart {
+  margin-top: auto; /* Pushes button to bottom */
   background-color: var(--accent-color);
   color: var(--contrast-color);
   border: none;
-  padding: 10px 20px;
+  padding: 12px 32px;
   border-radius: 50px;
-  transition: 0.3s;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  align-self: center;
+  min-width: 160px;
 }
 
-.btn-add-to-cart:hover {
-  background-color: color-mix(in srgb, var(--accent-color), transparent 20%);
+#menu-grid .btn-add-to-cart:hover {
+  background-color: color-mix(in srgb, var(--accent-color), black 15%);
+  transform: scale(1.05);
 }
 
+/* ==================== CART SIDEBAR ==================== */
 .cart-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
   padding-bottom: 15px;
-  border-bottom: 1px solid rgba(255,255,255,0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .cart-item-info {
@@ -1360,14 +1367,14 @@ section,
 .quantity-controls {
   display: flex;
   align-items: center;
-  background-color: rgba(255,255,255,0.1);
+  background-color: rgba(255, 255, 255, 0.1);
   border-radius: 50px;
-  padding: 5px;
+  padding: 6px 10px;
 }
 
 .qty-btn {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   background: var(--accent-color);
   color: var(--contrast-color);
   border: none;
@@ -1378,22 +1385,48 @@ section,
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background 0.2s;
+}
+
+.qty-btn:hover {
+  background: color-mix(in srgb, var(--accent-color), black 20%);
 }
 
 .quantity {
-  margin: 0 15px;
+  margin: 0 18px;
   font-size: 16px;
   font-weight: bold;
-  min-width: 20px;
+  min-width: 24px;
   text-align: center;
+  color: var(--default-color);
 }
 
 .item-total {
   font-weight: bold;
   font-size: 1.1rem;
-  min-width: 70px;
+  min-width: 80px;
   text-align: right;
+  color: var(--accent-color);
 }
+
+/* Checkout Button in Cart */
+.checkout-btn {
+  width: 100%;
+  background: var(--accent-color);
+  color: var(--contrast-color);
+  border: none;
+  padding: 15px;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-top: 10px;
+  transition: 0.3s;
+}
+
+.checkout-btn:hover {
+  background: color-mix(in srgb, var(--accent-color), black 15%);
+}
+
 
 /*--------------------------------------------------------------
 # Reviews Section

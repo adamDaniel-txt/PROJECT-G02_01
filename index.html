@@ -67,7 +67,7 @@
           <ul>
             <li><a href="#hero" class="active">Home<br></a></li>
             <li><a href="#about">About</a></li>
-            <li><a href="#menu">Menu</a></li>
+            <li><a href="menu(customer).html">Menu</a></li>
             <li><a href="#testimonials">Reviews</a></li>
             <li><a href="#contact">Contact</a></li>
             <li class="dropdown"><a href="#"><i class="bi bi-person-circle fs-3 toggle-dropdown"></i></a>
@@ -108,7 +108,7 @@
             <h2 data-aos="fade-up" data-aos-delay="100">Welcome to <span>Kafe Tiga Belas</span></h2>
             <p data-aos="fade-up" data-aos-delay="200">Delivering great food for more than 20 years!</p>
             <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
-              <a href="#menu" class="cta-btn">Order Now!</a>
+              <a href="menu(customer).html" class="cta-btn">Order Now!</a>
               <!--<a href="#give-feedback" class="cta-btn">Book a Table</a>-->
             </div>
           </div>
@@ -192,85 +192,6 @@
       </div>
 
     </section><!-- /Why Us Section -->
-
-    <!-- Menu Section -->
-    <section id="menu" class="menu section">
-
-  <!-- Section Title -->
-  <div class="container section-title" data-aos="fade-up">
-    <h2>Menu</h2>
-    <p>Check Our Tasty Menu</p>
-  </div><!-- End Section Title -->
-
-  <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-    <div class="row gy-4" id="menu-grid">
-
-      <!-- Example Menu Item 1 -->
-      <div class="col-lg-3 col-md-4 col-sm-6 menu-item-card">
-        <div class="card text-center p-4">
-          <img src="assets/img/menu/menu-item-1.jpg" class="img-fluid mb-3" alt="Espresso">
-          <h4>Espresso</h4>
-          <p class="price">$5.00</p>
-          <button class="btn btn-add-to-cart" data-name="Espresso" data-price="5.00">Add to Cart</button>
-        </div>
-      </div>
-
-      <!-- Repeat for more items (add your own images/prices/names) -->
-      <!-- Example 2 -->
-      <div class="col-lg-3 col-md-4 col-sm-6 menu-item-card">
-        <div class="card text-center p-4">
-          <img src="assets/img/menu/menu-item-2.jpg" class="img-fluid mb-3" alt="Cappuccino">
-          <h4>Cappuccino</h4>
-          <p class="price">$7.50</p>
-          <button class="btn btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-md-4 col-sm-6 menu-item-card">
-        <div class="card text-center p-4">
-          <img src="assets/img/menu/menu-item-2.jpg" class="img-fluid mb-3" alt="Cappuccino">
-          <h4>Cappuccino</h4>
-          <p class="price">$7.50</p>
-          <button class="btn btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-md-4 col-sm-6 menu-item-card">
-        <div class="card text-center p-4">
-          <img src="assets/img/menu/menu-item-2.jpg" class="img-fluid mb-3" alt="Cappuccino">
-          <h4>Cappuccino</h4>
-          <p class="price">$7.50</p>
-          <button class="btn btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-        </div>
-      </div>
-
-      <!-- Add as many as you want (e.g., 8-12 items) -->
-      <!-- Use placeholder images if needed: https://via.placeholder.com/300x300?text=Menu+Item -->
-
-    </div>
-
-  </div>
-
-</section>
-
-
-
-<div id="cart-sidebar" class="cart-sidebar">
-  <div class="cart-header">
-    <h3>Your Cart</h3>
-    <button id="close-cart" class="close-btn">&times;</button>
-  </div>
-  <div id="cart-items" class="cart-items">
-    <!-- Items will appear here dynamically -->
-    <p class="empty-cart">Your cart is empty.</p>
-  </div>
-  <div class="cart-footer">
-    <p>Total: <span id="cart-total">$0.00</span></p>
-    <button class="btn checkout-btn">Checkout</button>
-  </div>
-</div>
-<div id="cart-overlay" class="cart-overlay"></div>
 
     <!-- Reviews Section -->
       <section id="testimonials" class="testimonials section">
@@ -572,110 +493,6 @@
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
 
-  <script>
-let cart = [];
-const cartCount = document.querySelector('.icon-cart span');
-const addButtons = document.querySelectorAll('.btn-add-to-cart');
-
-addButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
-    const name = btn.dataset.name;
-    const price = parseFloat(btn.dataset.price);
-
-    const existingItem = cart.find(item => item.name === name);
-    if (existingItem) {
-      existingItem.quantity += 1;
-    } else {
-      cart.push({ name, price, quantity: 1 });
-    }
-
-    cartCount.textContent = cart.reduce((total, item) => total + item.quantity, 0);
-    alert(`${name} added to cart!`); // Optional feedback
-  });
-});
-</script>
-
-<script>
-// ... previous cart script ...
-
-const cartSidebar = document.getElementById('cart-sidebar');
-const cartOverlay = document.getElementById('cart-overlay');
-const cartItemsContainer = document.getElementById('cart-items');
-const cartTotal = document.getElementById('cart-total');
-
-document.querySelector('.icon-cart').addEventListener('click', () => {
-  cartSidebar.classList.add('open');
-  cartOverlay.classList.add('open');
-  updateCartDisplay();
-});
-
-document.getElementById('close-cart').addEventListener('click', closeCart);
-cartOverlay.addEventListener('click', closeCart);
-
-function closeCart() {
-  cartSidebar.classList.remove('open');
-  cartOverlay.classList.remove('open');
-}
-
-function updateCartDisplay() {
-  cartItemsContainer.innerHTML = '';
-  if (cart.length === 0) {
-    cartItemsContainer.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
-    cartTotal.textContent = '$0.00';
-    cartCount.textContent = '0';
-    return;
-  }
-
-  let total = 0;
-  let totalItems = 0;
-
-  cart.forEach((item, index) => {
-    const itemEl = document.createElement('div');
-    itemEl.classList.add('cart-item');
-    itemEl.innerHTML = `
-      <div class="cart-item-info">
-        <strong>${item.name}</strong><br>
-        <small>$${item.price.toFixed(2)} each</small>
-      </div>
-      <div class="quantity-controls">
-        <button class="qty-btn minus" data-index="${index}">-</button>
-        <span class="quantity">${item.quantity}</span>
-        <button class="qty-btn plus" data-index="${index}">+</button>
-      </div>
-      <div class="item-total">$${(item.price * item.quantity).toFixed(2)}</div>
-    `;
-    cartItemsContainer.appendChild(itemEl);
-
-    total += item.price * item.quantity;
-    totalItems += item.quantity;
-  });
-
-  cartTotal.textContent = '$' + total.toFixed(2);
-  cartCount.textContent = totalItems;
-}
-
-// Delegate Reviews for quantity buttons (since they are created dynamically)
-cartItemsContainer.addEventListener('click', (e) => {
-  if (e.target.classList.contains('qty-btn')) {
-    const index = parseInt(e.target.dataset.index);
-    const item = cart[index];
-
-    if (e.target.classList.contains('plus')) {
-      item.quantity += 1;
-    } else if (e.target.classList.contains('minus')) {
-      if (item.quantity > 1) {
-        item.quantity -= 1;
-      } else {
-        // Remove item if quantity reaches 0
-        cart.splice(index, 1);
-      }
-    }
-
-    updateCartDisplay(); // Refresh the cart view
-  }
-});
-
-</script>
 
 </body>
 
