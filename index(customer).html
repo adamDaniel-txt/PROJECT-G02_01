@@ -67,27 +67,20 @@
           <ul>
             <li><a href="#hero" class="active">Home<br></a></li>
             <li><a href="#about">About</a></li>
-            <li><a href="menu(guest).html">Menu</a></li>
+            <li><a href="menu.html">Menu</a></li>
             <li><a href="#testimonials">Reviews</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li class="dropdown"><a href="#"><i class="bi bi-person-circle fs-3 toggle-dropdown"></i></a>
-              <ul>
-              <li><a href="login.html">Log in</a></li>
-                <!-- <li><a href="#">Dashboard</a></li> -->
-              </ul>
+            <li class="dropdown">
+                <a href="#" id="profile-link">
+                  <i class="bi bi-person-circle fs-3"></i>
+                </a>
+               <ul id="profile-dropdown">
+                 <!-- Content will be injected by JS -->
+                </ul>
             </li>
           </ul>
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
-
-        <div class="icon-cart">
-            <svg  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
-            </svg>
-            <span>0</span>
-        </div>
-
-      <!--<a class="btn-give-feedback d-none d-xl-block" href="#give-feedback">Book a Table</a>-->
 
       </div>
 
@@ -490,6 +483,48 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+
+  <script>
+// Check login status and update profile icon behavior
+document.addEventListener('DOMContentLoaded', () => {
+  const profileLink = document.getElementById('profile-link');
+  const profileDropdown = document.getElementById('profile-dropdown');
+  const loggedInUser = localStorage.getItem('loggedInUser');
+
+  if (loggedInUser) {
+    // User is logged in
+    const user = JSON.parse(loggedInUser);
+
+    // Change link to go to profile page
+    profileLink.href = 'profile.html';
+
+    // Update dropdown menu
+    profileDropdown.innerHTML = `
+      <li><strong>Hello, ${user.email.split('@')[0]}!</strong></li>
+      <li><a href="profile.html">My Profile</a></li>
+      <li><a href="#" id="logout-link">Logout</a></li>
+    `;
+
+    // Add logout functionality
+    document.getElementById('logout-link').addEventListener('click', (e) => {
+      e.preventDefault();
+      localStorage.removeItem('loggedInUser');
+      alert('You have been logged out.');
+      location.reload(); // Refresh to update header
+    });
+
+  } else {
+    // User is NOT logged in
+    profileLink.href = 'login.html';
+
+    // Update dropdown
+    profileDropdown.innerHTML = `
+      <li><a href="login.html">Login</a></li>
+      <li><a href="signup.html">Sign Up</a></li>
+    `;
+  }
+});
+</script>
 
 
 </body>

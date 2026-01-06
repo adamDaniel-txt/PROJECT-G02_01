@@ -46,17 +46,12 @@
 
         <nav id="navmenu" class="navmenu">
           <ul>
-            <li><a href="index.html">Home</a></li>
+            <li><a href="index(customer).html">Home</a></li>
             <li><a href="#about">About</a></li>
             <li><a href="menu.html" class="active">Menu</a></li>
             <li><a href="#testimonials">Reviews</a></li>
             <li><a href="#contact">Contact</a></li>
-            <li class="dropdown"><a href="#"><i class="bi bi-person-circle fs-3 toggle-dropdown"></i></a>
-              <ul>
-              <li><a href="signup.html">Sign Up</a></li>
-                <!-- <li><a href="#">Dashboard</a></li> -->
-              </ul>
-            </li>
+            
           </ul>
           <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
@@ -359,7 +354,20 @@
   const addButtons = document.querySelectorAll('.btn-add-to-cart');
 
 addButtons.forEach(btn => {
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click', (e) => {
+    e.preventDefault(); // Prevent default action
+
+    const loggedInUser = localStorage.getItem('loggedInUser');
+    if (!loggedInUser) {
+      // Save current page to redirect back after login
+      sessionStorage.setItem('redirectAfterLogin', window.location.href);
+      
+      // Redirect to login page
+      window.location.href = 'login.html';
+      return;
+    }
+
+    // If logged in, proceed with add to cart
     const name = btn.dataset.name;
     const price = parseFloat(btn.dataset.price);
 
@@ -371,7 +379,8 @@ addButtons.forEach(btn => {
     }
 
     cartCount.textContent = cart.reduce((total, item) => total + item.quantity, 0);
-    alert(`${name} added to cart!`); // Optional feedback
+    alert(`${name} added to cart!`);
+    updateCartDisplay(); // If you want immediate sidebar update
   });
 });
 </script>
