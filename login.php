@@ -12,8 +12,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    $stmt = $pdo->prepare('SELECT * FROM users WHERE username = :username');
-    $stmt->execute(['username' => $username]);
+    // Query to allow login with username or email
+    $stmt = $pdo->prepare('SELECT * FROM users WHERE username = :identifier OR email = :identifier');
+    $stmt->execute(['identifier' => $username]);
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && hash('sha256', $password) === $user['password']) {
@@ -63,8 +64,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         <div class="form-group">
           <h4 class="text-center font-weight-bold"> Login </h4>
-          <label for="username">Username</label>
-           <input type="text" class="form-control" name="username" placeholder="Enter username" required>
+            <label for="username">Username or Email</label>
+            <input type="text" class="form-control" name="username" placeholder="Enter username or email" required>
         </div>
 
         <div class="form-group">
