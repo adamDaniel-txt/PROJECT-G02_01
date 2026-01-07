@@ -1,5 +1,8 @@
 <?php
 session_start();
+require 'app/db.php';
+require 'app/persmission.php';
+
 // Check if user is logged in and get their role
 $isLoggedIn = isset($_SESSION['role_id']);
 $userRole = $_SESSION['role'] ?? null; // Assuming you store role in session
@@ -97,12 +100,13 @@ $userRole = $_SESSION['role'] ?? null; // Assuming you store role in session
             </a>
             <div class="dropdown-menu">
                 <?php if (!$isLoggedIn): ?>
-                    <a class="dropdown-item" href="login.php">Sign In/Sign Up</a>
+                    <a class="dropdown-item" href="login.php"><i class="bi bi-box-arrow-in-right"></i>&nbsp&nbspLogin/Register</a>
                 <?php else: ?>
-                    <a class="dropdown-item" href="logout.php">Logout</a>
-                    <?php if (in_array($role_id, [1, 2])): ?>
-                        <a class="dropdown-item" href="dashboard.php">Dashboard</a>
+                    <a class="dropdown-item" href="profile.php"><i class="bi bi-person"></i>&nbsp&nbspProfile</a>
+                    <?php if (hasPermission('view_dashboard')): ?>
+                        <a class="dropdown-item" href="dashboard.php"><i class="bi bi-speedometer2"></i>&nbsp;&nbsp;Dashboard</a>
                     <?php endif; ?>
+                    <a class="dropdown-item" href="logout.php"><i class="bi bi-box-arrow-left"></i>&nbsp&nbspLog Out</a>
                 <?php endif; ?>
             </div>
         </div>
