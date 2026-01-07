@@ -5,8 +5,8 @@ if (!empty($_SESSION['flash'])) {
     unset($_SESSION['flash']);
 }
 
-require 'db.php';
-require 'persmission.php';
+require 'app/db.php';
+require 'app/persmission.php';
 
 // Simple helper to redirect after successful registration
 function redirect_to_login() {
@@ -17,12 +17,20 @@ function redirect_to_login() {
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Basic sanitization/trim
     $username = isset($_POST['username']) ? trim($_POST['username']) : '';
+    $email    = isset($_POST['email']) ? trim($_POST['email']) : '';
     $password = isset($_POST['password']) ? $_POST['password'] : '';
     $confirm  = isset($_POST['confirm_password']) ? $_POST['confirm_password'] : '';
 
     // Minimal validation (reasonable defaults)
-    if ($username === '' || $password === '') {
-        $_SESSION['flash'] = 'Username and password are required.';
+    if ($username === '' || $email === '' || $password === '') {
+        $_SESSION['flash'] = 'Username, email and password are required.';
+        header('Location: signup.php');
+        exit();
+    }
+
+    // Add email validation
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        $_SESSION['flash'] = 'Please enter a valid email address.';
         header('Location: signup.php');
         exit();
     }
@@ -48,6 +56,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
+    // Check if email already exists
+    $stmt = $pdo->prepare('SELECT id FROM users WHERE email = :email');
+    $stmt->execute(['email' => $email]);
+    if ($stmt->fetch(PDO::FETCH_ASSOC)) {
+        $_SESSION['flash'] = 'Email already registered.';
+        header('Location: signup.php');
+        exit();
+    }
+
     // Hash password with SHA-256 to match the style in your login code.
     // Note: using password_hash()/password_verify() is recommended for new apps.
     $password_hash = hash('sha256', $password);
@@ -56,9 +73,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $default_role_id = 3; // 3 for customer
 
     // Insert new user
-    $insert = $pdo->prepare('INSERT INTO users (username, password, role_id) VALUES (:username, :password, :role_id)');
+    $insert = $pdo->prepare('INSERT INTO users (username, email, password, role_id) VALUES (:username, :email, :password, :role_id)');
     $success = $insert->execute([
         'username' => $username,
+        'email' => $email,
         'password' => $password_hash,
         'role_id'  => $default_role_id
     ]);
@@ -107,6 +125,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="form-group">
                     <label for="username">Username</label>
                     <input type="text" class="form-control" name="username" placeholder="Enter username" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" class="form-control" name="email" placeholder="Enter email" required>
                 </div>
 
                 <div class="form-group">
