@@ -45,7 +45,7 @@
 
   <main class="main py-5">
     <div class="container">
-      
+
       <!-- Page Title -->
       <div class="text-center mb-5" data-aos="fade-up">
         <h2 class="display-4 fw-bold" style="color: var(--accent-color);">My Profile</h2>
@@ -60,11 +60,11 @@
               <!-- Profile Picture -->
         <div class="text-center mb-4">
         <div class="position-relative d-inline-block">
-        <i class="bi bi-person-circle" 
+        <i class="bi bi-person-circle"
        style="font-size: 120px; color: #ffffff;"></i>
 
         <!-- Optional: Change picture button (camera icon overlay) -->
-        <button id="change-pic-btn" 
+        <button id="change-pic-btn"
                 class="btn btn-sm position-absolute bottom-0 end-0 translate-middle-x"
                 style="background: var(--accent-color); border-radius: 50%; width: 40px; height: 40px; border: none;">
             <i class="bi bi-camera-fill text-white"></i>
