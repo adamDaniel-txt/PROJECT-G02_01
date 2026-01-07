@@ -1,3 +1,147 @@
+<?php
+session_start();
+require 'app/db.php';
+require 'app/persmission.php';
+
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php');
+    exit();
+}
+
+$user_id = $_SESSION['user_id'];
+$error = '';
+$success = '';
+
+// Fetch user data
+$stmt = $pdo->prepare('SELECT username, email, role_id FROM users WHERE id = ?');
+$stmt->execute([$user_id]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+if (!$user) {
+    header('Location: login.php');
+    exit();
+}
+
+// Handle form submissions
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Update Username
+    if (isset($_POST['update_username'])) {
+        $new_username = trim($_POST['username']);
+
+        if (empty($new_username)) {
+            $error = 'Username cannot be empty';
+        } elseif ($new_username === $user['username']) {
+            $error = 'New username is the same as current username';
+        } else {
+            // Check if username already exists
+            $check_stmt = $pdo->prepare('SELECT id FROM users WHERE username = ? AND id != ?');
+            $check_stmt->execute([$new_username, $user_id]);
+
+            if ($check_stmt->fetch()) {
+                $error = 'Username already taken';
+            } else {
+                $update_stmt = $pdo->prepare('UPDATE users SET username = ? WHERE id = ?');
+                if ($update_stmt->execute([$new_username, $user_id])) {
+                    $success = 'Username updated successfully';
+                    $user['username'] = $new_username; // Update displayed username
+                } else {
+                    $error = 'Failed to update username';
+                }
+            }
+        }
+    }
+
+    // Update Email
+    elseif (isset($_POST['update_email'])) {
+        $new_email = trim($_POST['email']);
+
+        if (empty($new_email)) {
+            $error = 'Email cannot be empty';
+        } elseif (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
+            $error = 'Please enter a valid email address';
+        } elseif ($new_email === $user['email']) {
+            $error = 'New email is the same as current email';
+        } else {
+            // Check if email already exists
+            $check_stmt = $pdo->prepare('SELECT id FROM users WHERE email = ? AND id != ?');
+            $check_stmt->execute([$new_email, $user_id]);
+
+            if ($check_stmt->fetch()) {
+                $error = 'Email already registered';
+            } else {
+                $update_stmt = $pdo->prepare('UPDATE users SET email = ? WHERE id = ?');
+                if ($update_stmt->execute([$new_email, $user_id])) {
+                    $success = 'Email updated successfully';
+                    $user['email'] = $new_email; // Update displayed email
+                } else {
+                    $error = 'Failed to update email';
+                }
+            }
+        }
+    }
+
+    // Change Password
+    elseif (isset($_POST['change_password'])) {
+        $current_password = $_POST['current_password'];
+        $new_password = $_POST['new_password'];
+        $confirm_password = $_POST['confirm_password'];
+
+        // Verify current password
+        $current_hash = hash('sha256', $current_password);
+        $check_stmt = $pdo->prepare('SELECT password FROM users WHERE id = ?');
+        $check_stmt->execute([$user_id]);
+        $db_password = $check_stmt->fetchColumn();
+
+        if ($current_hash !== $db_password) {
+            $error = 'Current password is incorrect';
+        } elseif (strlen($new_password) < 8) {
+            $error = 'New password must be at least 8 characters';
+        } elseif ($new_password !== $confirm_password) {
+            $error = 'New passwords do not match';
+        } else {
+            $new_hash = hash('sha256', $new_password);
+            $update_stmt = $pdo->prepare('UPDATE users SET password = ? WHERE id = ?');
+            if ($update_stmt->execute([$new_hash, $user_id])) {
+                $success = 'Password changed successfully';
+            } else {
+                $error = 'Failed to change password';
+            }
+        }
+    }
+
+    // Delete Account
+    elseif (isset($_POST['delete_account'])) {
+        $confirm_password = $_POST['confirm_password'] ?? '';
+
+        if (empty($confirm_password)) {
+            $error = 'Please enter your password to confirm account deletion';
+        } else {
+            // Verify password
+            $check_stmt = $pdo->prepare('SELECT password FROM users WHERE id = ?');
+            $check_stmt->execute([$user_id]);
+            $db_password = $check_stmt->fetchColumn();
+
+            $input_hash = hash('sha256', $confirm_password);
+
+            if ($input_hash === $db_password) {
+                // Delete user
+                $delete_stmt = $pdo->prepare('DELETE FROM users WHERE id = ?');
+                if ($delete_stmt->execute([$user_id])) {
+                    session_destroy();
+                    header('Location: index.php?deleted=1');
+                    exit();
+                } else {
+                    $error = 'Failed to delete account. Please try again.';
+                }
+            } else {
+                $error = 'Incorrect password. Please try again.';
+            }
+        }
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,7 +149,6 @@
   <meta content="width=device-width, initial-scale=1.0" name="viewport">
   <title>My Profile | Kafe Tiga Belas</title>
 
-  <!-- Same links as other pages -->
   <link href="assets/img/favicon.png" rel="icon">
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
@@ -13,19 +156,19 @@
 
   <style>
     /* Profile Page Text Visibility Fixes */
-    #profile-pic + div h4, /* Username */
+    #profile-pic + div h4,
     #display-email,
     .card-body p:not(.text-muted),
     .card-body a {
-     color: #ffffff !important; /* Force white for main text */
+     color: #ffffff !important;
     }
 
     .card-body .text-muted {
-    color: rgba(255, 255, 255, 0.6) !important; /* Lighter gray for labels */
+    color: rgba(255, 255, 255, 0.6) !important;
     }
 
     #change-password-link {
-    color: var(--accent-color) !important; /* Gold for link */
+    color: var(--accent-color) !important;
     text-decoration: underline;
     }
 
@@ -33,10 +176,55 @@
     color: #ffffff !important;
     }
 
-    .card-body p:contains("••••") { /* Approximate selector */
-    color: rgba(255, 255, 255, 0.8) !important;
-    font-size: 1.2rem;
-    letter-spacing: 4px;
+    .password-display {
+        color: rgba(255, 255, 255, 0.8) !important;
+        font-size: 1.2rem;
+        letter-spacing: 4px;
+    }
+
+    /* Alert styles */
+    .alert {
+        border-radius: 10px;
+        border: none;
+        margin-bottom: 20px;
+    }
+
+    .alert-success {
+        background-color: rgba(40, 167, 69, 0.2);
+        color: #28a745;
+    }
+
+    .alert-danger {
+        background-color: rgba(220, 53, 69, 0.2);
+        color: #dc3545;
+    }
+
+    /* Form input styles */
+    .form-control {
+        background-color: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+    }
+
+    .form-control:focus {
+        background-color: rgba(255, 255, 255, 0.15);
+        border-color: var(--accent-color);
+        color: white;
+        box-shadow: 0 0 0 0.25rem rgba(205, 164, 94, 0.25);
+    }
+
+    .form-control::placeholder {
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    /* Modal styles */
+    .modal-content {
+        background-color: var(--surface-color);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-close-white {
+        filter: invert(1) grayscale(100%) brightness(200%);
     }
   </style>
 </head>
@@ -51,6 +239,15 @@
         <h2 class="display-4 fw-bold" style="color: var(--accent-color);">My Profile</h2>
       </div>
 
+      <!-- Error and Success Messages -->
+      <?php if ($error): ?>
+        <div class="alert alert-danger text-center"><?php echo htmlspecialchars($error); ?></div>
+      <?php endif; ?>
+
+      <?php if ($success): ?>
+        <div class="alert alert-success text-center"><?php echo htmlspecialchars($success); ?></div>
+      <?php endif; ?>
+
       <div class="row justify-content-center" data-aos="fade-up" data-aos-delay="100">
         <div class="col-lg-8">
 
@@ -58,36 +255,80 @@
             <div class="card-body text-center py-5">
 
               <!-- Profile Picture -->
-        <div class="text-center mb-4">
-        <div class="position-relative d-inline-block">
-        <i class="bi bi-person-circle"
-       style="font-size: 120px; color: #ffffff;"></i>
-
-        <!-- Optional: Change picture button (camera icon overlay) -->
-        <button id="change-pic-btn"
-                class="btn btn-sm position-absolute bottom-0 end-0 translate-middle-x"
-                style="background: var(--accent-color); border-radius: 50%; width: 40px; height: 40px; border: none;">
-            <i class="bi bi-camera-fill text-white"></i>
-        </button>
-  </div>
-</div>
+              <div class="text-center mb-4">
+                <div class="position-relative d-inline-block">
+                  <i class="bi bi-person-circle" style="font-size: 120px; color: #ffffff;"></i>
+                  <button id="change-pic-btn" class="btn btn-sm position-absolute bottom-0 end-0 translate-middle-x"
+                          style="background: var(--accent-color); border-radius: 50%; width: 40px; height: 40px; border: none;">
+                    <i class="bi bi-camera-fill text-white"></i>
+                  </button>
+                </div>
+              </div>
 
               <!-- Username (Editable) -->
-               <p class="text-muted mb-1">Username</p>
-              <h4 id="display-username" class="mb-3"></h4>
-              <button id="edit-username-btn" class="btn btn-outline-light btn-sm mb-4">Edit Username</button>
+              <form method="POST" action="" class="mb-4">
+                <p class="text-muted mb-1">Username</p>
+                <h4 id="display-username" class="mb-2"><?php echo htmlspecialchars($user['username']); ?></h4>
+
+                <div class="row justify-content-center">
+                  <div class="col-md-6">
+                    <div class="input-group mb-2">
+                      <input type="text" class="form-control" name="username"
+                             placeholder="New username" value="<?php echo htmlspecialchars($user['username']); ?>">
+                    </div>
+                    <button type="submit" name="update_username" class="btn btn-outline-light btn-sm w-100">Update Username</button>
+                  </div>
+                </div>
+              </form>
 
               <!-- Email (Editable) -->
-              <p class="text-muted mb-1">Email</p>
-              <h5 id="display-email"></h5>
-              <button id="edit-email-btn" class="btn btn-outline-light btn-sm mb-4">Edit Email</button>
+              <form method="POST" action="" class="mb-4">
+                <p class="text-muted mb-1">Email</p>
+                <h5 id="display-email" class="mb-2"><?php echo htmlspecialchars($user['email']); ?></h5>
 
-              <!-- Change Password -->
-            <div class="mb-4">
-            <p class="text-muted mb-1">Password</p>
-            <p class="mb-2" style="color: rgba(255,255,255,0.8); font-size: 1.4rem; letter-spacing: 5px;">••••••••</p>
-            <a href="#" id="change-password-link" style="color: var(--accent-color);">Change Password</a>
-            </div>
+                <div class="row justify-content-center">
+                  <div class="col-md-6">
+                    <div class="input-group mb-2">
+                      <input type="email" class="form-control" name="email"
+                             placeholder="New email" value="<?php echo htmlspecialchars($user['email']); ?>">
+                    </div>
+                    <button type="submit" name="update_email" class="btn btn-outline-light btn-sm w-100">Update Email</button>
+                  </div>
+                </div>
+              </form>
+
+              <!-- Change Password Form (Initially Hidden) -->
+              <div id="password-form" style="display: none;">
+                <form method="POST" action="" class="mb-4">
+                  <p class="text-muted mb-1">Change Password</p>
+
+                  <div class="row justify-content-center">
+                    <div class="col-md-6">
+                      <div class="mb-2">
+                        <input type="password" class="form-control" name="current_password"
+                               placeholder="Current password" required>
+                      </div>
+                      <div class="mb-2">
+                        <input type="password" class="form-control" name="new_password"
+                               placeholder="New password (min 8 characters)" required>
+                      </div>
+                      <div class="mb-2">
+                        <input type="password" class="form-control" name="confirm_password"
+                               placeholder="Confirm new password" required>
+                      </div>
+                      <button type="submit" name="change_password" class="btn btn-outline-light btn-sm w-100">Change Password</button>
+                      <button type="button" id="cancel-password-btn" class="btn btn-outline-secondary btn-sm w-100 mt-2">Cancel</button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+
+              <!-- Change Password Link (Visible by default) -->
+              <div id="password-link" class="mb-4">
+                <p class="text-muted mb-1">Password</p>
+                <p class="password-display mb-2">••••••••</p>
+                <a href="#" id="change-password-link" style="color: var(--accent-color);">Change Password</a>
+              </div>
 
             </div>
           </div>
@@ -104,8 +345,8 @@
 
           <!-- Action Buttons -->
           <div class="text-center">
-            <button id="logout-btn" class="btn btn-outline-danger me-3 px-5">Log Out</button>
-            <button id="delete-account-btn" class="btn btn-danger px-5">Delete Account</button>
+            <a href="logout.php" class="btn btn-outline-danger me-3 px-5">Log Out</a>
+            <button id="delete-account-btn" class="btn btn-danger px-5" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Account</button>
           </div>
 
         </div>
@@ -113,7 +354,29 @@
     </div>
   </main>
 
-  <!-- Footer (same as other pages) -->
+  <!-- Delete Account Modal -->
+  <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" style="background-color: var(--surface-color);">
+        <div class="modal-header border-0">
+          <h5 class="modal-title" style="color: var(--accent-color);">Delete Account</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p class="text-white">Are you sure you want to delete your account? This action cannot be undone.</p>
+          <form method="POST" action="">
+            <div class="mb-3">
+              <input type="password" class="form-control" name="confirm_password" placeholder="Enter your password to confirm" required>
+            </div>
+            <div class="text-center">
+              <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancel</button>
+              <button type="submit" name="delete_account" class="btn btn-danger">Delete Account</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Scripts -->
   <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -121,72 +384,34 @@
   <script src="assets/js/main.js"></script>
 
   <script>
-    // Check if logged in
-    //const loggedInUser = localStorage.getItem('loggedInUser');
-    //if (!loggedInUser) {
-      //window.location.href = 'login.html';
-      //return;
-    //}
-
-    //const user = JSON.parse(loggedInUser);
-
-    // Display user info
-    document.getElementById('display-username').textContent = user.username || user.email.split('@')[0];
-    document.getElementById('display-email').textContent = user.email;
-
-    // Edit Username
-    document.getElementById('edit-username-btn').addEventListener('click', () => {
-      const newUsername = prompt('Enter new username:', user.username || '');
-      if (newUsername && newUsername !== user.username) {
-        user.username = newUsername;
-        localStorage.setItem('loggedInUser', JSON.stringify(user));
-        document.getElementById('display-username').textContent = newUsername;
-        alert('Username updated!');
-      }
-    });
-
-    // Edit Email
-    document.getElementById('edit-email-btn').addEventListener('click', () => {
-      const newEmail = prompt('Enter new email:', user.email);
-      if (newEmail && newEmail !== user.email && newEmail.includes('@')) {
-        user.email = newEmail;
-        localStorage.setItem('loggedInUser', JSON.stringify(user));
-        document.getElementById('display-email').textContent = newEmail;
-        alert('Email updated!');
-      } else if (newEmail && !newEmail.includes('@')) {
-        alert('Please enter a valid email.');
-      }
-    });
-
-    // Change Password Link (placeholder)
-    document.getElementById('change-password-link').addEventListener('click', (e) => {
+    // Toggle password change form
+    document.getElementById('change-password-link').addEventListener('click', function(e) {
       e.preventDefault();
-      alert('Change password feature coming soon!');
+      document.getElementById('password-link').style.display = 'none';
+      document.getElementById('password-form').style.display = 'block';
     });
 
-    // Logout
-    document.getElementById('logout-btn').addEventListener('click', () => {
-      if (confirm('Are you sure you want to log out?')) {
-        localStorage.removeItem('loggedInUser');
-        window.location.href = 'index.html';
-      }
+    document.getElementById('cancel-password-btn').addEventListener('click', function() {
+      document.getElementById('password-form').style.display = 'none';
+      document.getElementById('password-link').style.display = 'block';
+      // Clear password fields
+      document.querySelectorAll('#password-form input').forEach(input => input.value = '');
     });
 
-    // Delete Account
-    document.getElementById('delete-account-btn').addEventListener('click', () => {
-      if (confirm('Are you sure you want to delete your account? This cannot be undone.')) {
-        // Remove from users list (if you have one)
-        let users = JSON.parse(localStorage.getItem('users') || '[]');
-        users = users.filter(u => u.email !== user.email);
-        localStorage.setItem('users', JSON.stringify(users));
+    // Auto-hide alerts after 5 seconds
+    setTimeout(function() {
+      const alerts = document.querySelectorAll('.alert');
+      alerts.forEach(alert => {
+        alert.style.transition = 'opacity 0.5s';
+        alert.style.opacity = '0';
+        setTimeout(() => alert.remove(), 500);
+      });
+    }, 5000);
 
-        localStorage.removeItem('loggedInUser');
-        alert('Account deleted successfully.');
-        window.location.href = 'index.html';
-      }
+    // Clear error messages when closing modal
+    document.getElementById('deleteModal').addEventListener('hidden.bs.modal', function() {
+      document.querySelector('#deleteModal input[name="confirm_password"]').value = '';
     });
-
-    // load from localStorage or backend
   </script>
 </body>
 </html>
