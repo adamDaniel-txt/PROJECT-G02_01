@@ -64,37 +64,27 @@ $userRole = $_SESSION['role'] ?? null; // Assuming you store role in session
       </div>
     </div><!-- End Top Bar -->
 
-    <div class="branding d-flex align-items-cente">
+    <div class="branding d-flex align-items-left">
 
       <div class="container position-relative d-flex align-items-center justify-content-between">
-        <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+        <a href="index.php" class="logo d-flex align-items-center me-auto">
           <!-- Uncomment the line below if you also wish to use an image logo -->
           <!-- <img src="assets/img/logo.png" alt=""> -->
           <h1 class="sitename">Kafe Tiga Belas</h1>
         </a>
 
-        <nav id="navmenu" class="navmenu">
-          <ul>
-            <li><a href="#hero" class="active">Home<br></a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#menu">Menu</a></li>
-            <li><a href="#specials">Specials</a></li>
-            <li><a href="#testimonials">Reviews</a></li>
-            <!-- <li><a href="#chefs">Chefs</a></li> -->
-            <li><a href="#gallery">Gallery</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+        <nav id="navmenu" class="navmenu navbar navbar-expand-lg me-3">
+            <ul>
+              <li><a href="#hero" class="active">Home<br></a></li>
+              <li><a href="#about">About</a></li>
+              <li><a href="menu.html">Menu</a></li>
+              <li><a href="#testimonials">Reviews</a></li>
+              <li><a href="#contact">Contact</a></li>
+            </ul>
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
 
-        <div class="icon-cart">
-            <svg  aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
-            </svg>
-            <span>0</span>
-        </div>
-
-        <div class="dropdown">
+        <div class="dropdown ms-3">
             <a href="#" data-bs-toggle="dropdown" aria-expanded="false">
                 <i class="bi bi-person-circle fs-3"></i>
             </a>
@@ -111,10 +101,7 @@ $userRole = $_SESSION['role'] ?? null; // Assuming you store role in session
             </div>
         </div>
 
-      <!--<a class="btn-give-feedback d-none d-xl-block" href="#give-feedback">Book a Table</a>-->
-
       </div>
-
     </div>
 
   </header>
@@ -217,106 +204,15 @@ $userRole = $_SESSION['role'] ?? null; // Assuming you store role in session
 
     </section><!-- /Why Us Section -->
 
-    <!-- Menu Section -->
-    <section id="menu" class="menu section">
-
-  <!-- Section Title -->
-  <div class="container section-title" data-aos="fade-up">
-    <h2>Menu</h2>
-    <p>Check Our Tasty Menu</p>
-  </div><!-- End Section Title -->
-
-  <div class="container" data-aos="fade-up" data-aos-delay="100">
-
-    <div class="row gy-4" id="menu-grid">
-
-      <!-- Example Menu Item 1 -->
-      <div class="col-lg-3 col-md-4 col-sm-6 menu-item-card">
-        <div class="card text-center p-4">
-          <img src="assets/img/menu/menu-item-1.jpg" class="img-fluid mb-3" alt="Espresso">
-          <h4>Espresso</h4>
-          <p class="price">$5.00</p>
-          <button class="btn btn-add-to-cart" data-name="Espresso" data-price="5.00">Add to Cart</button>
-        </div>
-      </div>
-
-      <!-- Repeat for more items (add your own images/prices/names) -->
-      <!-- Example 2 -->
-      <div class="col-lg-3 col-md-4 col-sm-6 menu-item-card">
-        <div class="card text-center p-4">
-          <img src="assets/img/menu/menu-item-2.jpg" class="img-fluid mb-3" alt="Cappuccino">
-          <h4>Cappuccino</h4>
-          <p class="price">$7.50</p>
-          <button class="btn btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-md-4 col-sm-6 menu-item-card">
-        <div class="card text-center p-4">
-          <img src="assets/img/menu/menu-item-2.jpg" class="img-fluid mb-3" alt="Cappuccino">
-          <h4>Cappuccino</h4>
-          <p class="price">$7.50</p>
-          <button class="btn btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-        </div>
-      </div>
-
-      <div class="col-lg-3 col-md-4 col-sm-6 menu-item-card">
-        <div class="card text-center p-4">
-          <img src="assets/img/menu/menu-item-2.jpg" class="img-fluid mb-3" alt="Cappuccino">
-          <h4>Cappuccino</h4>
-          <p class="price">$7.50</p>
-          <button class="btn btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-        </div>
-      </div>
-
-      <!-- Add as many as you want (e.g., 8-12 items) -->
-      <!-- Use placeholder images if needed: https://via.placeholder.com/300x300?text=Menu+Item -->
-
-    </div>
-
-  </div>
-
-</section>
-
-
-
-<div id="cart-sidebar" class="cart-sidebar">
-  <div class="cart-header">
-    <h3>Your Cart</h3>
-    <button id="close-cart" class="close-btn">&times;</button>
-  </div>
-  <div id="cart-items" class="cart-items">
-    <!-- Items will appear here dynamically -->
-    <p class="empty-cart">Your cart is empty.</p>
-  </div>
-  <div class="cart-footer">
-    <p>Total: <span id="cart-total">$0.00</span></p>
-    <button class="btn checkout-btn">Checkout</button>
-  </div>
-</div>
-<div id="cart-overlay" class="cart-overlay"></div>
-
-    <!-- Specials Section -->
-    <section id="specials" class="specials section">
-
-      <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Specials</h2>
-        <p>Check Our Specials</p>
-      </div><!-- End Section Title -->
-
-
-    </section><!-- /Specials Section -->
-
     <!-- Reviews Section -->
     <!--<section id="Reviews" class="Reviews section">-->
 
-    <!-- Testimonials Section -->
+    <!-- Reviews Section -->
     <section id="testimonials" class="testimonials section">
 
       <!-- Section Title -->
       <div class="container section-title" data-aos="fade-up">
-        <h2>Testimonials</h2>
+        <h2>Reviews</h2>
         <p>What they're saying about us</p>
       </div><!-- End Section Title -->
 
@@ -351,7 +247,7 @@ $userRole = $_SESSION['role'] ?? null; // Assuming you store role in session
           <div class="swiper-wrapper">
 
             <div class="swiper-slide">
-              <div class="testimonial-item" "="">
+              <div class="testimonial-item" ="">
             <p>
               <i class=" bi bi-quote quote-icon-left"></i>
                 <span>Proin iaculis purus consequat sem cure digni ssim donec porttitora entum suscipit rhoncus. Accusantium quam, ultricies eget id, aliquam eget nibh et. Maecen aliquam, risus at semper.</span>
@@ -461,255 +357,81 @@ $userRole = $_SESSION['role'] ?? null; // Assuming you store role in session
 
       </div>
 
-    </section><!-- /Feedback Section -->
+    </section><!-- /feedback section -->
 
-  <!-- /Reviews Section -->
+  <!-- /reviews section -->
 
-    <!-- Gallery Section -->
-    <section id="gallery" class="gallery section">
-
-      <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Gallery</h2>
-        <p>Some photos from Our Restaurant</p>
-      </div><!-- End Section Title -->
-
-      <div class="container-fluid" data-aos="fade-up" data-aos-delay="100">
-
-        <div class="row g-0">
-
-          <div class="col-lg-3 col-md-4">
-            <div class="gallery-item">
-              <a href="assets/img/gallery/gallery-1.jpg" class="glightbox" data-gallery="images-gallery">
-                <img src="assets/img/gallery/gallery-1.jpg" alt="" class="img-fluid">
-              </a>
-            </div>
-          </div><!-- End Gallery Item -->
-
-          <div class="col-lg-3 col-md-4">
-            <div class="gallery-item">
-              <a href="assets/img/gallery/gallery-2.jpg" class="glightbox" data-gallery="images-gallery">
-                <img src="assets/img/gallery/gallery-2.jpg" alt="" class="img-fluid">
-              </a>
-            </div>
-          </div><!-- End Gallery Item -->
-
-          <div class="col-lg-3 col-md-4">
-            <div class="gallery-item">
-              <a href="assets/img/gallery/gallery-3.jpg" class="glightbox" data-gallery="images-gallery">
-                <img src="assets/img/gallery/gallery-3.jpg" alt="" class="img-fluid">
-              </a>
-            </div>
-          </div><!-- End Gallery Item -->
-
-          <div class="col-lg-3 col-md-4">
-            <div class="gallery-item">
-              <a href="assets/img/gallery/gallery-4.jpg" class="glightbox" data-gallery="images-gallery">
-                <img src="assets/img/gallery/gallery-4.jpg" alt="" class="img-fluid">
-              </a>
-            </div>
-          </div><!-- End Gallery Item -->
-
-          <div class="col-lg-3 col-md-4">
-            <div class="gallery-item">
-              <a href="assets/img/gallery/gallery-5.jpg" class="glightbox" data-gallery="images-gallery">
-                <img src="assets/img/gallery/gallery-5.jpg" alt="" class="img-fluid">
-              </a>
-            </div>
-          </div><!-- End Gallery Item -->
-
-          <div class="col-lg-3 col-md-4">
-            <div class="gallery-item">
-              <a href="assets/img/gallery/gallery-6.jpg" class="glightbox" data-gallery="images-gallery">
-                <img src="assets/img/gallery/gallery-6.jpg" alt="" class="img-fluid">
-              </a>
-            </div>
-          </div><!-- End Gallery Item -->
-
-          <div class="col-lg-3 col-md-4">
-            <div class="gallery-item">
-              <a href="assets/img/gallery/gallery-7.jpg" class="glightbox" data-gallery="images-gallery">
-                <img src="assets/img/gallery/gallery-7.jpg" alt="" class="img-fluid">
-              </a>
-            </div>
-          </div><!-- End Gallery Item -->
-
-          <div class="col-lg-3 col-md-4">
-            <div class="gallery-item">
-              <a href="assets/img/gallery/gallery-8.jpg" class="glightbox" data-gallery="images-gallery">
-                <img src="assets/img/gallery/gallery-8.jpg" alt="" class="img-fluid">
-              </a>
-            </div>
-          </div><!-- End Gallery Item -->
-
-        </div>
-
-      </div>
-
-    </section><!-- /Gallery Section -->
-
-    <!-- <!-- Chefs Section --> -->
-    <!-- <section id="chefs" class="chefs section"> -->
-    <!---->
-    <!--   <!-- Section Title --> -->
-    <!--   <div class="container section-title" data-aos="fade-up"> -->
-    <!--     <h2>Team</h2> -->
-    <!--     <p>Necessitatibus eius consequatur</p> -->
-    <!--   </div><!-- End Section Title --> -->
-    <!---->
-    <!--   <div class="container"> -->
-    <!---->
-    <!--     <div class="row gy-4"> -->
-    <!---->
-    <!--       <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100"> -->
-    <!--         <div class="member"> -->
-    <!--           <img src="assets/img/chefs/chefs-1.jpg" class="img-fluid" alt=""> -->
-    <!--           <div class="member-info"> -->
-    <!--             <div class="member-info-content"> -->
-    <!--               <h4>Walter White</h4> -->
-    <!--               <span>Master Chef</span> -->
-    <!--             </div> -->
-    <!--             <div class="social"> -->
-    <!--               <a href=""><i class="bi bi-twitter-x"></i></a> -->
-    <!--               <a href=""><i class="bi bi-facebook"></i></a> -->
-    <!--               <a href=""><i class="bi bi-instagram"></i></a> -->
-    <!--               <a href=""><i class="bi bi-linkedin"></i></a> -->
-    <!--             </div> -->
-    <!--           </div> -->
-    <!--         </div> -->
-    <!--       </div><!-- End Team Member --> -->
-    <!---->
-    <!--       <div class="col-lg-4" data-aos="fade-up" data-aos-delay="200"> -->
-    <!--         <div class="member"> -->
-    <!--           <img src="assets/img/chefs/chefs-2.jpg" class="img-fluid" alt=""> -->
-    <!--           <div class="member-info"> -->
-    <!--             <div class="member-info-content"> -->
-    <!--               <h4>Sarah Jhonson</h4> -->
-    <!--               <span>Patissier</span> -->
-    <!--             </div> -->
-    <!--             <div class="social"> -->
-    <!--               <a href=""><i class="bi bi-twitter-x"></i></a> -->
-    <!--               <a href=""><i class="bi bi-facebook"></i></a> -->
-    <!--               <a href=""><i class="bi bi-instagram"></i></a> -->
-    <!--               <a href=""><i class="bi bi-linkedin"></i></a> -->
-    <!--             </div> -->
-    <!--           </div> -->
-    <!--         </div> -->
-    <!--       </div><!-- End Team Member --> -->
-    <!---->
-    <!--       <div class="col-lg-4" data-aos="fade-up" data-aos-delay="300"> -->
-    <!--         <div class="member"> -->
-    <!--           <img src="assets/img/chefs/chefs-3.jpg" class="img-fluid" alt=""> -->
-    <!--           <div class="member-info"> -->
-    <!--             <div class="member-info-content"> -->
-    <!--               <h4>William Anderson</h4> -->
-    <!--               <span>Cook</span> -->
-    <!--             </div> -->
-    <!--             <div class="social"> -->
-    <!--               <a href=""><i class="bi bi-twitter-x"></i></a> -->
-    <!--               <a href=""><i class="bi bi-facebook"></i></a> -->
-    <!--               <a href=""><i class="bi bi-instagram"></i></a> -->
-    <!--               <a href=""><i class="bi bi-linkedin"></i></a> -->
-    <!--             </div> -->
-    <!--           </div> -->
-    <!--         </div> -->
-    <!--       </div><!-- End Team Member --> -->
-    <!---->
-    <!--     </div> -->
-    <!---->
-    <!--   </div> -->
-    <!---->
-    <!-- </section><!-- /Chefs Section --> -->
-
-    <!-- Contact Section -->
+    <!-- contact section -->
     <section id="contact" class="contact section">
 
-      <!-- Section Title -->
-      <div class="container section-title" data-aos="fade-up">
-        <h2>Contact</h2>
-        <p>Contact Us</p>
-      </div><!-- End Section Title -->
+      <!-- section title -->
+      <section id="contact" class="contact section">
 
-      <div class="mb-5" data-aos="fade-up" data-aos-delay="200">
-        <iframe style="border:0; width: 100%; height: 400px;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.0151918481743!2d101.54185571050638!3d3.0906143534967794!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cc4d34ec93230b%3A0xaf9872bdbb787390!2sKAFE%20TIGA%20BELAS!5e0!3m2!1sen!2smy!4v1766971925335!5m2!1sen!2smy" frameborder="0" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div><!-- End Google Maps -->
+  <!-- section title -->
+  <div class="container section-title" data-aos="fade-up">
+    <h2>Contact</h2>
+    <p>Keep in touch with us</p>
+  </div><!-- end section title -->
 
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
+  <div class="container" data-aos="fade-up" data-aos-delay="100">
 
-        <div class="row gy-4">
+    <!-- map + info side-by-side -->
+    <div class="row gy-5 align-items-stretch">
 
-          <div class="col-lg-4">
-            <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
-              <i class="bi bi-geo-alt flex-shrink-0"></i>
-              <div>
-                <h3>Location</h3>
-                <p>83, Jalan Lawan Pedang 13/27, Tadisma Business Park, 40100 Shah Alam, Selangor</p>
-              </div>
-            </div><!-- End Info Item -->
-
-            <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
-              <i class="bi bi-telephone flex-shrink-0"></i>
-              <div>
-                <h3>Open Hours</h3>
-                <p>Monday-Sunday:<br>04:00 PM - 12:00 AM</p>
-              </div>
-            </div><!-- End Info Item -->
-
-            <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
-              <i class="bi bi-telephone flex-shrink-0"></i>
-              <div>
-                <h3>Call Us</h3>
-                <p>012-234 6861</p>
-              </div>
-            </div><!-- End Info Item -->
-
-            <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="500">
-              <i class="bi bi-envelope flex-shrink-0"></i>
-              <div>
-                <h3>Email Us</h3>
-                <p>tigabelasmedia@gmail.com</p>
-              </div>
-            </div><!-- End Info Item -->
-
-          </div>
-
-          <div class="col-lg-8">
-            <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
-              <div class="row gy-4">
-
-                <div class="col-md-6">
-                  <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
-                </div>
-
-                <div class="col-md-6 ">
-                  <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
-                </div>
-
-                <div class="col-md-12">
-                  <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
-                </div>
-
-                <div class="col-md-12">
-                  <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
-                </div>
-
-                <div class="col-md-12 text-center">
-                  <div class="loading">Loading</div>
-                  <div class="error-message"></div>
-                  <div class="sent-message">Your message has been sent. Thank you!</div>
-
-                  <button type="submit">Send Message</button>
-                </div>
-
-              </div>
-            </form>
-          </div><!-- End Contact Form -->
-
-        </div>
-
+      <!-- google map (left side) -->
+      <div class="col-lg-8">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3984.0151918481743!2d101.54185571050638!3d3.0906143534967794!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31cc4d34ec93230b%3a0xaf9872bdbb787390!2skafe%20tiga%20belas!5e0!3m2!1sen!2smy!4v1766971925335!5m2!1sen!2smy"
+          width="100%"
+          height="500"
+          style="border:0;"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade">
+        </iframe>
       </div>
 
-    </section><!-- /Contact Section -->
+      <!-- Contact Info (right side) -->
+      <div class="col-lg-4">
+        <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="300">
+          <i class="bi bi-geo-alt flex-shrink-0"></i>
+          <div>
+            <h3>Location</h3>
+            <p>83, Jalan Lawan Pedang 13/27, Tadisma Business Park,<br>40100 Shah Alam, Selangor</p>
+          </div>
+        </div><!-- End Info Item -->
+
+        <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="400">
+          <i class="bi bi-clock flex-shrink-0"></i> <!-- Better icon for hours -->
+          <div>
+            <h3>Open Hours</h3>
+            <p>Monday-Sunday:<br>04:00 PM - 12:00 AM</p>
+          </div>
+        </div><!-- End Info Item -->
+
+        <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="500">
+          <i class="bi bi-telephone flex-shrink-0"></i>
+          <div>
+            <h3>Call Us</h3>
+            <p>012-234 6861</p>
+          </div>
+        </div><!-- End Info Item -->
+
+        <div class="info-item d-flex" data-aos="fade-up" data-aos-delay="600">
+          <i class="bi bi-envelope flex-shrink-0"></i>
+          <div>
+            <h3>Email Us</h3>
+            <p>tigabelasmedia@gmail.com</p>
+          </div>
+        </div><!-- End Info Item -->
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+      <!-- /Contact Section -->
 
   </main>
 
@@ -729,10 +451,8 @@ $userRole = $_SESSION['role'] ?? null; // Assuming you store role in session
             <p><strong>Email:</strong> <span>tigabelasmedia@gmail.com</span></p>
           </div>
           <div class="social-links d-flex mt-4">
-            <a href=""><i class="bi bi-twitter-x"></i></a>
-            <a href=""><i class="bi bi-facebook"></i></a>
-            <a href=""><i class="bi bi-instagram"></i></a>
-            <a href=""><i class="bi bi-linkedin"></i></a>
+            <a href="https://www.facebook.com/p/TIGA-BELAS-CAFE-61558395301486/"><i class="bi bi-facebook"></i></a>
+            <a href="https://www.instagram.com/co.tigabelas/"><i class="bi bi-instagram"></i></a>
           </div>
         </div>
 
@@ -746,29 +466,6 @@ $userRole = $_SESSION['role'] ?? null; // Assuming you store role in session
             <li><a href="#">Privacy policy</a></li>
           </ul>
         </div>
-
-        <div class="col-lg-2 col-md-3 footer-links">
-          <h4>Our Services</h4>
-          <ul>
-            <li><a href="#">Web Design</a></li>
-            <li><a href="#">Web Development</a></li>
-            <li><a href="#">Product Management</a></li>
-            <li><a href="#">Marketing</a></li>
-            <li><a href="#">Graphic Design</a></li>
-          </ul>
-        </div>
-
-        <div class="col-lg-4 col-md-12 footer-newsletter">
-          <h4>Our Newsletter</h4>
-          <p>Subscribe to our newsletter and receive the latest news about our products and services!</p>
-          <form action="forms/newsletter.php" method="post" class="php-email-form">
-            <div class="newsletter-form"><input type="email" name="email"><input type="submit" value="Subscribe"></div>
-            <div class="loading">Loading</div>
-            <div class="error-message"></div>
-            <div class="sent-message">Your subscription request has been sent. Thank you!</div>
-          </form>
-        </div>
-
       </div>
     </div>
 
