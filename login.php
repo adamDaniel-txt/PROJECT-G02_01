@@ -18,6 +18,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user && hash('sha256', $password) === $user['password']) {
+        // Email verification
+        if (!$user['email_verified']) {
+            $_SESSION['flash'] = 'Please verify your email before logging in. Check your email for the verification link.';
+            header('Location: login.php');
+            exit();
+        }
+
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['role_id'] = $user['role_id'];
         header('Location: index.php');

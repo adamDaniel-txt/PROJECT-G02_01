@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
 if (!empty($_SESSION['flash'])) {
     echo '<div class="flash">'.htmlspecialchars($_SESSION['flash']).'</div>';
@@ -6,13 +9,8 @@ if (!empty($_SESSION['flash'])) {
 }
 
 require 'app/db.php';
-require 'app/persmission.php';
-
-// Simple helper to redirect after successful registration
-function redirect_to_login() {
-    header('Location: login.php');
-    exit();
-}
+require 'app/config.php';
+require 'app/mailer.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Basic sanitization/trim
@@ -52,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute(['username' => $username]);
     if ($stmt->fetch(PDO::FETCH_ASSOC)) {
         $_SESSION['flash'] = 'Username already taken.';
-        header('Location: signup.php'); // or the form page
+        header('Location: signup.php');
         exit();
     }
 
@@ -65,27 +63,46 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    // Hash password with SHA-256 to match the style in your login code.
-    // Note: using password_hash()/password_verify() is recommended for new apps.
+    // Hash password with SHA-256
     $password_hash = hash('sha256', $password);
 
-    // Default role_id (adjust as needed)
-    $default_role_id = 3; // 3 for customer
+    // Generate verification token and expiration time
+    $verificationToken = bin2hex(random_bytes(32)); // 64 characters
+    $tokenExpires = date('Y-m-d H:i:s', strtotime('+' . TOKEN_EXPIRY_HOURS . ' hours'));
 
-    // Insert new user
-    $insert = $pdo->prepare('INSERT INTO users (username, email, password, role_id) VALUES (:username, :email, :password, :role_id)');
+    // Default role_id (3 for customer)
+    $default_role_id = 3;
+
+    // Insert new user with verification data
+    $insert = $pdo->prepare('INSERT INTO users (username, email, password, role_id, email_verified, verification_token, token_expires)
+                             VALUES (:username, :email, :password, :role_id, :email_verified, :verification_token, :token_expires)');
+
     $success = $insert->execute([
         'username' => $username,
         'email' => $email,
         'password' => $password_hash,
-        'role_id'  => $default_role_id
+        'role_id'  => $default_role_id,
+        'email_verified' => 0,
+        'verification_token' => $verificationToken,
+        'token_expires' => $tokenExpires
     ]);
 
     if ($success) {
-        // After successful registration, redirect to login page
-        redirect_to_login();
+        // Send verification email
+        $emailSent = sendVerificationEmail($email, $username, $verificationToken);
+
+        if ($emailSent) {
+            $_SESSION['flash'] = 'Registration successful! Please check your email to verify your account.';
+            $_SESSION['flash_type'] = 'success';
+            header('Location: login.php');
+        } else {
+            $_SESSION['flash'] = 'Registration successful but verification email could not be sent. Please contact support.';
+            $_SESSION['flash_type'] = 'warning';
+            header('Location: login.php');
+        }
     } else {
         $_SESSION['flash'] = 'Registration failed. Please try again.';
+        $_SESSION['flash_type'] = 'error';
         header('Location: signup.php');
     }
     exit();
