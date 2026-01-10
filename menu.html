@@ -34,36 +34,46 @@
   <header id="header" class="header fixed-top">
     <!-- Paste your full header code from index.html here -->
     <!-- Including the topbar, logo, navmenu, and the .icon-cart div -->
-    <div class="topbar d-flex align-items-center">
-      <!-- ... your topbar ... -->
+    <div class="topbar d-flex align-items-center" style="background-color: var(--background-color);">
+      <div class="container d-flex justify-content-center justify-content-md-between">
+        <div class="contact-info d-flex align-items-center">
+          <i class="bi bi-envelope d-flex align-items-center"><a href="mailto:contact@example.com">tigabelasmedia@gmail.com</a></i>
+          <i class="bi bi-phone d-flex align-items-center ms-4"><span>012-234 6861</span></i>
+        </div>
+        <div class="languages d-none d-md-flex align-items-center">
+          <ul>
+            <li>En</li>
+          </ul>
+        </div>
+      </div>
     </div>
 
     <div class="branding d-flex align-items-center">
-      <div class="container position-relative d-flex align-items-center justify-content-between">
-        <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
-          <h1 class="sitename">Kafe Tiga Belas</h1>
-        </a>
+        <div class="container position-relative d-flex align-items-center justify-content-between">
+            <a href="index.php">
+                <i class="bi bi-arrow-left-circle-fill fs-3"></i>
+            </a>
+            <a href="#menu" class="logo d-flex align-items-center me-auto me-xl-0">
+                <h1 class="sitename">Kafe Tiga Belas</h1>
+                <h1 style="
+                           font-size: 3em;
+                           transform: rotate(4deg);
+                           color: var(--accent-color);"
+                    class="sitename">&nbsp;&nbsp;Menu
+                </h1>
+            </a>
 
-        <nav id="navmenu" class="navmenu">
-          <ul>
-            <li><a href="index(customer).html">Home</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="menu.html" class="active">Menu</a></li>
-            <li><a href="#testimonials">Reviews</a></li>
-            <li><a href="#contact">Contact</a></li>
+            <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+            </nav>
 
-          </ul>
-          <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
-        </nav>
-
-        <!-- CART ICON - CRITICAL -->
-        <div class="icon-cart ms-3">
-          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-            <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 4h1.5L9 16m0 0h8m-8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm8 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4Zm-8.5-3h9.25L19 7H7.312"/>
-          </svg>
-          <span>0</span>
+            <!-- CART ICON - CRITICAL -->
+            <div class="icon-cart">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 20 20">
+                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
+                </svg>
+                <span>0</span>
+            </div>
         </div>
-      </div>
     </div>
   </header>
   <!-- End Header -->
