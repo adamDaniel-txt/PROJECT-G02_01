@@ -1575,6 +1575,47 @@ section,
 }
 
 /*--------------------------------------------------------------
+# Rating Section
+--------------------------------------------------------------*/
+.star-rating {
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: flex-end;
+    cursor: pointer;
+}
+
+.star-rating input {
+    display: none;
+}
+
+.star-rating label {
+    color: #dee2e6;
+    cursor: pointer;
+    transition: color 0.2s;
+    margin: 0 2px;
+}
+
+.star-rating label:hover,
+.star-rating label:hover ~ label,
+.star-rating input:checked ~ label {
+    color: #ffc107; /* Bootstrap warning color (yellow) */
+}
+
+.star-display {
+    color: #ffc107;
+    font-size: 1.1rem;
+}
+
+.star-label {
+    font-size: 1.8rem;
+}
+
+/* Make sure stars are properly aligned */
+.star-rating i {
+    display: inline-block;
+}
+
+/*--------------------------------------------------------------
 # Testimonials Section
 --------------------------------------------------------------*/
 .testimonials .testimonials-carousel,
