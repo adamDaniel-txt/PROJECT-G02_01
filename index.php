@@ -2,10 +2,14 @@
 session_start();
 require 'app/db.php';
 require 'app/persmission.php';
+require 'app/feedback.php';
 
 // Check if user is logged in and get their role
 $isLoggedIn = isset($_SESSION['role_id']);
 $userRole = $_SESSION['role'] ?? null; // Assuming you store role in session
+
+// Get all feedbacks for display
+$feedbacks = getAllFeedbacks($pdo);
 ?>
 
 <!DOCTYPE html>
@@ -77,9 +81,9 @@ $userRole = $_SESSION['role'] ?? null; // Assuming you store role in session
             <ul>
               <li><a href="#hero" class="active">Home<br></a></li>
               <li><a href="#about">About</a></li>
-              <li><a href="menu.html">Menu</a></li>
               <li><a href="#testimonials">Reviews</a></li>
               <li><a href="#contact">Contact</a></li>
+              <li><a href="menu.html">Menu</a></li>
             </ul>
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
         </nav>
@@ -94,7 +98,7 @@ $userRole = $_SESSION['role'] ?? null; // Assuming you store role in session
                 <?php else: ?>
                     <a class="dropdown-item" href="profile.php"><i class="bi bi-person"></i>&nbsp&nbspProfile</a>
                     <?php if (hasPermission('view_dashboard')): ?>
-                        <a class="dropdown-item" href="dashboard.php"><i class="bi bi-speedometer2"></i>&nbsp;&nbsp;Dashboard</a>
+                        <a class="dropdown-item" href="dashboard.php"><i class="bi bi-speedometer2"></i>&nbsp&nbspDashboard</a>
                     <?php endif; ?>
                     <a class="dropdown-item" href="logout.php"><i class="bi bi-box-arrow-left"></i>&nbsp&nbspLog Out</a>
                 <?php endif; ?>
@@ -328,33 +332,75 @@ $userRole = $_SESSION['role'] ?? null; // Assuming you store role in session
         <p>Leave a message for us to improve our food and services!</p>
       </div><!-- End Section Title -->
 
-      <div class="container" data-aos="fade-up" data-aos-delay="100">
+      <div class="container col-12" data-aos="fade-up" data-aos-delay="100">
 
-        <form action="forms/give-feedback.php" method="post" role="form" class="php-email-form">
-          <div class="row gy-4">
-            <div class="col-lg-4 col-md-6">
-              <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required="">
+        <!-- Success/Error Messages -->
+        <?php if (!empty($message)): ?>
+            <div class="alert alert-<?php echo $message_type === 'success' ? 'success' : 'danger'; ?> alert-custom alert-dismissible fade show" role="alert">
+                <i class="bi <?php echo $message_type === 'success' ? 'bi-check-circle-fill' : 'bi-exclamation-triangle-fill'; ?> me-2"></i>
+                <?php echo htmlspecialchars($message); ?>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
-            <div class="col-lg-4 col-md-6">
-              <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required="">
+        <?php endif; ?>
+
+        <!-- Give Feedback Form -->
+        <form method="POST" action="" novalidate>
+            <div class="col-12">
+                <div class="star-rating star-label mb-2">
+                    <!-- Stars in reverse order for CSS sibling selector -->
+                    <input type="radio" id="star5" name="rating" value="5" <?php echo (($_POST['rating'] ?? 3) == 5) ? 'checked' : ''; ?>>
+                    <label for="star5" title="Excellent - Perfect experience!">
+                        <i class="bi bi-star-fill"></i>
+                    </label>
+
+                    <input type="radio" id="star4" name="rating" value="4" <?php echo (($_POST['rating'] ?? 3) == 4) ? 'checked' : ''; ?>>
+                    <label for="star4" title="Very Good - Great experience">
+                        <i class="bi bi-star-fill"></i>
+                    </label>
+
+                    <input type="radio" id="star3" name="rating" value="3" <?php echo (($_POST['rating'] ?? 3) == 3) ? 'checked' : ''; ?>>
+                    <label for="star3" title="Good - Satisfied">
+                        <i class="bi bi-star-fill"></i>
+                    </label>
+
+                    <input type="radio" id="star2" name="rating" value="2" <?php echo (($_POST['rating'] ?? 3) == 2) ? 'checked' : ''; ?>>
+                    <label for="star2" title="Fair - Could be better">
+                        <i class="bi bi-star-fill"></i>
+                    </label>
+
+                    <input type="radio" id="star1" name="rating" value="1" <?php echo (($_POST['rating'] ?? 3) == 1) ? 'checked' : ''; ?>>
+                    <label for="star1" title="Poor - Needs improvement">
+                        <i class="bi bi-star-fill"></i>
+                    </label>
+                </div>
             </div>
-            <div class="col-lg-4 col-md-6">
-              <input type="text" class="form-control" name="phone" id="phone" placeholder="Your Phone" required="">
+
+            <div class="col-12">
+                <div class="form-floating">
+                    <textarea class="form-control border-coffee"
+                              id="feedback_text"
+                              name="feedback"
+                              placeholder="Share your thoughts..."
+                              style="height: 120px"
+                              required><?php echo htmlspecialchars($_POST['feedback'] ?? ''); ?></textarea>
+                    <label for="feedback_text" class="text-muted">
+                        <i class="bi bi-chat-text me-1"></i>Your Feedback
+                    </label>
+                    <br>
+                </div>
             </div>
-          </div>
 
-          <div class="form-group mt-3">
-            <textarea class="form-control" name="message" rows="5" placeholder="Message"></textarea>
-          </div>
-
-          <div class="text-center mt-3">
-            <div class="loading">Loading</div>
-            <div class="error-message"></div>
-            <div class="sent-message">We appreciate for your feedback. Thank you!</div>
-            <button type="submit">Send feedback</button>
-          </div>
-        </form><!-- End Feedback Form -->
-
+            <div class="col-12">
+                <div class="d-grid d-md-flex justify-content-md-end">
+                    <button type="reset" class="btn btn-outline-secondary me-md-2 border-coffee">
+                        <i class="bi bi-arrow-clockwise me-2"></i>Clear
+                    </button>
+                    <button type="submit" name="submit_feedback" class="btn coffee-primary px-4" style="color: white; border-color: #cda45e;">
+                        <i class="bi bi-send-check me-2"></i>Submit Feedback
+                    </button>
+                </div>
+            </div>
+        </form>
       </div>
 
     </section><!-- /feedback section -->
