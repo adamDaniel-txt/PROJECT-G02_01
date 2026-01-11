@@ -236,7 +236,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
       <!-- Page Title -->
       <div class="text-center mb-5" data-aos="fade-up">
-        <h2 class="display-4 fw-bold" style="color: var(--accent-color);">My Profile</h2>
+
+        <h2 class="display-4 fw-bold" style="color: var(--accent-color);">
+            <a href="index.php"><i class="bi bi-arrow-left-circle-fill"></i></a>
+                My Profile
+        </h2>
       </div>
 
       <!-- Error and Success Messages -->
