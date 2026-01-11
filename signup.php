@@ -11,6 +11,9 @@ if (!empty($_SESSION['flash'])) {
 require 'app/db.php';
 require 'app/config.php';
 require 'app/mailer.php';
+require 'app/flash.php';
+
+echo flash();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Basic sanitization/trim
@@ -22,6 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Minimal validation (reasonable defaults)
     if ($username === '' || $email === '' || $password === '') {
         $_SESSION['flash'] = 'Username, email and password are required.';
+        flash('Invalid username/email or password!', 'danger');
         header('Location: signup.php');
         exit();
     }
@@ -29,18 +33,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Add email validation
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $_SESSION['flash'] = 'Please enter a valid email address.';
+        flash('Invalid username/email or password!', 'danger');
         header('Location: signup.php');
         exit();
     }
 
     if ($password !== $confirm) {
         $_SESSION['flash'] = 'Passwords do not match.';
+        flash('Invalid username/email or password!', 'danger');
         header('Location: signup.php');
         exit();
     }
 
     if (strlen($password) < 8) {
         $_SESSION['flash'] = 'Password must be at least 8 characters.';
+        flash('Invalid username/email or password!', 'danger');
         header('Location: signup.php');
         exit();
     }
@@ -50,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute(['username' => $username]);
     if ($stmt->fetch(PDO::FETCH_ASSOC)) {
         $_SESSION['flash'] = 'Username already taken.';
+        flash('Invalid username/email or password!', 'danger');
         header('Location: signup.php');
         exit();
     }
@@ -59,6 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute(['email' => $email]);
     if ($stmt->fetch(PDO::FETCH_ASSOC)) {
         $_SESSION['flash'] = 'Email already registered.';
+        flash('Invalid username/email or password!', 'danger');
         header('Location: signup.php');
         exit();
     }
@@ -93,16 +102,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($emailSent) {
             $_SESSION['flash'] = 'Registration successful! Please check your email to verify your account.';
-            $_SESSION['flash_type'] = 'success';
+        flash('Invalid username/email or password!', 'danger');
             header('Location: login.php');
         } else {
             $_SESSION['flash'] = 'Registration successful but verification email could not be sent. Please contact support.';
-            $_SESSION['flash_type'] = 'warning';
+        flash('Invalid username/email or password!', 'danger');
             header('Location: login.php');
         }
     } else {
         $_SESSION['flash'] = 'Registration failed. Please try again.';
-        $_SESSION['flash_type'] = 'error';
+        flash('Invalid username/email or password!', 'danger');
         header('Location: signup.php');
     }
     exit();

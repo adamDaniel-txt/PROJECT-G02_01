@@ -1,12 +1,13 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
-if (!empty($_SESSION['flash'])) {
-    echo '<div class="flash">'.htmlspecialchars($_SESSION['flash']).'</div>';
-    unset($_SESSION['flash']);
-}
 
 require 'app/db.php';
-require 'app/persmission.php';
+require 'app/flash.php';
+
+echo flash();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
@@ -20,19 +21,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($user && hash('sha256', $password) === $user['password']) {
         // Email verification
         if (!$user['email_verified']) {
-            $_SESSION['flash'] = 'Please verify your email before logging in. Check your email for the verification link.';
+            flash('Please verify your email before logging in. Check your email for the verification link.', 'warning');
             header('Location: login.php');
             exit();
         }
 
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['role_id'] = $user['role_id'];
+
+        flash('Login successful! Redirecting...', 'success');
         header('Location: index.php');
         exit();
     } else {
-        echo " test";
-        $_SESSION['flash'] = 'Invalid credentials!';
+        flash('Invalid username/email or password!', 'danger');
         header('Location: login.php');
+        exit();
     }
 }
 ?>
@@ -46,18 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/main.css">
 
-    <style>
-    @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-    }
-
-    .flash {
-        color: #cda45e;
-        animation: fadeIn 0.5s ease-out;
-        text-align: center;
-    }
-    </style>
 </head>
 
 <body>
