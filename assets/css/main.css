@@ -1615,17 +1615,104 @@ section,
     display: inline-block;
 }
 
+
+/*--------------------------------------------------------------
+# Feedback Section
+--------------------------------------------------------------*/
+/* Change card background color */
+.feedback-card {
+    background-color: color-mix(in srgb, var(--default-color), transparent 95%) !important; /* White background */
+    /* border-color: var(--accent-color) !important; /* Coffee border */ */
+    min-height: 5em; /* Minimum card height */
+}
+
+/* Change card text color */
+.feedback-card .card-title {
+    color: var(--accent-color) !important; /* Coffee brown for titles */
+}
+
+.feedback-card .card-text {
+    color: var(--default-color) !important; /* Dark gray for text */
+}
+
+.form-control {
+    background-color: var(--background-color);
+    color: var(--default-color);
+    border-color: var(--accent-color);
+}
+
+#feedback_text {
+    background-color: var(--background-color) !important;
+    color: var(--default-color) !important;
+    border-color: var(--accent-color) !important;
+}
+
+#feedback_text::placeholder {
+    color: var(--default-color) !important;
+}
+
+#feedback_text:focus {
+    background-color: var(--background-color) !important;
+    color: var(--default-color) !important;
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 0 0.25rem var(--accent-color) !important;
+}
+
+.form-control.border-coffee:focus {
+    background-color: var(--background-color);
+    color: var(--default-color);
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.25rem var(--accent-color);
+}
+
+/*--------------------------------------------------------------
+# Swiper
+--------------------------------------------------------------*/
+/* Swiper Navigation Buttons - Larger */
+.swiper-button-next,
+.swiper-button-prev {
+    width: 32px !important;
+    height: 32px !important;
+    background-color: var(--accent-color);
+    border-radius: 50%;
+    color: white !important;
+    top: 50% !important;
+    margin-top: 40px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.swiper-button-next {
+    right: 10px !important;
+}
+
+.swiper-button-prev {
+    left: 10px !important;
+}
+
+.swiper-button-next:after,
+.swiper-button-prev:after {
+    font-size: 20px !important;
+    font-weight: bold;
+}
+
+.swiper-button-next.swiper-button-disabled,
+.swiper-button-prev.swiper-button-disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    pointer-events: all;
+}
+
 /*--------------------------------------------------------------
 # Testimonials Section
 --------------------------------------------------------------*/
 .testimonials .testimonials-carousel,
 .testimonials .testimonials-slider {
-  overflow: hidden;
+    overflow: hidden;
 }
 
 .testimonials .testimonial-item {
-  box-sizing: content-box;
-  min-height: 320px;
+    box-sizing: content-box;
+    min-height: 320px;
 }
 
 .testimonials .testimonial-item .testimonial-img {
