@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customers</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="assets/css/dashStyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        .customer-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .customer-table th,
+        .customer-table td {
+            padding: 12px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        .customer-table input {
+            border: none;
+            background: transparent;
+            width: 100%;
+        }
+
+        .customer-table button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            margin-right: 8px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+<div class="app-container">
+
+    <!-- Side Bar-->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">
+                <div class="logo-icon">D</div>
+                <div class="logo-text">Dashboard</div>
+            </div>
+
+            <nav class="nav-section">
+                <div class="nav-label">Main Menu</div>
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="analytics.html" class="nav-item">
+                    <i class="fa-solid fa-chart-bar"></i>
+                    <span>Analytics</span>
+                </a>
+
+                <a href="sales.html" class="nav-item">
+                    <i class="fa-solid fa-shopping-cart"></i>
+                    <span>Sales</span>
+                    <span class="nav-badge">12</span>
+                </a>
+
+                <a href="products.html" class="nav-item">
+                    <i class="fa-solid fa-box"></i>
+                    <span>Product</span>
+                </a>
+
+                <a href="customers.html" class="nav-item active">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Customers</span>
+                </a>
+            </nav>
+
+            <nav class="nav-section">
+                <div class="nav-label">Management</div>
+                <a href="#" class="nav-item">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <span>Orders</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <i class="fa-solid fa-warehouse"></i>
+                    <span>Inventory</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Reports</span>
+                </a>
+            </nav>
+
+            <nav class="nav-section">
+                <div class="nav-label">Support</div>
+                <a href="#" class="nav-item">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Settings</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <i class="fa-solid fa-circle-question"></i>
+                    <span>Help Centre</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Log Out</span>
+                </a>
+            </div>
+        </aside>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <header class="top-bar">
+            <h2>Customer Management</h2>
+        </header>
+
+        <div class="dashboard">
+            <div class="card">
+                <div class="card-header">Customer List</div>
+
+                <table class="customer-table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Email</th>
+                            <th>Phone</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="customerTable"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let customers = [
+        { name: "John Doe", email: "john@email.com", phone: "012-3456789" },
+        { name: "Jane Smith", email: "jane@email.com", phone: "017-8889999" },
+        { name: "Ali Ahmad", email: "ali@email.com", phone: "019-2233445" }
+    ];
+
+    const table = document.getElementById("customerTable");
+
+    function renderCustomers() {
+        table.innerHTML = "";
+
+        customers.forEach((c, index) => {
+            table.innerHTML += `
+                <tr>
+                    <td><input value="${c.name}" disabled></td>
+                    <td><input value="${c.email}" disabled></td>
+                    <td><input value="${c.phone}" disabled></td>
+                    <td>
+                        <button onclick="editCustomer(${index})">
+                            <i class="fa-solid fa-pen"></i>
+                        </button>
+                        <button onclick="deleteCustomer(${index})">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                        <button style="display:none" onclick="saveCustomer(${index}, this)">
+                            <i class="fa-solid fa-check"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+    }
+
+    function editCustomer(index) {
+        const row = table.rows[index];
+        row.querySelectorAll("input").forEach(i => i.disabled = false);
+        row.cells[3].children[0].style.display = "none"; // edit
+        row.cells[3].children[2].style.display = "inline";
+    }
+
+    function saveCustomer(index, btn) {
+        const row = btn.closest("tr");
+        const inputs = row.querySelectorAll("input");
+
+        customers[index] = {
+            name: inputs[0].value,
+            email: inputs[1].value,
+            phone: inputs[2].value
+        };
+
+        inputs.forEach(i => i.disabled = true);
+        row.cells[3].children[0].style.display = "inline";
+        row.cells[3].children[2].style.display = "none";
+    }
+
+    function deleteCustomer(index) {
+        if (confirm("Delete this customer?")) {
+            customers.splice(index, 1);
+            renderCustomers();
+        }
+    }
+
+    renderCustomers();
+</script>
+</body>
+</html>

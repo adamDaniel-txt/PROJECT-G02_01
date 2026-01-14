@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics</title>
+
+    <link rel="stylesheet" href="assets/css/dashStyle.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="app-container">
+
+        <!-- Side Bar-->
+        <aside class="sidebar" id="sidebar">
+            <div class="logo">
+                <div class="logo-icon">D</div>
+                <div class="logo-text">Dashboard</div>
+            </div>
+
+            <nav class="nav-section">
+                <div class="nav-label">Main Menu</div>
+                <a href="dashboard.html" class="nav-item">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Dashboard</span>
+                </a>
+
+                <a href="analytics.html" class="nav-item active">
+                    <i class="fa-solid fa-chart-bar"></i>
+                    <span>Analytics</span>
+                </a>
+
+                <a href="sales.html" class="nav-item">
+                    <i class="fa-solid fa-shopping-cart"></i>
+                    <span>Sales</span>
+                    <span class="nav-badge">12</span>
+                </a>
+
+                <a href="products.html" class="nav-item">
+                    <i class="fa-solid fa-box"></i>
+                    <span>Product</span>
+                </a>
+
+                <a href="customers.html" class="nav-item">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Customers</span>
+                </a>
+            </nav>
+
+            <nav class="nav-section">
+                <div class="nav-label">Management</div>
+                <a href="#" class="nav-item">
+                    <i class="fa-solid fa-file-invoice"></i>
+                    <span>Orders</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <i class="fa-solid fa-warehouse"></i>
+                    <span>Inventory</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>Reports</span>
+                </a>
+            </nav>
+
+            <nav class="nav-section">
+                <div class="nav-label">Support</div>
+                <a href="#" class="nav-item">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Settings</span>
+                </a>
+
+                <a href="#" class="nav-item">
+                    <i class="fa-solid fa-circle-question"></i>
+                    <span>Help Centre</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <a href="#" class="nav-item">
+                    <i class="fa-solid fa-right-from-bracket"></i>
+                    <span>Log Out</span>
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <div class="main-content">
+
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <div style="display: flex; align-items: center; gap: 16px;">
+                    <button class="mobile-menu-toggle" onclick="toggleSidebar()">
+                        <i class="fa-solid fa-bars"></i>
+                    </button>
+
+                    <div class="search-bar">
+                        <i class="fa-solid fa-search"></i>
+                        <input type="text" placeholder="Search analytics...">
+                    </div>
+                </div>
+
+                <div class="top-actions">
+                    <button class="icon-button">
+                        <i class="fa-solid fa-bell"></i>
+                        <span class="notification-badge">.</span>
+                    </button>
+
+                    <button class="profile-button">
+                        <div class="profile-info">
+                            <div class="profile-name">Hazim Faiz</div>
+                            <div class="profile-role">Admin</div>
+                        </div>
+                        <div class="profile-avatar">HZ</div>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Analytics Content -->
+            <div class="dashboard">
+
+                <!-- Metric Cards -->
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            Total Revenue <i class="fa-solid fa-circle-info"></i>
+                        </div>
+                        <div class="metric-value">RM132,500</div>
+                        <div class="metric-change positive">
+                            vs last month <i class="fa-solid fa-arrow-up"></i> 11%
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            Page Views <i class="fa-solid fa-circle-info"></i>
+                        </div>
+                        <div class="metric-value">245,300</div>
+                        <div class="metric-change positive">
+                            vs last month <i class="fa-solid fa-arrow-up"></i> 6%
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            Conversion Rate <i class="fa-solid fa-circle-info"></i>
+                        </div>
+                        <div class="metric-value">6.7%</div>
+                        <div class="metric-change negative">
+                            vs last month <i class="fa-solid fa-arrow-down"></i> 1.1%
+                        </div>
+                    </div>
+
+                    <div class="metric-card">
+                        <div class="metric-header">
+                            Avg. Session Time <i class="fa-solid fa-circle-info"></i>
+                        </div>
+                        <div class="metric-value">3m 42s</div>
+                        <div class="metric-change positive">
+                            vs last month <i class="fa-solid fa-arrow-up"></i> 4%
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analytics Chart (same chart component as dashboard) -->
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div class="card-header">
+                            Analytics <i class="fa-solid fa-circle-info"></i>
+                        </div>
+
+                        <div class="chart-control">
+                            <button class="btn"><i class="fa-solid fa-filter"></i>Filter</button>
+                            <button class="btn">Last Year<i class="fa-solid fa-chevron-down"></i></button>
+                            <button class="btn"><i class="fa-solid fa-expand"></i></button>
+                        </div>
+                    </div>
+
+                    <div class="analytics-chart">
+                        <div class="chart-bars">
+                            <div class="chart-bar" style="height: 15%;">
+                                <span class="chart-label">Jan</span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 20%;">
+                                <span class="chart-label">Feb</span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 25%;">
+                                <span class="chart-label">Mar</span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 18%;">
+                                <span class="chart-label">Apr</span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 22%;">
+                                <span class="chart-label">May</span>
+                            </div>
+
+                            <div class="chart-bar active" style="height: 85%;">
+                                <div class="chart-tooltip">
+                                    <div>Jun: 2025</div>
+                                    <div>Revenue: RM16,500.00</div>
+                                    <div>Conversion Rate: 6.7%</div>
+                                </div>
+                                <span class="chart-label">Jun</span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 12%;">
+                                <span class="chart-label">Jul</span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 16%;">
+                                <span class="chart-label">Aug</span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 19%;">
+                                <span class="chart-label">Sep</span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 14%;">
+                                <span class="chart-label">Oct</span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 17%;">
+                                <span class="chart-label">Nov</span>
+                            </div>
+
+                            <div class="chart-bar" style="height: 21%;">
+                                <span class="chart-label">Dec</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/dashScript.js"></script>
+</body>
+
+</html>
