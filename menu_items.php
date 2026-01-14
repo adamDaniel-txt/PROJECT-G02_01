@@ -1,7 +1,7 @@
 <?php
 session_start();
 require 'app/db.php';
-require 'menu_functions.php';
+require 'app/menu_functions.php';
 
 // Simple authentication - in real app, use proper authentication
 $is_staff = true; // You'll replace this with real auth later

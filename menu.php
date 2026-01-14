@@ -3,7 +3,7 @@ error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
 require 'app/db.php';
-require 'menu_functions.php';
+require 'app/menu_functions.php';
 
 // Get all available menu items
 $menu_items = getAllMenuItems($pdo);
