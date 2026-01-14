@@ -81,7 +81,7 @@ function getStarDisplay($rating) {
     for ($i = $rating + 1; $i <= 5; $i++) {
         $html .= '<i class="bi bi-star"></i>';
     }
-    $html .= '<span class="ms-2 text-muted small">' . $rating . '/5</span>';
+    $html .= '<span class="ms-2 text-light small">' . $rating . '/5</span>';
     return $html;
 }
 
