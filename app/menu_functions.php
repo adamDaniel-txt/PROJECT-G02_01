@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . '/app/db.php';
+require 'db.php';
 
 // Get all menu items (for customers)
 function getAllMenuItems($pdo, $category = null, $available_only = true) {
