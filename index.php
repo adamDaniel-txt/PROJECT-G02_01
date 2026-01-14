@@ -333,6 +333,12 @@ $feedbacks = getAllFeedbacks($pdo);
 
                 <div class="container col-10" data-aos="fade-up" data-aos-delay="100">
 
+                    <?php if (!hasPermission('create_feedback')): ?>
+                    <div class="alert alert-primary text-center" role="alert">
+                      To give a feedback, you need to be a <a href="#" class="alert-link">Customer</a> first.
+                    </div>
+                    <?php endif; ?>
+
                     <!-- Success/Error Messages -->
                     <?php if (!empty($message)): ?>
                     <div class="alert alert-<?php echo $message_type === 'success' ? 'success' : 'danger'; ?> alert-custom alert-dismissible fade show" role="alert">
@@ -343,11 +349,7 @@ $feedbacks = getAllFeedbacks($pdo);
                     <?php endif; ?>
 
 
-                    <?php if (hasPermission('create_feedback')): ?>
-                    <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>#give-feedback" novalidate>
-                    <?php else: ?>
-                    <form method="POST" action="login.php" novalidate>
-                    <?php endif; ?>
+                    <form method="POST" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?>#testimonials" novalidate>
                         <div class="col-12">
                             <div class="star-rating star-label mb-2">
                                 <!-- Stars in reverse order for CSS sibling selector -->
@@ -391,16 +393,19 @@ $feedbacks = getAllFeedbacks($pdo);
 
                         <div class="col-12">
                             <div class="d-grid d-md-flex justify-content-md-end">
+                                <?php if (hasPermission('create_feedback')): ?>
                                 <button type="reset" class="btn btn-outline-secondary me-md-2">
                                     <i class="bi bi-arrow-clockwise me-2"></i>Clear
                                 </button>
-                                <?php if (hasPermission('create_feedback')): ?>
                                 <button type="submit" name="submit_feedback" class="btn px-4" style="color: var(--accent-color); border-color: var(--accent-color);">
                                     <i class="bi bi-send-check me-2"></i>Submit Feedback
                                 </button>
                                 <?php else: ?>
-                                <button class="btn px-4" style="color: var(--accent-color); border-color: var(--accent-color);">
-                                    <i class="bi bi-send-check me-2"></i>Login to Give Feedback
+                                <button hidden type="reset" class="btn btn-outline-secondary me-md-2">
+                                    <i class="bi bi-arrow-clockwise me-2"></i>Clear
+                                </button>
+                                <button hidden type="submit" name="submit_feedback" class="btn px-4" style="color: var(--accent-color); border-color: var(--accent-color);">
+                                    <i class="bi bi-send-check me-2"></i>Submit Feedback
                                 </button>
                                 <?php endif; ?>
                             </div>
