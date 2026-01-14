@@ -123,7 +123,7 @@ $feedbacks = getAllFeedbacks($pdo);
                             <h2 data-aos="fade-up" data-aos-delay="100">Welcome to <span>Kafe Tiga Belas</span></h2>
                             <p data-aos="fade-up" data-aos-delay="200">Delivering great food for more than 20 years!</p>
                             <div class="d-flex mt-4" data-aos="fade-up" data-aos-delay="300">
-                                <a href="#menu" class="cta-btn">Order Now!</a>
+                                <a href="menu.html" class="cta-btn">Order Now!</a>
                                 <!--<a href="#give-feedback" class="cta-btn">Book a Table</a>-->
                             </div>
                         </div>
