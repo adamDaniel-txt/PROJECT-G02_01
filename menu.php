@@ -1,3 +1,20 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+require 'app/db.php';
+require 'menu_functions.php';
+
+// Get all available menu items
+$menu_items = getAllMenuItems($pdo);
+$categories = getMenuCategories($pdo);
+
+// Filter by category if selected
+$selected_category = $_GET['category'] ?? null;
+if ($selected_category) {
+    $menu_items = getAllMenuItems($pdo, $selected_category);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -80,11 +97,61 @@
 
   <main class="main">
       <!-- Menu Section -->
-<section id="menu" class="menu section">
+<section id="menu" class="menu section container py-5">
+        <br><br><br>
 
   <!-- Menu Grid -->
   <div class="container" data-aos="fade-up" data-aos-delay="100">
     <div id="menu-grid" class="row gy-4 justify-content-center">
+
+        <?php if (empty($menu_items)): ?>
+            <div class="text-center py-5">
+                <div class="mb-3">
+                    <i class="bi bi-cup display-1 text-muted opacity-25"></i>
+                </div>
+                <h3 class="text-muted">No items found</h3>
+                <p class="text-muted">Please check back later or try another category.</p>
+            </div>
+        <?php else: ?>
+            <div class="row g-4">
+                <?php foreach ($menu_items as $item): ?>
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card menu-card shadow-sm">
+                            <!-- Item Image -->
+                            <?php if ($item['image_url']): ?>
+                                <img src="<?php echo htmlspecialchars($item['image_url']); ?>"
+                                     alt="<?php echo htmlspecialchars($item['name']); ?>"
+                                     class="card-img-top menu-img">
+                            <?php else: ?>
+                                <div class="default-menu-img">
+                                    <i class="bi bi-cup-hot display-1"></i>
+                                </div>
+                            <?php endif; ?>
+
+                            <div class="card-body d-flex flex-column">
+                                <!-- Item Name -->
+                                <h3 class="card-title h5 text-light"><?php echo htmlspecialchars($item['name']); ?></h3>
+
+                                <!-- Description -->
+                                <?php if ($item['description']): ?>
+                                    <p class="card-text text-light flex-grow-1"><?php echo htmlspecialchars($item['description']); ?></p>
+                                <?php endif; ?>
+
+                                <!-- Price and Action -->
+                                <div class="d-flex justify-content-between align-items-center mt-3">
+                                    <div class="price-tag"><?php echo formatPrice($item['price']); ?></div>
+                                    <button class="btn btn-add-to-cart">
+                                        <i class="bi bi-cart-plus me-1"></i>Add to Order
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            </div>
+        <?php endif; ?>
+
+    <div hidden>
 
       <!-- Menu Item 1 -->
       <div class="menu-item-card">
@@ -263,7 +330,7 @@
           </div>
         </div>
       </div>
-
+    </div>
 
     </div>
   </div>
