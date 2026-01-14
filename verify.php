@@ -59,6 +59,7 @@ if (isset($_GET['token']) && !empty($_GET['token'])) {
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/css/main.css">
     <title>Email Verification - TigaBelas Cafe</title>
 </head>
 <body>
@@ -66,10 +67,10 @@ if (isset($_GET['token']) && !empty($_GET['token'])) {
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card">
-                    <div class="card-header">
+                    <div class="card-header bg-dark">
                         <h3 class="text-center">Email Verification</h3>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body bg-dark">
                         <div class="alert alert-<?php echo $message_type; ?> text-center">
                             <?php echo htmlspecialchars($message); ?>
                         </div>
