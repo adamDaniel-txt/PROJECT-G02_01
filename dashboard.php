@@ -33,12 +33,12 @@
                 <a href="sales.html" class="nav-item">
                     <i class="fa-solid fa-shopping-cart"></i>
                     <span>Sales</span>
-                    <span class="nav-badge">12</span>
+                    <!-- <span class="nav-badge">12</span> -->
                 </a>
 
-                <a href="products.html" class="nav-item">
+                <a href="menu_items.php" class="nav-item">
                     <i class="fa-solid fa-box"></i>
-                    <span>Product</span>
+                    <span>Menu Items</span>
                 </a>
 
                 <a href="customers.html" class="nav-item">
@@ -47,7 +47,7 @@
                 </a>
             </nav>
 
-            <nav class="nav-section">
+            <nav hidden class="nav-section">
                 <div class="nav-label">Management</div>
                 <a href="#" class="nav-item">
                     <i class="fa-solid fa-file-invoice"></i>
@@ -65,7 +65,7 @@
                 </a>
             </nav>
 
-            <nav class="nav-section">
+            <nav hidden class="nav-section">
                 <div class="nav-label">Support</div>
                 <a href="#" class="nav-item">
                     <i class="fa-solid fa-gear"></i>
