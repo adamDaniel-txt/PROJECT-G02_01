@@ -20,17 +20,17 @@
 
             <nav class="nav-section">
                 <div class="nav-label">Main Menu</div>
-                <a href="dashboard.html" class="nav-item active">
+                <a href="dashboard.php" class="nav-item active">
                     <i class="fa-solid fa-chart-line"></i>
                     <span>Dashboard</span>
                 </a>
 
-                <a href="analytics.html" class="nav-item">
+                <a href="#" class="nav-item">
                     <i class="fa-solid fa-chart-bar"></i>
                     <span>Analytics</span>
                 </a>
 
-                <a href="sales.html" class="nav-item">
+                <a href="#" class="nav-item">
                     <i class="fa-solid fa-shopping-cart"></i>
                     <span>Sales</span>
                     <!-- <span class="nav-badge">12</span> -->
@@ -41,7 +41,7 @@
                     <span>Menu Items</span>
                 </a>
 
-                <a href="customers.html" class="nav-item">
+                <a href="#" class="nav-item">
                     <i class="fa-solid fa-users"></i>
                     <span>Customers</span>
                 </a>
