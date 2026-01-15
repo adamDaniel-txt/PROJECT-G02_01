@@ -79,9 +79,13 @@
             </nav>
 
             <div class="sidebar-footer">
-                <a href="#" class="nav-item">
+                <a href="profile.php" class="nav-item">
+                    <i class="fa-solid fa-person"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="index.php" class="nav-item">
                     <i class="fa-solid fa-right-from-bracket"></i>
-                    <span>Log Out</span>
+                    <span>Go Home</span>
                 </a>
             </div>
         </aside>
@@ -89,6 +93,7 @@
         <!--Main Content-->
         <div class="main-content">
             <!--Top Bar-->
+<!--
             <header class="top-bar">
                 <div style="display: flex; align-items: center; gap: 16px;">
                     <button class="mobile-menu-toggle" onclick="toggleSidebar()">
@@ -96,16 +101,16 @@
                     </button>
                     <div class="search-bar">
                         <i class="fa-solid fa-search"></i>
-                        <input type="text" placeholder="Search..."> <!--Dummy-->
+                        <input type="text" placeholder="Search...">
                     </div>
                 </div>
-                <div class="top-actions">
+                <div hidden class="top-actions">
                     <button class="icon-button">
                         <i class="fa-solid fa-bell"></i>
                         <span class="notification-badge">.</span>
                     </button>
 
-                    <!--Sample Profile-->
+                    Sample Profile
                     <button class="profile-button">
                         <div class="profile-info">
                             <div class="profile-name">Hazim Faiz</div>
@@ -115,6 +120,7 @@
                     </button>
                 </div>
             </header>
+-->
 
             <!--Dashboard Content-->
             <div class="dashboard">
