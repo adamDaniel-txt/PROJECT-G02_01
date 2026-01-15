@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jan 12, 2026 at 04:07 AM
+-- Generation Time: Jan 15, 2026 at 03:27 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -35,6 +35,48 @@ CREATE TABLE `feedbacks` (
   `rating` int(1) DEFAULT 3,
   `created_at` datetime NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `feedbacks`
+--
+
+INSERT INTO `feedbacks` (`id`, `user_name`, `user_email`, `feedback_text`, `rating`, `created_at`) VALUES
+(1, 'Anonymous', NULL, 'very good very nice', 3, '2026-01-12 11:31:17'),
+(2, 'Anonymous', NULL, 'i very like this coffee, it is very goood', 3, '2026-01-14 22:48:15'),
+(3, 'Anonymous', NULL, 'i loooove this cafe', 5, '2026-01-14 22:48:33'),
+(4, 'Anonymous', NULL, 'It is okay, overrated', 1, '2026-01-14 23:49:20');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `menu_items`
+--
+
+CREATE TABLE `menu_items` (
+  `id` int(11) NOT NULL,
+  `name` varchar(100) NOT NULL,
+  `description` text DEFAULT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `category` varchar(50) NOT NULL,
+  `image_url` varchar(255) DEFAULT NULL,
+  `is_available` tinyint(1) DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `menu_items`
+--
+
+INSERT INTO `menu_items` (`id`, `name`, `description`, `price`, `category`, `image_url`, `is_available`, `created_at`, `updated_at`) VALUES
+(1, 'Espresso', 'Strong black coffee made by forcing steam through ground coffee beans', 3.50, 'Coffee', 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.NZGzV2GOHNqBXmBPXiH6YwHaE8%3Fcb%3Ddefcache2%26pid%3DApi%26defcache%3D1&f=1&ipt=61f57b0bd7a48fdd80170f1e1246bde987049c453e3f764de40c3b102561b3b3&ipo=images', 1, '2026-01-14 17:17:36', '2026-01-15 02:25:46'),
+(2, 'Cappuccino', 'Espresso with steamed milk and a layer of milk foam', 4.50, 'Coffee', 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.kbjQCtA_at72z3EldA1UmQHaFJ%3Fpid%3DApi&f=1&ipt=d4a8a2daa404d6ba2ff2d3ba2e744e7f45ec1b9c6e5d9915f383b721979ec60e&ipo=images', 1, '2026-01-14 17:17:36', '2026-01-15 02:24:40'),
+(3, 'Latte', 'Espresso with steamed milk and a light layer of foam', 5.00, 'Coffee', 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.6Lb2xzBM3B6maFHPDwhw5AHaE8%3Fpid%3DApi&f=1&ipt=1d8c9eb33ac101c33c5a67ceb1516f78667fadee1c94ecc6fa3a223e48e72ba8&ipo=images', 1, '2026-01-14 17:17:36', '2026-01-15 02:26:06'),
+(4, 'Hot Chocolate', 'Rich chocolate drink with steamed milk', 4.00, 'Non-Coffee', 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.ZrDN-j89uEKUSh7rWteCxAHaE8%3Fpid%3DApi&f=1&ipt=e04c69e671ca6fdec7673d2b9af3d379060d9a41de954b926644e30f0767dafe&ipo=images', 1, '2026-01-14 17:17:36', '2026-01-15 02:27:17'),
+(5, 'Green Tea', 'Refreshing traditional green tea', 3.00, 'Tea', 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.OrD-0SE3pvuxamciektv-AHaE8%3Fpid%3DApi&f=1&ipt=2a8975355f6d015458d8960615a34375eb2feefa3a0519bccc2ff887b2073887&ipo=images', 1, '2026-01-14 17:17:36', '2026-01-15 02:27:41'),
+(6, 'Chocolate Cake', 'Rich chocolate cake with ganache frosting', 6.50, 'Dessert', 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.EH61MhxlPzlSlbABSSVLawHaE8%3Fpid%3DApi&f=1&ipt=c909f3718a347a973fd715bb67ff3c5b82c5d0802aa40a8815da9a68c966de7e&ipo=images', 1, '2026-01-14 17:17:36', '2026-01-15 02:26:34'),
+(7, 'Croissant', 'Freshly baked butter croissant', 3.50, 'Bakery', 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.oiiTqE1huSD65JUzFiXVCwHaHa%3Fpid%3DApi&f=1&ipt=7a594e6cb023c6e5664dc6b1171d7fa11cbb902b1bbb93e743490e6ec0f9f872&ipo=images', 1, '2026-01-14 17:17:36', '2026-01-14 17:23:47'),
+(8, 'Club Sandwich', 'Turkey, bacon, lettuce, tomato with mayo', 8.50, 'Food', 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.sjci0ZZ6vOr5OyBbPYhcYwHaFj%3Fpid%3DApi&f=1&ipt=afb450587920559c908487666f871ee4222739455b91a3bf9653911b0e742dfa&ipo=images', 1, '2026-01-14 17:17:36', '2026-01-15 02:26:56');
 
 -- --------------------------------------------------------
 
@@ -138,6 +180,14 @@ ALTER TABLE `feedbacks`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `menu_items`
+--
+ALTER TABLE `menu_items`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_category` (`category`),
+  ADD KEY `idx_available` (`is_available`);
+
+--
 -- Indexes for table `permissions`
 --
 ALTER TABLE `permissions`
@@ -175,7 +225,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `feedbacks`
 --
 ALTER TABLE `feedbacks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+
+--
+-- AUTO_INCREMENT for table `menu_items`
+--
+ALTER TABLE `menu_items`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `permissions`
@@ -193,7 +249,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=43;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
 
 --
 -- Constraints for dumped tables
