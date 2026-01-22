@@ -320,10 +320,7 @@ $categories = getMenuCategories($pdo);
                                     <option value="Coffee">Coffee</option>
                                     <option value="Tea">Tea</option>
                                     <option value="Non-Coffee">Non-Coffee Drinks</option>
-                                    <option value="Food">Food</option>
-                                    <option value="Dessert">Dessert</option>
-                                    <option value="Bakery">Bakery</option>
-                                    <option value="Special">Special</option>
+                                    <option value="Refreshing">Refreshing</option>
                                 </select>
                             </div>
                         </div>
@@ -376,11 +373,7 @@ $categories = getMenuCategories($pdo);
                                     <option value="Coffee">Coffee</option>
                                     <option value="Tea">Tea</option>
                                     <option value="Non-Coffee">Non-Coffee Drinks</option>
-                                    <option value="Food">Food</option>
-                                    <option value="Dessert">Dessert</option>
-                                    <option value="Bakery">Bakery</option>
-                                    <option value="Special">Special</option>
-                                </select>
+                                    <option value="Refreshing">Refreshing</option>
                             </div>
                         </div>
                         <div class="mb-3">

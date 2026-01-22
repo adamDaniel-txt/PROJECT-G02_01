@@ -83,15 +83,13 @@ if ($selected_category) {
             <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
             </nav>
 
-            <!-- CART ICON - CRITICAL
+            <!-- CART ICON - CRITICAL -->
             <div class="icon-cart">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-cart" viewBox="0 0 20 20">
                     <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M3.102 4l1.313 7h8.17l1.313-7zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2"/>
                 </svg>
                 <span>0</span>
             </div>
-            -->
-            <i class="bi bi-icon-cart"></i>
         </div>
     </div>
   </header>
@@ -143,7 +141,7 @@ if ($selected_category) {
                                 <div class="d-flex justify-content-between align-items-center mt-3">
                                     <div class="price-tag"><?php echo formatPrice($item['price']); ?></div>
                                     <button class="btn btn-add-to-cart">
-                                        <i class="bi bi-cart-plus me-1"></i>Add to Order
+                                        <i class="bi bi-cart-plus me-1"></i>Add to Cart
                                     </button>
                                 </div>
                             </div>
@@ -375,10 +373,8 @@ if ($selected_category) {
             <p><strong>Email:</strong> <span>tigabelasmedia@gmail.com</span></p>
           </div>
           <div class="social-links d-flex mt-4">
-            <a href=""><i class="bi bi-twitter-x"></i></a>
             <a href=""><i class="bi bi-facebook"></i></a>
             <a href=""><i class="bi bi-instagram"></i></a>
-            <a href=""><i class="bi bi-linkedin"></i></a>
           </div>
         </div>
 

@@ -1338,7 +1338,7 @@ section,
 }
 
 #menu-grid .menu-img {
-    height: 200px;
+    height: 400px;
     object-fit: cover;
     background-color: #e9ecef;
 }
@@ -1350,7 +1350,7 @@ section,
 }
 
 #menu-grid .default-menu-img {
-    height: 200px;
+    height: 300px;
     display: flex;
     align-items: center;
     justify-content: center;
