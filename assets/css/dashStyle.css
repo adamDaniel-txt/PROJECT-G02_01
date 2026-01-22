@@ -79,7 +79,8 @@ body {
     text-decoration: none;
     border-radius: 10px;
     transition: all 0.3s ease;
-    font-size: 14px;
+    font-size: 16px;
+    font-weight: 500;
     margin: 4px;
     cursor: pointer;
 }

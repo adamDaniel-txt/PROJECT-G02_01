@@ -145,7 +145,7 @@ $feedbacks = getAllFeedbacks($pdo);
                             <img src="assets/img/about.jpg" class="img-fluid about-img" alt="">
                         </div>
                         <div class="col-lg-6 order-2 order-lg-1 content">
-                            <h3>Kafe Tiga Belas</h3>
+                            <h2>Kafe Tiga Belas</h2>
                             <p class="fst-italic">
                             Tiga Belas Cafe is a charming family-owned business that offers a delightful combination of aromatic coffee and delectable cakes.
                             With a passionate team of five siblings at the helm, this cozy cafe creates an inviting ambiance for coffee enthusiasts and dessert lovers alike.
