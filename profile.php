@@ -52,8 +52,47 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
+// Handle Profile Picture Upload
+if (isset($_FILES['profile_image'])) {
+    $file = $_FILES['profile_image'];
+    $allowed_ext = ['jpg', 'jpeg', 'png'];
+    $file_ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+
+    if (in_array($file_ext, $allowed_ext)) {
+        if ($file['error'] === 0) {
+            if ($file['size'] < 2000000) { // 2MB Limit
+                // Create unique name to prevent overwriting
+                $new_file_name = "profile_" . $user_id . "_" . time() . "." . $file_ext;
+                $file_destination = 'assets/img/profile_picture/' . $new_file_name;
+
+                if (move_uploaded_file($file['tmp_name'], $file_destination)) {
+                    // Update Database
+                    $update_pic = $pdo->prepare('UPDATE users SET profile_pic = ? WHERE id = ?');
+                    if ($update_pic->execute([$new_file_name, $user_id])) {
+                        $success = 'Profile picture updated!';
+                        // Optional: Delete old photo here if it's not the default
+                    }
+                } else {
+                    $error = 'Failed to move uploaded file.';
+                }
+            } else {
+                $error = 'File is too large (Max 2MB).';
+            }
+        } else {
+            $error = 'There was an error uploading your file.';
+        }
+    } else {
+        $error = 'Invalid file type. Only JPG, JPEG, and PNG allowed.';
+    }
+}
+
+// Refresh user data to get the latest profile_pic
+$stmt = $pdo->prepare('SELECT username, email, role_id, profile_pic FROM users WHERE id = ?');
+$stmt->execute([$user_id]);
+$user = $stmt->fetch(PDO::FETCH_ASSOC);
+
     // Update Email
-    elseif (isset($_POST['update_email'])) {
+    if (isset($_POST['update_email'])) {
         $new_email = trim($_POST['email']);
 
         if (empty($new_email)) {
@@ -258,17 +297,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           <div class="card mb-4" style="background-color: var(--surface-color); border: none; border-radius: 15px;">
             <div class="card-body text-center py-5">
 
-              <!-- Profile Picture -->
-              <div class="text-center mb-4">
-                <div class="position-relative d-inline-block">
-                  <i class="bi bi-person-circle" style="font-size: 120px; color: #ffffff;"></i>
-                  <button id="change-pic-btn" class="btn btn-sm position-absolute bottom-0 end-0 translate-middle-x"
-                          style="background: var(--accent-color); border-radius: 50%; width: 40px; height: 40px; border: none;">
-                    <i class="bi bi-camera-fill text-white"></i>
-                  </button>
-                </div>
-              </div>
+      <!-- Profile Picture -->
+   <div class="text-center mb-4">
+     <div class="position-relative d-inline-block">
+         <?php if (!empty($user['profile_pic'])): ?>
+             <img src="assets/img/profile_picture/<?php echo $user['profile_pic']; ?>" 
+                  style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent-color);">
+         <?php else: ?>
+             <i class="bi bi-person-circle" style="font-size: 120px; color: #ffffff;"></i>
+         <?php endif; ?>
 
+         <form id="profile-pic-form" method="POST" enctype="multipart/form-data">
+             <input type="file" id="profile_image_input" name="profile_image" accept="image/*" style="display: none;" onchange="document.getElementById('profile-pic-form').submit();">
+             <button type="button" onclick="document.getElementById('profile_image_input').click();" 
+                     class="btn btn-sm position-absolute bottom-0 end-0 translate-middle-x"
+                     style="background: var(--accent-color); border-radius: 50%; width: 40px; height: 40px; border: none;">
+                 <i class="bi bi-camera-fill text-white"></i>
+             </button>
+         </form>
+     </div>
+ </div>
+
+            
               <!-- Username (Editable) -->
               <form method="POST" action="" class="mb-4">
                 <p class="text-muted mb-1">Username</p>
