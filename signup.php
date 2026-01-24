@@ -4,8 +4,16 @@ ini_set('display_errors', 1);
 
 session_start();
 if (!empty($_SESSION['flash'])) {
-    echo '<div class="flash">'.htmlspecialchars($_SESSION['flash']).'</div>';
+    // Determine the color class (default to 'error' if type isn't set)
+    $type = isset($_SESSION['flash_type']) ? $_SESSION['flash_type'] : 'error';
+    
+    echo '<div class="flash flash-' . htmlspecialchars($type) . '">'.
+            htmlspecialchars($_SESSION['flash']).
+         '</div>';
+
+    // Clear the session so it doesn't show again on refresh
     unset($_SESSION['flash']);
+    unset($_SESSION['flash_type']);
 }
 
 require 'app/db.php';
@@ -22,6 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Minimal validation (reasonable defaults)
     if ($username === '' || $email === '' || $password === '') {
         $_SESSION['flash'] = 'Username, email and password are required.';
+        $_SESSION['flash_type'] = 'warning';
         header('Location: signup.php');
         exit();
     }
@@ -29,18 +38,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Add email validation
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
         $_SESSION['flash'] = 'Please enter a valid email address.';
+        $_SESSION['flash_type'] = 'warning';
         header('Location: signup.php');
         exit();
     }
 
     if ($password !== $confirm) {
         $_SESSION['flash'] = 'Passwords do not match.';
+        $_SESSION['flash_type'] = 'warning';
         header('Location: signup.php');
         exit();
     }
 
     if (strlen($password) < 8) {
         $_SESSION['flash'] = 'Password must be at least 8 characters.';
+        $_SESSION['flash_type'] = 'warning';
         header('Location: signup.php');
         exit();
     }
@@ -50,6 +62,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute(['username' => $username]);
     if ($stmt->fetch(PDO::FETCH_ASSOC)) {
         $_SESSION['flash'] = 'Username already taken.';
+        $_SESSION['flash_type'] = 'warning';
         header('Location: signup.php');
         exit();
     }
@@ -59,6 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute(['email' => $email]);
     if ($stmt->fetch(PDO::FETCH_ASSOC)) {
         $_SESSION['flash'] = 'Email already registered.';
+        $_SESSION['flash_type'] = 'warning';
         header('Location: signup.php');
         exit();
     }
@@ -124,10 +138,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     to { opacity: 1; transform: translateY(0); }
     }
 
+    /* Shared styles for all flash messages */
     .flash {
-        color: #cda45e;
-        animation: fadeIn 0.5s ease-out;
+        padding: 15px;
+        margin: 20px auto;
+        max-width: 450px;
+        border-radius: 8px;
         text-align: center;
+        font-weight: 600;
+        animation: fadeIn 0.5s ease-out;
+    }
+
+    /* Green design for Success */
+    .flash-success {
+        color: #155724;
+        background-color: rgba(40, 167, 69, 0.2);
+        border: 1px solid #28a745;
+    }
+
+    /* Red design for Error (Invalid Credentials) */
+    .flash-warning,
+    .flash-error {
+        color: white;
+        background-color: rgba(220, 53, 69, 0.2);
+        border: 1px solid #dc3545;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
     }
     </style>
 </head>
