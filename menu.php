@@ -140,8 +140,11 @@ if ($selected_category) {
                                 <!-- Price and Action -->
                                 <div class="d-flex justify-content-between align-items-center mt-3">
                                     <div class="price-tag"><?php echo formatPrice($item['price']); ?></div>
-                                    <button class="btn btn-add-to-cart">
-                                        <i class="bi bi-cart-plus me-1"></i>Add to Cart
+                                    <button class="btn btn-add-to-cart" 
+                                      data-id="<?php echo $item['id']; ?>" 
+                                      data-name="<?php echo htmlspecialchars($item['name']); ?>" 
+                                      data-price="<?php echo $item['price']; ?>">
+                                      <i class="bi bi-cart-plus me-1"></i>Add to Cart
                                     </button>
                                 </div>
                             </div>
@@ -350,7 +353,7 @@ if ($selected_category) {
       <p class="empty-cart">Your cart is empty.</p>
     </div>
     <div class="cart-footer">
-      <p>Total: <span id="cart-total">$0.00</span></p>
+      <p>Total: <span id="cart-total">RM0.00</span></p>
       <button class="btn checkout-btn">Checkout</button>
     </div>
   </div>

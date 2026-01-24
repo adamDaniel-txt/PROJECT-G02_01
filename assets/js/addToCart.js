@@ -42,7 +42,7 @@ function updateCartDisplay() {
     cartItemsContainer.innerHTML = '';
     if (cart.length === 0) {
         cartItemsContainer.innerHTML = '<p class="empty-cart">Your cart is empty.</p>';
-        cartTotal.textContent = '$0.00';
+        cartTotal.textContent = 'RM0.00';
         cartCount.textContent = '0';
         return;
     }
@@ -56,14 +56,14 @@ function updateCartDisplay() {
     itemEl.innerHTML = `
         <div class="cart-item-info">
         <strong>${item.name}</strong><br>
-        <small>$${item.price.toFixed(2)} each</small>
+        <small>RM${item.price.toFixed(2)} each</small>
       </div>
       <div class="quantity-controls">
         <button class="qty-btn minus" data-index="${index}">-</button>
         <span class="quantity">${item.quantity}</span>
         <button class="qty-btn plus" data-index="${index}">+</button>
       </div>
-      <div class="item-total">$${(item.price * item.quantity).toFixed(2)}</div>
+      <div class="item-total">${(item.price * item.quantity).toFixed(2)}</div>
     `;
     cartItemsContainer.appendChild(itemEl);
 
@@ -71,7 +71,7 @@ function updateCartDisplay() {
     totalItems += item.quantity;
     });
 
-    cartTotal.textContent = '$' + total.toFixed(2);
+    cartTotal.textContent = 'RM' + total.toFixed(2);
     cartCount.textContent = totalItems;
 }
 
@@ -94,4 +94,25 @@ if (e.target.classList.contains('qty-btn')) {
 
     updateCartDisplay(); // Refresh the cart view
 }
-});
+})
+
+async function checkout() {
+    const cartData = {
+        total: calculateTotal(), // Function to get sum of items
+        items: cartItems       // Array of items in the cart
+    };
+
+    const response = await fetch('save_order.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(cartData)
+    });
+
+    const result = await response.json();
+    if (result.success) {
+        alert('Order placed successfully! Order ID: ' + result.order_id);
+        window.location.href = 'profile.php'; // Redirect to see order history
+    } else {
+        alert(result.message);
+    }
+};
