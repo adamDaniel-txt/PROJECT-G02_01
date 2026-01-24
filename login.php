@@ -53,10 +53,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     .flash {
-        color: #cda45e;
-        animation: fadeIn 0.5s ease-out;
-        text-align: center;
-    }
+    color: #ffffff; /* White text for better contrast */
+    background-color: rgba(220, 53, 69, 0.2); /* Soft red background */
+    border: 1px solid #dc3545; /* Solid red border */
+    padding: 12px 20px;
+    border-radius: 8px;
+    margin: 15px auto;
+    max-width: 400px; /* Keeps the box from being too wide */
+    text-align: center;
+    font-weight: 600;
+    animation: shake 0.4s ease-in-out; /* Added a shake for attention */
+}
+
+/* Attention-grabbing shake animation */
+@keyframes shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+}
     </style>
 </head>
 
