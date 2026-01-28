@@ -1,5 +1,10 @@
 <?php
 session_start();
+
+error_log("=== CART DEBUG ===");
+error_log("Session user_id: " . ($_SESSION['user_id'] ?? 'NOT SET'));
+error_log("POST data: " . file_get_contents('php://input'));
+
 require 'app/db.php';
 
 // Ensure the user is logged in

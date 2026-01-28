@@ -1,20 +1,39 @@
 <?php
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
+session_start();
+// 1. MUST require the database connection FIRST
 require 'app/db.php';
 require 'app/menu_functions.php';
 
-// Get all available menu items
+$user_id = $_SESSION['user_id'] ?? null;
+$user_cart = [];
+
+// 2. Now that $pdo exists, we can fetch the cart
+if ($user_id) {
+    try {
+        $stmt = $pdo->prepare("SELECT c.*, m.name, m.price, m.image_url 
+                               FROM cart_items c 
+                               JOIN menu_items m ON c.menu_item_id = m.id 
+                               WHERE c.user_id = ?");
+        $stmt->execute([$user_id]);
+        $user_cart = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        // Log error if needed: error_log($e->getMessage());
+    }
+}
+
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+// 3. Get all available menu items
 $menu_items = getAllMenuItems($pdo);
 $categories = getMenuCategories($pdo);
 
-// Filter by category if selected
 $selected_category = $_GET['category'] ?? null;
 if ($selected_category) {
     $menu_items = getAllMenuItems($pdo, $selected_category);
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -153,211 +172,39 @@ if ($selected_category) {
                 <?php endforeach; ?>
             </div>
         <?php endif; ?>
-
-    <div hidden>
-
-      <!-- Menu Item 1 -->
-      <div class="menu-item-card">
-        <div class="card">
-          <img src="assets/img/menu/americano2.png" alt="Americano">
-          <div class="card-body">
-            <h4>Americano</h4>
-            <p class="price">RM7</p>
-            <button class="btn-add-to-cart" data-name="Espresso" data-price="5.00">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- Menu Item 2 -->
-      <div class="menu-item-card">
-        <div class="card">
-          <img src="assets/img/menu/hotdrink.jpg" alt="Cappuccino">
-          <div class="card-body">
-            <h4>Cappuccino</h4>
-            <p class="price">RM11</p>
-            <button class="btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-item-card">
-        <div class="card">
-          <img src="assets/img/menu/latte.jpg" alt="Latte">
-          <div class="card-body">
-            <h4>Latte</h4>
-            <p class="price">RM11</p>
-            <button class="btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-item-card">
-        <div class="card">
-          <img src="assets/img/menu/latte.jpg" alt="Hazelnut Latte">
-          <div class="card-body">
-            <h4>Hazelnut Latte</h4>
-            <p class="price">RM13</p>
-            <button class="btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-item-card">
-        <div class="card">
-          <img src="assets/img/menu/latte.jpg" alt="Spanish Latte">
-          <div class="card-body">
-            <h4>Spanish Latte</h4>
-            <p class="price">RM13</p>
-            <button class="btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-item-card">
-        <div class="card">
-          <img src="assets/img/menu/creme.jpg" alt="Creme brulee latte">
-          <div class="card-body">
-            <h4>Creme Brulee Latte</h4>
-            <p class="price">RM14</p>
-            <button class="btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-item-card">
-        <div class="card">
-          <img src="assets/img/menu/butterscotch.jpg" alt="Creamy Butterscotch Latte">
-          <div class="card-body">
-            <h4>Creamy Butterscotch Latte</h4>
-            <p class="price">RM14</p>
-            <button class="btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-item-card">
-        <div class="card">
-          <img src="assets/img/menu/macchiato.png" alt="Macchiato">
-          <div class="card-body">
-            <h4>Caramel Macchiato</h4>
-            <p class="price">RM13</p>
-            <button class="btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-item-card">
-        <div class="card">
-          <img src="assets/img/menu/chocolate.png" alt="Chocolate">
-          <div class="card-body">
-            <h4>Chocolate</h4>
-            <p class="price">RM13</p>
-            <button class="btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-item-card">
-        <div class="card">
-          <img src="assets/img/menu/matcha.png" alt="Matcha">
-          <div class="card-body">
-            <h4>Matcha</h4>
-            <p class="price">RM13</p>
-            <button class="btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-item-card">
-        <div class="card">
-          <img src="assets/img/menu/strawberrylatte.jpg" alt="Strawberry Latte">
-          <div class="card-body">
-            <h4>Strawberry Latte</h4>
-            <p class="price">RM12</p>
-            <button class="btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-item-card">
-        <div class="card">
-          <img src="assets/img/menu/grape.png" alt="Sakura grape">
-          <div class="card-body">
-            <h4>Sakura Grape</h4>
-            <p class="price">RM12</p>
-            <button class="btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-item-card">
-        <div class="card">
-          <img src="assets/img/menu/peach.png" alt="Peach">
-          <div class="card-body">
-            <h4>Peach</h4>
-            <p class="price">RM12</p>
-            <button class="btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-item-card">
-        <div class="card">
-          <img src="assets/img/menu/mojito.jpg" alt="Mojito">
-          <div class="card-body">
-            <h4>Mojito</h4>
-            <p class="price">RM12</p>
-            <button class="btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-item-card">
-        <div class="card">
-          <img src="assets/img/menu/hotdrink.jpg" alt="Green tea">
-          <div class="card-body">
-            <h4>Green tea</h4>
-            <p class="price">RM7</p>
-            <button class="btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="menu-item-card">
-        <div class="card">
-          <img src="assets/img/menu/hotdrink.jpg" alt="Earl Grey Tea">
-          <div class="card-body">
-            <h4>Earl Grey Tea</h4>
-            <p class="price">RM7</p>
-            <button class="btn-add-to-cart" data-name="Cappuccino" data-price="7.50">Add to Cart</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    </div>
-  </div>
-
-</section>
-
+   
   </main>
 
   <!-- Cart Sidebar -->
-  <div id="cart-sidebar" class="cart-sidebar">
+<div id="cart-sidebar" class="cart-sidebar">
     <div class="cart-header">
       <h3>Your Cart</h3>
       <button id="close-cart" class="close-btn">&times;</button>
     </div>
+    
     <div id="cart-items" class="cart-items">
-       <!-- Items will appear here dynamically -->
-      <p class="empty-cart">Your cart is empty.</p>
-    </div>
-    <div class="cart-footer">
+      <?php if (empty($user_cart)): ?>
+          <p class="empty-cart">Your cart is empty.</p>
+      <?php else: ?>
+          <?php foreach ($user_cart as $cart_item): ?>
+              <div class="cart-item d-flex justify-content-between align-items-center mb-3">
+                  <div>
+                      <h6><?php echo htmlspecialchars($cart_item['name']); ?></h6>
+                      <span>RM <?php echo number_format($cart_item['price'], 2); ?></span>
+                  </div>
+                  <div class="qty-controls">
+                      <button onclick="updateQuantity(<?php echo $cart_item['menu_item_id']; ?>, <?php echo $cart_item['quantity'] - 1; ?>)">-</button>
+                      <span><?php echo $cart_item['quantity']; ?></span>
+                      <button onclick="updateQuantity(<?php echo $cart_item['menu_item_id']; ?>, <?php echo $cart_item['quantity'] + 1; ?>)">+</button>
+                  </div>
+              </div>
+          <?php endforeach; ?>
+      <?php endif; ?>
+    </div> <div class="cart-footer">
       <p>Total: <span id="cart-total">RM0.00</span></p>
       <button class="btn checkout-btn">Checkout</button>
     </div>
-  </div>
-  <div id="cart-overlay" class="cart-overlay"></div>
+  </div> <div id="cart-overlay" class="cart-overlay"></div>  
 
   <!-- Footer -->
   <footer id="footer" class="footer">
