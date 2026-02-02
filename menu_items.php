@@ -81,9 +81,8 @@ $categories = getMenuCategories($pdo);
 
     <!-- Same CSS as dashboard -->
     <link rel="stylesheet" href="assets/css/dashStyle.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- Vendor CSS Files -->
+    <!-- Bootstrap Icons only (Font Awesome removed) -->
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/vendor/aos/aos.css" rel="stylesheet">
@@ -107,73 +106,45 @@ $categories = getMenuCategories($pdo);
         <!-- Side Bar-->
         <aside class="sidebar" id="sidebar">
             <div class="logo">
-                <div class="logo-icon">D</div>
                 <div class="logo-text">Dashboard</div>
             </div>
 
             <nav class="nav-section">
                 <div class="nav-label">Main Menu</div>
                 <a href="dashboard.php" class="nav-item">
-                    <i class="fa-solid fa-chart-line"></i>
+                    <i class="bi bi-graph-up"></i>
                     <span>Dashboard</span>
                 </a>
 
-                <a href="#" class="nav-item">
-                    <i class="fa-solid fa-chart-bar"></i>
+                <a href="analytics.php" class="nav-item">
+                    <i class="bi bi-bar-chart"></i>
                     <span>Analytics</span>
                 </a>
 
-                <a href="#" class="nav-item">
-                    <i class="fa-solid fa-shopping-cart"></i>
+                <a href="sales.php" class="nav-item">
+                    <i class="bi bi-cart3"></i>
                     <span>Sales</span>
                 </a>
 
                 <a href="#" class="nav-item active">
-                    <i class="fa-solid fa-box"></i>
+                    <i class="bi bi-box"></i>
                     <span>Menu Items</span>
                 </a>
 
                 <a href="customers.php" class="nav-item">
-                    <i class="fa-solid fa-users"></i>
+                    <i class="bi bi-people"></i>
                     <span>Customers</span>
                 </a>
             </nav>
 
-            <nav hidden class="nav-section">
-                <div class="nav-label">Management</div>
-                <a href="#" class="nav-item">
-                    <i class="fa-solid fa-file-invoice"></i>
-                    <span>Orders</span>
-                </a>
-
-                <a href="#" class="nav-item">
-                    <i class="fa-solid fa-warehouse"></i>
-                    <span>Inventory</span>
-                </a>
-
-                <a href="#" class="nav-item">
-                    <i class="fa-solid fa-chart-pie"></i>
-                    <span>Reports</span>
-                </a>
-            </nav>
-
-            <nav hidden class="nav-section">
-                <div class="nav-label">Support</div>
-                <a href="#" class="nav-item">
-                    <i class="fa-solid fa-gear"></i>
-                    <span>Settings</span>
-                </a>
-
-                <a href="#" class="nav-item">
-                    <i class="fa-solid fa-circle-question"></i>
-                    <span>Help Centre</span>
-                </a>
-            </nav>
-
             <div class="sidebar-footer">
-                <a href="#" class="nav-item">
-                    <i class="fa-solid fa-right-from-bracket"></i>
-                    <span>Log Out</span>
+                <a href="profile.php" class="nav-item">
+                    <i class="bi bi-person"></i>
+                    <span>Profile</span>
+                </a>
+                <a href="index.php" class="nav-item">
+                    <i class="bi bi-box-arrow-right"></i>
+                    <span>Go Home</span>
                 </a>
             </div>
         </aside>
@@ -190,9 +161,9 @@ $categories = getMenuCategories($pdo);
                     </div>
                 <?php endif; ?>
 
-                <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="top-bar d-flex justify-content-between align-items-center mb-4">
                     <h1 class="h3 mb-0">
-                        <i class="bi bi-menu-button me-2"></i>Menu Management
+                        <i class="bi bi-box me-2"></i>Menu Management
                     </h1>
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addItemModal">
                         <i class="bi bi-plus-circle me-1"></i>Add New Item
@@ -374,6 +345,7 @@ $categories = getMenuCategories($pdo);
                                     <option value="Tea">Tea</option>
                                     <option value="Non-Coffee">Non-Coffee Drinks</option>
                                     <option value="Refreshing">Refreshing</option>
+                                </select>
                             </div>
                         </div>
                         <div class="mb-3">

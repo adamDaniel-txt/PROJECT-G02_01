@@ -99,7 +99,7 @@ $categories = getMenuCategories($pdo);
 
             <nav class="nav-section">
                 <div class="nav-label">Main Menu</div>
-                <a href="#" class="nav-item active">
+                <a href="dashboard.php" class="nav-item">
                     <i class="bi bi-graph-up"></i>
                     <span>Dashboard</span>
                 </a>
@@ -109,7 +109,7 @@ $categories = getMenuCategories($pdo);
                     <span>Analytics</span>
                 </a>
 
-                <a href="sales.php" class="nav-item">
+                <a href="#" class="nav-item active">
                     <i class="bi bi-cart3"></i>
                     <span>Sales</span>
                 </a>
@@ -151,7 +151,7 @@ $categories = getMenuCategories($pdo);
 
                 <div class="top-bar d-flex justify-content-between align-items-center mb-4">
                     <h1 class="h3 mb-0">
-                        <i class="bi bi-graph-up me-2"></i>Main Dashboard
+                        <i class="bi bi-cart3 me-2"></i>Sales
                     </h1>
                 </div>
 
