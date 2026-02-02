@@ -335,7 +335,7 @@ $feedbacks = getAllFeedbacks($pdo);
 
                     <?php if (!hasPermission('create_feedback')): ?>
                     <div class="alert alert-primary text-center" role="alert">
-                      To give a feedback, you need to be a <a href="#" class="alert-link">Customer</a> first.
+                      To give a feedback, you need to be a <a href="login.php" class="alert-link">Customer</a> first.
                     </div>
                     <?php endif; ?>
 
