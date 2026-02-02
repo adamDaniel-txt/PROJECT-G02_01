@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jan 15, 2026 at 03:27 AM
+-- Host: 127.0.0.1
+-- Generation Time: Feb 02, 2026 at 10:07 AM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,8 +18,30 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `tigaBelasCafe`
+-- Database: `tigabelascafe`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `cart_items`
+--
+
+CREATE TABLE `cart_items` (
+  `cart_id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `menu_item_id` int(11) NOT NULL,
+  `quantity` int(11) DEFAULT 1,
+  `added_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `cart_items`
+--
+
+INSERT INTO `cart_items` (`cart_id`, `user_id`, `menu_item_id`, `quantity`, `added_at`) VALUES
+(5, 12, 14, 1, '2026-01-28 14:58:24'),
+(11, 12, 11, 1, '2026-01-28 15:24:01');
 
 -- --------------------------------------------------------
 
@@ -44,7 +66,8 @@ INSERT INTO `feedbacks` (`id`, `user_name`, `user_email`, `feedback_text`, `rati
 (1, 'Anonymous', NULL, 'very good very nice', 3, '2026-01-12 11:31:17'),
 (2, 'Anonymous', NULL, 'i very like this coffee, it is very goood', 3, '2026-01-14 22:48:15'),
 (3, 'Anonymous', NULL, 'i loooove this cafe', 5, '2026-01-14 22:48:33'),
-(4, 'Anonymous', NULL, 'It is okay, overrated', 1, '2026-01-14 23:49:20');
+(4, 'Anonymous', NULL, 'It is okay, overrated', 1, '2026-01-14 23:49:20'),
+(5, 'Anonymous', NULL, 'Food is very good, will revisit', 3, '2026-01-17 14:59:00');
 
 -- --------------------------------------------------------
 
@@ -69,14 +92,49 @@ CREATE TABLE `menu_items` (
 --
 
 INSERT INTO `menu_items` (`id`, `name`, `description`, `price`, `category`, `image_url`, `is_available`, `created_at`, `updated_at`) VALUES
-(1, 'Espresso', 'Strong black coffee made by forcing steam through ground coffee beans', 3.50, 'Coffee', 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.NZGzV2GOHNqBXmBPXiH6YwHaE8%3Fcb%3Ddefcache2%26pid%3DApi%26defcache%3D1&f=1&ipt=61f57b0bd7a48fdd80170f1e1246bde987049c453e3f764de40c3b102561b3b3&ipo=images', 1, '2026-01-14 17:17:36', '2026-01-15 02:25:46'),
-(2, 'Cappuccino', 'Espresso with steamed milk and a layer of milk foam', 4.50, 'Coffee', 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.kbjQCtA_at72z3EldA1UmQHaFJ%3Fpid%3DApi&f=1&ipt=d4a8a2daa404d6ba2ff2d3ba2e744e7f45ec1b9c6e5d9915f383b721979ec60e&ipo=images', 1, '2026-01-14 17:17:36', '2026-01-15 02:24:40'),
-(3, 'Latte', 'Espresso with steamed milk and a light layer of foam', 5.00, 'Coffee', 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.6Lb2xzBM3B6maFHPDwhw5AHaE8%3Fpid%3DApi&f=1&ipt=1d8c9eb33ac101c33c5a67ceb1516f78667fadee1c94ecc6fa3a223e48e72ba8&ipo=images', 1, '2026-01-14 17:17:36', '2026-01-15 02:26:06'),
-(4, 'Hot Chocolate', 'Rich chocolate drink with steamed milk', 4.00, 'Non-Coffee', 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.ZrDN-j89uEKUSh7rWteCxAHaE8%3Fpid%3DApi&f=1&ipt=e04c69e671ca6fdec7673d2b9af3d379060d9a41de954b926644e30f0767dafe&ipo=images', 1, '2026-01-14 17:17:36', '2026-01-15 02:27:17'),
-(5, 'Green Tea', 'Refreshing traditional green tea', 3.00, 'Tea', 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.OrD-0SE3pvuxamciektv-AHaE8%3Fpid%3DApi&f=1&ipt=2a8975355f6d015458d8960615a34375eb2feefa3a0519bccc2ff887b2073887&ipo=images', 1, '2026-01-14 17:17:36', '2026-01-15 02:27:41'),
-(6, 'Chocolate Cake', 'Rich chocolate cake with ganache frosting', 6.50, 'Dessert', 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.EH61MhxlPzlSlbABSSVLawHaE8%3Fpid%3DApi&f=1&ipt=c909f3718a347a973fd715bb67ff3c5b82c5d0802aa40a8815da9a68c966de7e&ipo=images', 1, '2026-01-14 17:17:36', '2026-01-15 02:26:34'),
-(7, 'Croissant', 'Freshly baked butter croissant', 3.50, 'Bakery', 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.oiiTqE1huSD65JUzFiXVCwHaHa%3Fpid%3DApi&f=1&ipt=7a594e6cb023c6e5664dc6b1171d7fa11cbb902b1bbb93e743490e6ec0f9f872&ipo=images', 1, '2026-01-14 17:17:36', '2026-01-14 17:23:47'),
-(8, 'Club Sandwich', 'Turkey, bacon, lettuce, tomato with mayo', 8.50, 'Food', 'https://external-content.duckduckgo.com/iu/?u=https%3A%2F%2Ftse1.mm.bing.net%2Fth%2Fid%2FOIP.sjci0ZZ6vOr5OyBbPYhcYwHaFj%3Fpid%3DApi&f=1&ipt=afb450587920559c908487666f871ee4222739455b91a3bf9653911b0e742dfa&ipo=images', 1, '2026-01-14 17:17:36', '2026-01-15 02:26:56');
+(3, 'Latte', 'A smooth and comforting blend of espresso with plenty of creamy steamed milk', 11.00, 'Coffee', 'https://www.brighteyedbaker.com/wp-content/uploads/2024/07/Dulce-de-Leche-Latte-Recipe.jpg', 1, '2026-01-14 17:17:36', '2026-01-22 09:14:21'),
+(5, 'Green Tea', 'Refreshing traditional green tea', 7.00, 'Tea', 'https://tuyabeauty.com/cdn/shop/articles/Benefits_of_Green_Tea_For_Skin.jpg', 1, '2026-01-14 17:17:36', '2026-01-22 09:19:31'),
+(10, 'Americano', 'A clean and robust classic made with deep espresso shots and hot water', 7.00, 'Coffee', 'https://mocktail.net/wp-content/uploads/2022/05/homemade-Iced-Americano-recipe_5.jpg', 1, '2026-01-22 09:21:17', '2026-01-22 09:21:17'),
+(11, 'Cappuccino', 'A rich espresso base topped with a thick, velvety layer of steamed milk foam', 11.00, 'Coffee', 'https://www.shutterstock.com/image-photo/heart-shaped-latte-art-white-600nw-2506388167.jpg', 1, '2026-01-22 09:23:15', '2026-01-22 09:23:15'),
+(12, 'Spanish Latte', 'A rich, velvety espresso drink sweetened with a touch of condensed milk', 13.00, 'Coffee', 'https://img.freepik.com/premium-photo/cappuccino-latte-with-milk-foam-caramel-glass-with-coffee-beans-light-marble-background-with-branches-front-view-copy-space_185452-4001.jpg', 1, '2026-01-22 09:25:52', '2026-01-22 09:29:53'),
+(13, 'Hazelnut latte', 'A fragrant and nutty twist on our classic latte with sweet hazelnut notes', 13.00, 'Coffee', 'https://tyberrymuch.com/wp-content/uploads/2024/03/Hazelnut-Iced-Coffee-Hero.jpg', 1, '2026-01-22 09:28:49', '2026-01-22 09:34:06'),
+(14, 'Creme Brulee Latte', 'A dessert-inspired latte featuring a caramelized sugar finish and custard-like sweetness', 14.00, 'Coffee', 'https://www.shutterstock.com/image-photo/creme-brulee-milk-tea-cold-600nw-2424254335.jpg', 1, '2026-01-22 09:32:24', '2026-01-22 09:35:53'),
+(16, 'Macchiato', 'A bold, concentrated espresso \"marked\" with a light dollop of silky milk foam', 13.00, 'Coffee', 'https://jivajava.cafe/coffeetalk/wp-content/uploads/2024/04/macchiato-e1713123117777.jpg', 1, '2026-01-22 09:40:47', '2026-01-22 09:40:47'),
+(17, 'Chocolate', 'A decadent and smooth cocoa experience, perfect for any time of day', 13.00, 'Non-Coffee', 'https://coffeeclub.com.au/cdn/shop/files/Beverages_Product_Images_1200x1200_IcedChoc.jpg?v=1716270110', 1, '2026-01-22 09:42:28', '2026-01-22 09:42:28'),
+(18, 'Matcha', 'Earthy, premium green tea whisked with milk for a vibrant and creamy energy boost', 13.00, 'Non-Coffee', 'https://iswari.s3.eu-west-3.amazonaws.com/products/aeqdws-iced%20matcha%20latte-5%20-%20c%C3%B3pia.jpg', 1, '2026-01-22 09:43:37', '2026-01-22 09:43:37'),
+(19, 'Strawberry Latte', 'A fresh and fruity milk-based drink layered with sweet strawberry puree', 12.00, 'Coffee', 'https://cookhousediary.com/wp-content/uploads/2025/02/strawberry-latte-in-glass.jpg', 1, '2026-01-22 09:44:52', '2026-01-22 09:44:52'),
+(20, 'Sakura Grape Sparkling', 'A light and fizzy refresher with delicate floral notes and sweet grape', 12.00, 'Refreshing', 'https://mocktail.net/wp-content/uploads/2022/05/Homemade-Grape-Soda_1.jpg', 1, '2026-01-22 09:47:29', '2026-01-22 09:47:29'),
+(21, 'Peach Soda', 'A bright, bubbly iced drink bursting with juicy peach flavor', 12.00, 'Refreshing', 'https://img.freepik.com/premium-photo/refreshing-peach-ice-mint-tea-vegan-homemade-cold-summer-drink-tall-glass-orange-background-with-fresh-fruits_185452-6410.jpg?semt=ais_hybrid&w=740&q=80', 1, '2026-01-22 09:49:36', '2026-01-22 09:55:25'),
+(22, 'Mojito', 'A zesty and cooling blend of fresh lime and mint for a sparkling citrus kick', 12.00, 'Refreshing', 'https://www.saveur.com/uploads/2007/02/SAVEUR_Mojito_1149-Edit-scaled.jpg?auto=webp', 1, '2026-01-22 09:52:04', '2026-01-22 09:52:04'),
+(23, 'Earl Grey Tea', 'A classic black tea infused with the distinct citrus aroma of bergamot', 7.00, 'Tea', 'https://weeteacompany.com/wp-content/uploads/2024/11/Vanilla-Earl-Grey-Tea.webp', 1, '2026-01-22 09:53:26', '2026-01-22 09:53:26');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `orders`
+--
+
+CREATE TABLE `orders` (
+  `order_id` int(11) NOT NULL,
+  `users_id` int(11) NOT NULL,
+  `total_price` decimal(10,2) NOT NULL DEFAULT 0.00,
+  `status` enum('pending','completed','cancelled') DEFAULT 'pending',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `order_items`
+--
+
+CREATE TABLE `order_items` (
+  `item_id` int(11) NOT NULL,
+  `orders_id` int(11) NOT NULL,
+  `menu_items_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  `price_at_purchase` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -152,26 +210,36 @@ CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
+  `profile_pic` varchar(255) DEFAULT NULL,
   `password` varchar(255) NOT NULL,
   `role_id` int(11) NOT NULL,
   `email_verified` tinyint(1) DEFAULT 0,
   `verification_token` varchar(64) DEFAULT NULL,
-  `token_expires` datetime DEFAULT NULL
+  `token_expires` datetime DEFAULT NULL,
+  `profile_picture` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `role_id`, `email_verified`, `verification_token`, `token_expires`) VALUES
-(10, 'admin', 'admin@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, 1, NULL, NULL),
-(11, 'guest', 'guest@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 4, 1, NULL, NULL),
-(12, 'customer', 'customer@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL),
-(13, 'staff', 'staff@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 2, 1, NULL, NULL);
+INSERT INTO `users` (`id`, `username`, `email`, `profile_pic`, `password`, `role_id`, `email_verified`, `verification_token`, `token_expires`, `profile_picture`) VALUES
+(10, 'admin', 'admin@example.com', 'profile_10_1769099142.jpg', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, 1, NULL, NULL, NULL),
+(11, 'guest', 'guest@example.com', NULL, '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 4, 1, NULL, NULL, NULL),
+(12, 'customer', 'customer@example.com', 'profile_12_1769608791.jpg', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, NULL),
+(13, 'staff', 'staff@example.com', NULL, '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 2, 1, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `cart_items`
+--
+ALTER TABLE `cart_items`
+  ADD PRIMARY KEY (`cart_id`),
+  ADD UNIQUE KEY `unique_user_item` (`user_id`,`menu_item_id`),
+  ADD KEY `menu_item_id` (`menu_item_id`);
 
 --
 -- Indexes for table `feedbacks`
@@ -186,6 +254,21 @@ ALTER TABLE `menu_items`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_category` (`category`),
   ADD KEY `idx_available` (`is_available`);
+
+--
+-- Indexes for table `orders`
+--
+ALTER TABLE `orders`
+  ADD PRIMARY KEY (`order_id`),
+  ADD KEY `user_id` (`users_id`);
+
+--
+-- Indexes for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD PRIMARY KEY (`item_id`),
+  ADD KEY `order_id` (`orders_id`),
+  ADD KEY `menu_item_id` (`menu_items_id`);
 
 --
 -- Indexes for table `permissions`
@@ -222,16 +305,34 @@ ALTER TABLE `users`
 --
 
 --
+-- AUTO_INCREMENT for table `cart_items`
+--
+ALTER TABLE `cart_items`
+  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+
+--
 -- AUTO_INCREMENT for table `feedbacks`
 --
 ALTER TABLE `feedbacks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `menu_items`
 --
 ALTER TABLE `menu_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+
+--
+-- AUTO_INCREMENT for table `orders`
+--
+ALTER TABLE `orders`
+  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `order_items`
+--
+ALTER TABLE `order_items`
+  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `permissions`
@@ -249,11 +350,31 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=46;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- Constraints for dumped tables
 --
+
+--
+-- Constraints for table `cart_items`
+--
+ALTER TABLE `cart_items`
+  ADD CONSTRAINT `cart_items_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `cart_items_ibfk_2` FOREIGN KEY (`menu_item_id`) REFERENCES `menu_items` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `orders`
+--
+ALTER TABLE `orders`
+  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
+
+--
+-- Constraints for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`orders_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`menu_items_id`) REFERENCES `menu_items` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `role_permissions`
