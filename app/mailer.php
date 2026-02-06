@@ -49,3 +49,47 @@ function sendVerificationEmail($toEmail, $toName, $verificationToken) {
         return false;
     }
 }
+
+function sendPasswordResetEmail($toEmail, $toName, $resetToken) {
+    $mail = new PHPMailer(true);
+
+    try {
+        // Server settings
+        $mail->isSMTP();
+        $mail->Host       = SMTP_HOST;
+        $mail->SMTPAuth   = true;
+        $mail->Username   = SMTP_USERNAME;
+        $mail->Password   = SMTP_PASSWORD;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port       = SMTP_PORT;
+
+        // Recipients
+        $mail->setFrom(SMTP_FROM_EMAIL, SMTP_FROM_NAME);
+        $mail->addAddress($toEmail, $toName);
+
+        // Content
+        $mail->isHTML(true);
+        $mail->Subject = 'Reset Your Password - TigaBelas Cafe';
+
+        $resetLink = BASE_URL . '/reset_password.php?token=' . $resetToken;
+
+        $mail->Body = "
+            <h2>Reset Your Password</h2>
+            <p>Hello $toName,</p>
+            <p>We received a request to reset your password. Click the button below to create a new password:</p>
+            <p><a href='$resetLink' style='background-color: #cda45e; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;'>Reset Password</a></p>
+            <p>Or copy and paste this link in your browser:<br>$resetLink</p>
+            <p>This link will expire in 1 hour.</p>
+            <p>If you didn't request a password reset, please ignore this email.</p>
+            <p>For security reasons, this link can only be used once.</p>
+        ";
+
+        $mail->AltBody = "Reset Your Password\n\nClick this link to reset your password: $resetLink\n\nThis link will expire in 1 hour.\n\nIf you didn't request this, please ignore this email.";
+
+        $mail->send();
+        return true;
+    } catch (Exception $e) {
+        error_log("Password reset email could not be sent. Mailer Error: {$mail->ErrorInfo}");
+        return false;
+    }
+}
