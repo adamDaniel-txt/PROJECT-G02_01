@@ -389,8 +389,8 @@ header .icon-cart,
   justify-content: center;
   width: 24px;
   height: 24px;
-  background-color: red;
-  color: #fff;
+  background-color: #fb4934;
+  color: var(--background-color);
   border-radius: 50%;
   font-size: 14px;
   font-weight: bold;

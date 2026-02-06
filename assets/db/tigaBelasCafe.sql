@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 06, 2026 at 02:31 PM
+-- Generation Time: Feb 06, 2026 at 06:18 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -24,24 +24,27 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `cart_items`
+-- Table structure for table `carts`
 --
 
-CREATE TABLE `cart_items` (
-  `cart_id` int(11) NOT NULL,
-  `user_id` int(11) NOT NULL,
+CREATE TABLE `carts` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) DEFAULT NULL,
+  `session_id` varchar(255) DEFAULT NULL,
   `menu_item_id` int(11) NOT NULL,
-  `quantity` int(11) DEFAULT 1,
-  `added_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Dumping data for table `cart_items`
+-- Dumping data for table `carts`
 --
 
-INSERT INTO `cart_items` (`cart_id`, `user_id`, `menu_item_id`, `quantity`, `added_at`) VALUES
-(5, 12, 14, 1, '2026-01-28 14:58:24'),
-(11, 12, 11, 1, '2026-01-28 15:24:01');
+INSERT INTO `carts` (`id`, `user_id`, `session_id`, `menu_item_id`, `quantity`, `created_at`, `updated_at`) VALUES
+(40, 12, NULL, 13, 1, '2026-02-06 17:13:25', '2026-02-06 17:13:25'),
+(41, 12, NULL, 19, 1, '2026-02-06 17:13:27', '2026-02-06 17:13:27'),
+(42, 12, NULL, 14, 3, '2026-02-06 17:13:30', '2026-02-06 17:13:36');
 
 -- --------------------------------------------------------
 
@@ -107,34 +110,6 @@ INSERT INTO `menu_items` (`id`, `name`, `description`, `price`, `category`, `ima
 (21, 'Peach Soda', 'A bright, bubbly iced drink bursting with juicy peach flavor', 12.00, 'Refreshing', 'https://img.freepik.com/premium-photo/refreshing-peach-ice-mint-tea-vegan-homemade-cold-summer-drink-tall-glass-orange-background-with-fresh-fruits_185452-6410.jpg?semt=ais_hybrid&w=740&q=80', 1, '2026-01-22 09:49:36', '2026-01-22 09:55:25'),
 (22, 'Mojito', 'A zesty and cooling blend of fresh lime and mint for a sparkling citrus kick', 12.00, 'Refreshing', 'https://www.saveur.com/uploads/2007/02/SAVEUR_Mojito_1149-Edit-scaled.jpg?auto=webp', 1, '2026-01-22 09:52:04', '2026-01-22 09:52:04'),
 (23, 'Earl Grey Tea', 'A classic black tea infused with the distinct citrus aroma of bergamot', 7.00, 'Tea', 'https://weeteacompany.com/wp-content/uploads/2024/11/Vanilla-Earl-Grey-Tea.webp', 1, '2026-01-22 09:53:26', '2026-01-22 09:53:26');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `orders`
---
-
-CREATE TABLE `orders` (
-  `order_id` int(11) NOT NULL,
-  `users_id` int(11) NOT NULL,
-  `total_price` decimal(10,2) NOT NULL DEFAULT 0.00,
-  `status` enum('pending','completed','cancelled') DEFAULT 'pending',
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `order_items`
---
-
-CREATE TABLE `order_items` (
-  `item_id` int(11) NOT NULL,
-  `orders_id` int(11) NOT NULL,
-  `menu_items_id` int(11) NOT NULL,
-  `quantity` int(11) NOT NULL DEFAULT 1,
-  `price_at_purchase` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -227,19 +202,20 @@ INSERT INTO `users` (`id`, `username`, `email`, `profile_pic`, `password`, `role
 (10, 'admin', 'admin@example.com', 'profile_10_1769099142.jpg', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, 1, NULL, NULL, NULL),
 (11, 'guest', 'guest@example.com', NULL, '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 4, 1, NULL, NULL, NULL),
 (12, 'customer', 'customer@example.com', 'profile_12_1769608791.jpg', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, NULL),
-(13, 'staff', 'staff@example.com', NULL, '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 2, 1, NULL, NULL, NULL),
-(51, 'test', 'fish_kake@proton.me', NULL, '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, NULL);
+(13, 'staff', 'staff@example.com', NULL, '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 2, 1, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
 --
 
 --
--- Indexes for table `cart_items`
+-- Indexes for table `carts`
 --
-ALTER TABLE `cart_items`
-  ADD PRIMARY KEY (`cart_id`),
-  ADD UNIQUE KEY `unique_user_item` (`user_id`,`menu_item_id`),
+ALTER TABLE `carts`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `unique_cart_item` (`user_id`,`session_id`,`menu_item_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `session_id` (`session_id`),
   ADD KEY `menu_item_id` (`menu_item_id`);
 
 --
@@ -255,21 +231,6 @@ ALTER TABLE `menu_items`
   ADD PRIMARY KEY (`id`),
   ADD KEY `idx_category` (`category`),
   ADD KEY `idx_available` (`is_available`);
-
---
--- Indexes for table `orders`
---
-ALTER TABLE `orders`
-  ADD PRIMARY KEY (`order_id`),
-  ADD KEY `user_id` (`users_id`);
-
---
--- Indexes for table `order_items`
---
-ALTER TABLE `order_items`
-  ADD PRIMARY KEY (`item_id`),
-  ADD KEY `order_id` (`orders_id`),
-  ADD KEY `menu_item_id` (`menu_items_id`);
 
 --
 -- Indexes for table `permissions`
@@ -306,10 +267,10 @@ ALTER TABLE `users`
 --
 
 --
--- AUTO_INCREMENT for table `cart_items`
+-- AUTO_INCREMENT for table `carts`
 --
-ALTER TABLE `cart_items`
-  MODIFY `cart_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+ALTER TABLE `carts`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `feedbacks`
@@ -322,18 +283,6 @@ ALTER TABLE `feedbacks`
 --
 ALTER TABLE `menu_items`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
-
---
--- AUTO_INCREMENT for table `orders`
---
-ALTER TABLE `orders`
-  MODIFY `order_id` int(11) NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `order_items`
---
-ALTER TABLE `order_items`
-  MODIFY `item_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `permissions`
@@ -358,24 +307,11 @@ ALTER TABLE `users`
 --
 
 --
--- Constraints for table `cart_items`
+-- Constraints for table `carts`
 --
-ALTER TABLE `cart_items`
-  ADD CONSTRAINT `cart_items_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `cart_items_ibfk_2` FOREIGN KEY (`menu_item_id`) REFERENCES `menu_items` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `orders`
---
-ALTER TABLE `orders`
-  ADD CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`users_id`) REFERENCES `users` (`id`) ON DELETE CASCADE;
-
---
--- Constraints for table `order_items`
---
-ALTER TABLE `order_items`
-  ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`orders_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE,
-  ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`menu_items_id`) REFERENCES `menu_items` (`id`) ON DELETE CASCADE;
+ALTER TABLE `carts`
+  ADD CONSTRAINT `carts_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`) ON DELETE CASCADE,
+  ADD CONSTRAINT `carts_ibfk_2` FOREIGN KEY (`menu_item_id`) REFERENCES `menu_items` (`id`) ON DELETE CASCADE;
 
 --
 -- Constraints for table `role_permissions`
