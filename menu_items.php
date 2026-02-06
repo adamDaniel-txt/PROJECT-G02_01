@@ -165,6 +165,9 @@ $categories = getMenuCategories($pdo);
                     <h1 class="h3 mb-0">
                         <i class="bi bi-box me-2"></i>Menu Management
                     </h1>
+                    <a href="menu.php" target="_blank">
+                        <button class="btn btn-primary"> <i class="bi bi-eye me-1"></i>View Menu </button>
+                    </a>
                     <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addItemModal">
                         <i class="bi bi-plus-circle me-1"></i>Add New Item
                     </button>
