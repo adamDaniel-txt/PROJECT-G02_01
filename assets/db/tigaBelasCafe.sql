@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Feb 03, 2026 at 05:24 PM
+-- Host: localhost
+-- Generation Time: Feb 06, 2026 at 02:31 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- PHP Version: 8.0.30
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `tigabelascafe`
+-- Database: `tigaBelasCafe`
 --
 
 -- --------------------------------------------------------
@@ -216,20 +216,19 @@ CREATE TABLE `users` (
   `email_verified` tinyint(1) DEFAULT 0,
   `verification_token` varchar(64) DEFAULT NULL,
   `token_expires` datetime DEFAULT NULL,
-  `reset_token` varchar(255) DEFAULT NULL
+  `profile_picture` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `profile_pic`, `password`, `role_id`, `email_verified`, `verification_token`, `token_expires`, `reset_token`) VALUES
+INSERT INTO `users` (`id`, `username`, `email`, `profile_pic`, `password`, `role_id`, `email_verified`, `verification_token`, `token_expires`, `profile_picture`) VALUES
 (10, 'admin', 'admin@example.com', 'profile_10_1769099142.jpg', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, 1, NULL, NULL, NULL),
 (11, 'guest', 'guest@example.com', NULL, '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 4, 1, NULL, NULL, NULL),
 (12, 'customer', 'customer@example.com', 'profile_12_1769608791.jpg', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, NULL),
 (13, 'staff', 'staff@example.com', NULL, '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 2, 1, NULL, NULL, NULL),
-(51, 'zihui', 'zihui12547@gmail.com', NULL, '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, '98750992547d1e833fdbbec4bbee20f13ce8d03ff5c4dc37a283cb4409b2033e'),
-(52, '2d53bc6fd8c4f8', 'gihago7677@dnsclick.com', NULL, '089542505d659cecbb988bb5ccff5bccf85be2dfa8c221359079aee2531298bb', 3, 1, NULL, NULL, NULL);
+(51, 'test', 'fish_kake@proton.me', NULL, '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -352,7 +351,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=53;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
 
 --
 -- Constraints for dumped tables
