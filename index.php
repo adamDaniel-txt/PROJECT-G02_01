@@ -100,7 +100,7 @@ $feedbacks = getAllFeedbacks($pdo);
                             <?php if (hasPermission('view_dashboard')): ?>
                             <a class="dropdown-item" href="dashboard.php"><i class="bi bi-speedometer2"></i>&nbsp&nbspDashboard</a>
                             <?php endif; ?>
-                            <a class="dropdown-item" href="logout.php"><i class="bi bi-box-arrow-left"></i>&nbsp&nbspLog Out</a>
+                            <a class="dropdown-item" href="app/logout.php"><i class="bi bi-box-arrow-left"></i>&nbsp&nbspLog Out</a>
                             <?php endif; ?>
                         </div>
                     </div>

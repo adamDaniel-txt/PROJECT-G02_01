@@ -301,7 +301,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
    <div class="text-center mb-4">
      <div class="position-relative d-inline-block">
          <?php if (!empty($user['profile_pic'])): ?>
-             <img src="assets/img/profile_picture/<?php echo $user['profile_pic']; ?>" 
+             <img src="assets/img/profile_picture/<?php echo $user['profile_pic']; ?>"
                   style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 3px solid var(--accent-color);">
          <?php else: ?>
              <i class="bi bi-person-circle" style="font-size: 120px; color: #ffffff;"></i>
@@ -309,7 +309,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
          <form id="profile-pic-form" method="POST" enctype="multipart/form-data">
              <input type="file" id="profile_image_input" name="profile_image" accept="image/*" style="display: none;" onchange="document.getElementById('profile-pic-form').submit();">
-             <button type="button" onclick="document.getElementById('profile_image_input').click();" 
+             <button type="button" onclick="document.getElementById('profile_image_input').click();"
                      class="btn btn-sm position-absolute bottom-0 end-0 translate-middle-x"
                      style="background: var(--accent-color); border-radius: 50%; width: 40px; height: 40px; border: none;">
                  <i class="bi bi-camera-fill text-white"></i>
@@ -318,7 +318,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
      </div>
  </div>
 
-            
+
               <!-- Username (Editable) -->
               <form method="POST" action="" class="mb-4">
                 <p class="text-muted mb-1">Username</p>
@@ -399,7 +399,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
           <!-- Action Buttons -->
           <div class="text-center">
-            <a href="logout.php" class="btn btn-outline-danger me-3 px-5">Log Out</a>
+            <a href="app/logout.php" class="btn btn-outline-danger me-3 px-5">Log Out</a>
             <button id="delete-account-btn" class="btn btn-danger px-5" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Account</button>
           </div>
 
