@@ -266,16 +266,12 @@ class CartManager {
     proceedToCheckout() {
         // First, check if cart is empty
         if (parseInt(this.cartCount.textContent) === 0) {
-            this.showNotification('Your cart is empty!', 'error');
+            alert('Your cart is empty!');
             return;
         }
 
-        // You can implement your checkout logic here
-        // For now, show a message
-        alert('Checkout functionality would be implemented here.\n\nYou would be redirected to a checkout page.');
-
         // Example redirect:
-        // window.location.href = 'checkout.php';
+        window.location.href = 'checkout.php';
     }
 
     // Helper: Escape HTML to prevent XSS

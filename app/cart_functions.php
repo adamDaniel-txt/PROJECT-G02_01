@@ -176,24 +176,24 @@ function getCartTotal($pdo) {
 /**
  * Clear cart
  */
-function clearCart($pdo) {
-    $cartIdentifier = getCartIdentifier();
-
-    try {
-        if ($cartIdentifier['type'] === 'user') {
-            $stmt = $pdo->prepare("DELETE FROM carts WHERE user_id = ?");
-            $stmt->execute([$cartIdentifier['id']]);
-        } else {
-            $stmt = $pdo->prepare("DELETE FROM carts WHERE session_id = ?");
-            $stmt->execute([$cartIdentifier['id']]);
-        }
-
-        return true;
-    } catch (PDOException $e) {
-        error_log("Cart clear error: " . $e->getMessage());
-        return false;
-    }
-}
+/* function clearCart($pdo) { */
+/*     $cartIdentifier = getCartIdentifier(); */
+/**/
+/*     try { */
+/*         if ($cartIdentifier['type'] === 'user') { */
+/*             $stmt = $pdo->prepare("DELETE FROM carts WHERE user_id = ?"); */
+/*             $stmt->execute([$cartIdentifier['id']]); */
+/*         } else { */
+/*             $stmt = $pdo->prepare("DELETE FROM carts WHERE session_id = ?"); */
+/*             $stmt->execute([$cartIdentifier['id']]); */
+/*         } */
+/**/
+/*         return true; */
+/*     } catch (PDOException $e) { */
+/*         error_log("Cart clear error: " . $e->getMessage()); */
+/*         return false; */
+/*     } */
+/* } */
 
 /**
  * Transfer guest cart to user cart (when guest logs in)
