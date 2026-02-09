@@ -261,10 +261,7 @@ $cart_total = getCartTotal($pdo);
             </div>
 
             <div class="container copyright text-center mt-4">
-                <p>© <span>Copyright</span> <strong class="px-1 sitename">Restaurantly</strong> <span>All Rights Reserved</span></p>
-                <div class="credits">
-                            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a> Distributed by <a href="https://themewagon.com" target="_blank">ThemeWagon</a>
-                </div>
+                <p>© <span>Copyright</span> <strong class="px-1 sitename">Kafe Tiga Belas</strong> <span>All Rights Reserved</span></p>
             </div>
         </footer>
 
