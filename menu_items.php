@@ -135,6 +135,11 @@ $categories = getMenuCategories($pdo);
                     <i class="bi bi-people"></i>
                     <span>Customers</span>
                 </a>
+
+                <a href="orders.php" class="nav-item">
+                    <i class="bi bi-receipt"></i>
+                    <span>Orders</span>
+                </a>
             </nav>
 
             <div class="sidebar-footer">
