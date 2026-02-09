@@ -387,16 +387,6 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
             </div>
           </div>
 
-          <!-- Order History Section -->
-          <div class="card mb-4" style="background-color: var(--surface-color); border: none; border-radius: 15px;">
-            <div class="card-body">
-              <h4 class="mb-4" style="color: var(--accent-color);">Order History</h4>
-              <div id="order-history">
-                <p class="text-muted text-center py-4">No orders yet. Start shopping!</p>
-              </div>
-            </div>
-          </div>
-
           <!-- Action Buttons -->
           <div class="text-center">
             <a href="app/logout.php" class="btn btn-outline-danger me-3 px-5">Log Out</a>
