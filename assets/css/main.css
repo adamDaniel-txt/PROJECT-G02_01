@@ -1844,8 +1844,178 @@ section,
 }
 
 /*--------------------------------------------------------------
-# Starter Section Section
+# btn, pills, card
 --------------------------------------------------------------*/
-.starter-section {
-  /* Add your styles here */
+.nav {
+    background: var(--surface-color);
+}
+
+.card {
+    background: var(--surface-color);
+    color: var(--default-color)
+}
+
+table {
+    background: var(--accent-color);
+}
+
+/*--------------------------------------------------------------
+# Order Details Page
+--------------------------------------------------------------*/
+
+.status-timeline {
+    position: relative;
+    padding-left: 30px;
+    margin: 30px 0;
+}
+.status-timeline::before {
+    content: '';
+    position: absolute;
+    left: 5px;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--accent-color);
+}
+.status-step {
+    position: relative;
+    margin-bottom: 20px;
+}
+.status-step::before {
+    content: '';
+    position: absolute;
+    left: -30px;
+    top: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--accent-color);
+    border: 2px solid white;
+}
+.status-step.active::before {
+    background: #28a745;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
+}
+.item-image {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+/*--------------------------------------------------------------
+# Order History Page
+--------------------------------------------------------------*/
+.order-card {
+    background: var(--surface-color);
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-left: 4px solid var(--accent-color);
+    transition: transform 0.2s;
+}
+.status-badge {
+    font-size: 0.85em;
+    padding: 5px 10px;
+    border-radius: 20px;
+}
+.order-number {
+    font-family: monospace;
+    font-size: 1.1em;
+    color: var(--accent-color);
+}
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+}
+.time-remaining {
+    font-size: 0.9em;
+    color: #6c757d;
+}
+
+/*--------------------------------------------------------------
+# Track Order Page
+--------------------------------------------------------------*/
+.tracking-card {
+    background: linear-gradient(135deg, var(--background-color) 0%, #1a1a2e 100%);
+    border-radius: 15px;
+    padding: 30px;
+    margin-bottom: 30px;
+    border: 1px solid rgba(255,255,255,0.1);
+}
+.tracking-input {
+    font-size: 1.2em;
+    padding: 15px;
+    border-radius: 10px;
+    border: 2px solid var(--accent-color);
+    background-color: var(--background-color);
+    color: var(--default-color);
+}
+.progress-tracker {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin: 40px 0;
+}
+.progress-tracker::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: rgba(255,255,255,0.1);
+    z-index: 1;
+}
+.progress-step {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    flex: 1;
+}
+.step-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    transition: all 0.3s;
+}
+.step-icon.active {
+    background: var(--accent-color);
+    transform: scale(1.1);
+}
+.step-label {
+    font-size: 0.9em;
+    color: rgba(255,255,255,0.7);
+}
+.step-label.active {
+    color: white;
+    font-weight: bold;
+}
+
+/*--------------------------------------------------------------
+# Payment Success Page
+--------------------------------------------------------------*/
+.success-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 40px;
+    text-align: center;
+    border-radius: 15px;
+}
+.success-icon {
+    font-size: 4em;
+    color: #28a745;
+    margin-bottom: 20px;
+}
+.order-details {
+    background: rgba(255,255,255,0.05);
+    border-radius: 10px;
+    padding: 20px;
+    margin: 30px 0;
 }

@@ -53,40 +53,8 @@ try {
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/css/main.css" rel="stylesheet">
-    <style>
-        .success-container {
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 40px;
-            text-align: center;
-            background: var(--background-color);
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        .success-icon {
-            font-size: 4em;
-            color: #28a745;
-            margin-bottom: 20px;
-        }
-        .order-details {
-            background: rgba(255,255,255,0.05);
-            border-radius: 10px;
-            padding: 20px;
-            margin: 30px 0;
-        }
-    </style>
 </head>
 <body class="index-page">
-    <header id="header" class="header fixed-top">
-        <div class="branding d-flex align-items-center">
-            <div class="container position-relative d-flex align-items-center justify-content-between">
-                <a href="index.php" class="logo d-flex align-items-center me-auto me-xl-0">
-                    <h1 class="sitename">Kafe Tiga Belas</h1>
-                </a>
-            </div>
-        </div>
-    </header>
-
     <main class="main">
         <div class="success-container">
             <div class="success-icon">
@@ -123,9 +91,13 @@ try {
                     Your order will be ready in approximately 15-20 minutes.
                 </small>
             </div>
-            <div class="mt-3">
+
+            <div class="d-flex justify-content-center gap-3 mt-4">
                 <a href="receipt.php?order_id=<?php echo $order_id; ?>" class="btn btn-outline-success btn-sm">
                     <i class="bi bi-receipt me-1"></i>View Receipt
+                </a>
+                <a class="btn btn-outline-success btn-sm" href="order_track.php">
+                    <i class="bi bi-truck me-1"></i>Track Order
                 </a>
             </div>
         </div>

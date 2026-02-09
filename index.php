@@ -97,9 +97,12 @@ $feedbacks = getAllFeedbacks($pdo);
                             <a class="dropdown-item" href="login.php"><i class="bi bi-box-arrow-in-right"></i>&nbsp&nbspLogin/Register</a>
                             <?php else: ?>
                             <a class="dropdown-item" href="profile.php"><i class="bi bi-person"></i>&nbsp&nbspProfile</a>
-                            <?php if (hasPermission('view_dashboard')): ?>
-                            <a class="dropdown-item" href="dashboard.php"><i class="bi bi-speedometer2"></i>&nbsp&nbspDashboard</a>
-                            <?php endif; ?>
+                                <?php if (hasPermission('view_dashboard')): ?>
+                                <a class="dropdown-item" href="dashboard.php"><i class="bi bi-speedometer2"></i>&nbsp&nbspDashboard</a>
+                                <?php elseif (hasPermission('view_order_status/history')): ?>
+                                <a class="dropdown-item" href="order_history.php"><i class="bi bi-clock-history"></i>&nbsp&nbspMy Orders</a>
+                                <a class="dropdown-item" href="order_track.php"><i class="bi bi-truck"></i>&nbsp&nbspTrack Order</a>
+                                <?php endif; ?>
                             <a class="dropdown-item" href="app/logout.php"><i class="bi bi-box-arrow-left"></i>&nbsp&nbspLog Out</a>
                             <?php endif; ?>
                         </div>
