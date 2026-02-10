@@ -202,6 +202,22 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
      color: #ffffff !important;
     }
 
+    .container{
+      max-width: 1000px;
+    }
+
+    body{
+      background-image:url('https://cdn.thespaces.com/wp-content/uploads/2019/09/Korea-Hero.jpg');
+      background-size: cover;          
+      background-position: center;      
+      background-repeat: no-repeat;     /* Prevents tiling/repeating */
+      background-attachment: fixed;     /* Keeps background fixed when scrolling (parallax effect) */
+
+      /*darken the image*/
+      background-color: rgba(0, 0, 0, 0.5); 
+      background-blend-mode: multiply;
+    }
+
     .card-body .text-muted {
     color: rgba(255, 255, 255, 0.6) !important;
     }
@@ -322,7 +338,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
               <!-- Username (Editable) -->
               <form method="POST" action="" class="mb-4">
                 <p class="text-muted mb-1">Username</p>
-                <h4 id="display-username" class="mb-2"><?php echo htmlspecialchars($user['username']); ?></h4>
+                <!--<h4 id="display-username" class="mb-2"><?php echo htmlspecialchars($user['username']); ?></h4>-->
 
                 <div class="row justify-content-center">
                   <div class="col-md-6">
@@ -338,7 +354,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
               <!-- Email (Editable) -->
               <form method="POST" action="" class="mb-4">
                 <p class="text-muted mb-1">Email</p>
-                <h5 id="display-email" class="mb-2"><?php echo htmlspecialchars($user['email']); ?></h5>
+                <!--<h5 id="display-email" class="mb-2"><?php echo htmlspecialchars($user['email']); ?></h5>-->
 
                 <div class="row justify-content-center">
                   <div class="col-md-6">
@@ -413,7 +429,7 @@ $user = $stmt->fetch(PDO::FETCH_ASSOC);
               <input type="password" class="form-control" name="confirm_password" placeholder="Enter your password to confirm" required>
             </div>
             <div class="text-center">
-              <button type="button" class="btn btn-secondary me-2" data-bs-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
               <button type="submit" name="delete_account" class="btn btn-danger">Delete Account</button>
             </div>
           </form>
