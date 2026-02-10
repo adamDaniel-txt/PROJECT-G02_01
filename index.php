@@ -269,19 +269,30 @@ $feedbacks = getAllFeedbacks($pdo);
                                                 <div class="card-body d-flex flex-column">
                                                     <!-- User Info -->
                                                     <div class="d-flex justify-content-between align-items-start mb-3">
-                                                        <div class="flex-grow-1">
-                                                            <h5 class="card-title mb-1">
-                                                                <i class="bi bi-person-circle me-2"></i>
-                                                                <?php echo htmlspecialchars($feedback['user_name']); ?>
-                                                            </h5>
-                                                            <?php if (!empty($feedback['user_email'])): ?>
-                                                            <small class="text-light">
-                                                                <i class="bi bi-envelope me-1"></i>
-                                                                <?php echo htmlspecialchars($feedback['user_email']); ?>
-                                                            </small>
+                                                        <div class="d-flex align-items-center flex-grow-1">
+                                                            <!-- Profile Picture -->
+                                                            <?php if (!empty($feedback['profile_picture'])): ?>
+                                                                <img src="<?php echo htmlspecialchars($feedback['profile_picture']); ?>"
+                                                                     alt="<?php echo htmlspecialchars($feedback['display_name']); ?>'s profile picture"
+                                                                     class="rounded-circle me-2"
+                                                                     style="width: 40px; height: 40px; object-fit: cover; border: 2px solid var(--accent-color);">
+                                                            <?php else: ?>
+                                                                <!-- Fallback to icon if no profile picture -->
+                                                                <div class="rounded-circle me-2 d-flex align-items-center justify-content-center"
+                                                                     style="width: 40px; height: 40px; background-color: var(--accent-color); color: white;">
+                                                                    <i class="bi bi-person fs-5"></i>
+                                                                </div>
                                                             <?php endif; ?>
+
+                                                            <div>
+                                                                <h5 class="card-title mb-0">
+                                                                    <?php echo htmlspecialchars($feedback['display_name']); ?>
+                                                                </h5>
+                                                                <!-- Optional: Show role or other info here -->
+                                                            </div>
                                                         </div>
-                                                        <span class="badge ms-2">
+
+                                                        <span class="badge ms-2 align-self-start">
                                                             <i class="bi bi-calendar3 me-1"></i>
                                                             <?php echo formatFeedbackDate($feedback['created_at']); ?>
                                                         </span>

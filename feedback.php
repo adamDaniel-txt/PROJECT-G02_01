@@ -81,8 +81,7 @@ if ($ratingFilter) {
 if ($searchQuery) {
     $feedback_items = array_filter($feedback_items, function($item) use ($searchQuery) {
         return stripos($item['feedback_text'], $searchQuery) !== false ||
-               stripos($item['user_name'], $searchQuery) !== false ||
-               ($item['user_email'] && stripos($item['user_email'], $searchQuery) !== false);
+               stripos($item['display_name'], $searchQuery) !== false;
     });
 }
 
@@ -342,12 +341,7 @@ $stats = getFeedbackStats($pdo);
                                                 <td><?php echo $feedback['id']; ?></td>
                                                 <td>
                                                     <div>
-                                                        <strong><?php echo htmlspecialchars($feedback['user_name']); ?></strong>
-                                                        <?php if ($feedback['user_email']): ?>
-                                                            <div class="text-muted small">
-                                                                <?php echo htmlspecialchars($feedback['user_email']); ?>
-                                                            </div>
-                                                        <?php endif; ?>
+                                                        <strong><?php echo htmlspecialchars($feedback['display_name']); ?></strong>
                                                     </div>
                                                 </td>
                                                 <td>
@@ -377,8 +371,7 @@ $stats = getFeedbackStats($pdo);
                                                             data-bs-toggle="modal"
                                                             data-bs-target="#viewFeedbackModal"
                                                             data-feedback-id="<?php echo $feedback['id']; ?>"
-                                                            data-feedback-name="<?php echo htmlspecialchars($feedback['user_name']); ?>"
-                                                            data-feedback-email="<?php echo htmlspecialchars($feedback['user_email']); ?>"
+                                                            data-feedback-name="<?php echo htmlspecialchars($feedback['display_name']); ?>"
                                                             data-feedback-rating="<?php echo $feedback['rating']; ?>"
                                                             data-feedback-text="<?php echo htmlspecialchars($feedback['feedback_text']); ?>"
                                                             data-feedback-date="<?php echo date('F j, Y g:i A', strtotime($feedback['created_at'])); ?>"
@@ -418,10 +411,6 @@ $stats = getFeedbackStats($pdo);
                             <label class="form-label fw-bold">User</label>
                             <div id="viewUserName" class="p-2 bg-light rounded"></div>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Email</label>
-                            <div id="viewUserEmail" class="p-2 bg-light rounded"></div>
-                        </div>
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
@@ -457,13 +446,11 @@ $stats = getFeedbackStats($pdo);
         function viewFeedback(button) {
             const feedbackId = button.getAttribute('data-feedback-id');
             const userName = button.getAttribute('data-feedback-name');
-            const userEmail = button.getAttribute('data-feedback-email');
             const rating = button.getAttribute('data-feedback-rating');
             const feedbackText = button.getAttribute('data-feedback-text');
             const date = button.getAttribute('data-feedback-date');
 
             document.getElementById('viewUserName').textContent = userName;
-            document.getElementById('viewUserEmail').textContent = userEmail || 'Not provided';
             document.getElementById('viewDate').textContent = date;
             document.getElementById('deleteFeedbackId').value = feedbackId;
 

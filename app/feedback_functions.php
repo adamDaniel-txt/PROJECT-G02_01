@@ -8,18 +8,21 @@ $message_type = ''; // 'success' or 'error'
 
 // Handle feedback submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_feedback'])) {
-    $name = trim($_POST['name'] ?? 'Anonymous');
-    $email = trim($_POST['email'] ?? '');
     $feedback_text = trim($_POST['feedback'] ?? '');
     $rating = intval($_POST['rating'] ?? 3);
+    $user_id = $_SESSION['user_id'] ?? null;
 
+    // Validate that user is logged in (since we removed Anonymous option)
+    if (!$user_id) {
+        $message = "You must be logged in to submit feedback.";
+        $message_type = 'error';
+    }
     // Validate rating
-    if ($rating < 1 || $rating > 5) {
+    else if ($rating < 1 || $rating > 5) {
         $rating = 3; // Default to 3 if invalid
     }
-
     // Validate feedback text
-    if (empty($feedback_text)) {
+    else if (empty($feedback_text)) {
         $message = "Please enter your feedback.";
         $message_type = 'error';
     } elseif (strlen($feedback_text) < 5) {
@@ -27,22 +30,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_feedback'])) {
         $message_type = 'error';
     } else {
         try {
-            // Use your existing $pdo connection from db.php
-
-            // Prepare and execute insert statement
+            // Insert feedback with only user_id
             $stmt = $pdo->prepare("
-                INSERT INTO feedbacks (user_name, user_email, feedback_text, rating, created_at)
-                VALUES (:name, :email, :feedback, :rating, NOW())
+                INSERT INTO feedbacks (user_id, feedback_text, rating, created_at)
+                VALUES (:user_id, :feedback, :rating, NOW())
             ");
 
             $stmt->execute([
-                ':name' => $name ?: 'Anonymous',
-                ':email' => $email ?: null,
+                ':user_id' => $user_id,
                 ':feedback' => $feedback_text,
                 ':rating' => $rating
             ]);
 
-            $message = "Thank you for your feedback!";
+            // Get the username for success message
+            $stmt = $pdo->prepare("SELECT username FROM users WHERE id = :user_id");
+            $stmt->execute([':user_id' => $user_id]);
+            $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            $user_name = $user ? $user['username'] : 'User';
+            $message = "Thank you for your feedback, " . htmlspecialchars($user_name) . "!";
             $message_type = 'success';
 
             // Clear form data after successful submission
@@ -60,8 +66,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['submit_feedback'])) {
 function getAllFeedbacks($pdo) {
     try {
         $stmt = $pdo->query("
-            SELECT * FROM feedbacks
-            ORDER BY created_at DESC
+            SELECT f.*,
+                   COALESCE(u.username, 'Anonymous') as display_name,
+                   u.profile_picture
+            FROM feedbacks f
+            LEFT JOIN users u ON f.user_id = u.id
+            ORDER BY f.created_at DESC
         ");
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch(PDOException $e) {
