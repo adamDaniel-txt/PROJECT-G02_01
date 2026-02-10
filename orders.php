@@ -152,20 +152,29 @@ foreach ($orders as $order) {
                     <span>Menu Items</span>
                 </a>
 
+                <?php if (hasPermission('manage_customers')): ?>
                 <a href="customers.php" class="nav-item">
                     <i class="bi bi-people"></i>
                     <span>Customers</span>
                 </a>
+                <?php elseif (hasPermission('manage_staff')): ?>
+                <a href="staff.php" class="nav-item">
+                    <i class="bi bi-people"></i>
+                    <span>Staff</span>
+                </a>
+                <?php endif; ?>
 
                 <a href="#" class="nav-item active">
                     <i class="bi bi-receipt"></i>
                     <span>Orders</span>
                 </a>
 
+                <?php if (hasPermission('manage_feedback')): ?>
                 <a href="feedback.php" class="nav-item">
                     <i class="bi bi-chat-left-text"></i>
                     <span>Feedback</span>
                 </a>
+                <?php endif; ?>
             </nav>
 
             <div class="sidebar-footer">
