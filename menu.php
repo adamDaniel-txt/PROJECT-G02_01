@@ -140,6 +140,24 @@ $cart_total = getCartTotal($pdo);
             <section id="menu" class="menu section container py-5">
                 <br><br><br>
 
+                <!-- Category Filter -->
+                <div class="category-filter mb-5 text-center" data-aos="fade-up">
+                    <div class="btn-group" role="group" aria-label="Menu categories">
+                        <a href="menu.php"
+                           class="btn btn-outline-dark <?php echo !$selected_category ? 'active' : ''; ?>"
+                           style="border-color: var(--accent-color); color: var(--text-color);">
+                            All Items
+                        </a>
+                        <?php foreach ($categories as $category): ?>
+                            <a href="menu.php?category=<?php echo urlencode($category); ?>"
+                               class="btn btn-outline-dark <?php echo $selected_category === $category ? 'active' : ''; ?>"
+                               style="border-color: var(--accent-color); color: var(--text-color);">
+                                <?php echo htmlspecialchars($category); ?>
+                            </a>
+                        <?php endforeach; ?>
+                    </div>
+                </div>
+
                 <!-- Menu Grid -->
                 <div class="container" data-aos="fade-up" data-aos-delay="100">
                     <div id="menu-grid" class="row gy-4 justify-content-center">
@@ -171,6 +189,13 @@ $cart_total = getCartTotal($pdo);
                                          <div class="card-body d-flex flex-column">
                                              <!-- Item Name -->
                                              <h3 class="card-title h5 text-light mb-2"><?php echo htmlspecialchars($item['name']); ?></h3>
+
+                                             <!-- Category -->
+                                             <div class="category-badge mb-2">
+                                                 <span class="badge text-dark" style="background: var(--accent-color)">
+                                                     <?php echo htmlspecialchars($item['category']); ?>
+                                                 </span>
+                                             </div>
 
                                              <!-- Description -->
                                              <?php if ($item['description']): ?>
