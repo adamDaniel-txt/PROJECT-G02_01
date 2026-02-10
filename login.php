@@ -6,7 +6,7 @@ if (!empty($_SESSION['flash'])) {
 }
 
 require 'app/db.php';
-require 'app/persmission.php';
+require 'app/permission.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
@@ -27,8 +27,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['role_id'] = $user['role_id'];
-        header('Location: index.php');
-        exit();
+        if (hasPermission('view_dashboard')) {
+            header('Location: dashboard.php');
+            exit();
+        } else {
+            header('Location: index.php');
+            exit();
+        }
     } else {
         echo " test";
         $_SESSION['flash'] = 'Invalid credentials!';

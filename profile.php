@@ -1,7 +1,7 @@
 <?php
 session_start();
 require 'app/db.php';
-require 'app/persmission.php';
+require 'app/permission.php';
 
 // Check if user is logged in
 if (!isset($_SESSION['user_id'])) {

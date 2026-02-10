@@ -2,11 +2,10 @@
 session_start();
 require 'app/db.php';
 require 'app/feedback_functions.php';
+require 'app/permission.php';
 
-// Simple authentication - in real app, use proper authentication
-$is_staff = true; // You'll replace this with real auth later
-
-if (!$is_staff) {
+// Check if user have permission
+if (!hasPermission('view_dashboard')) {
     header('Location: index.php');
     exit();
 }
