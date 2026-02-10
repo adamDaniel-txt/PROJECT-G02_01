@@ -174,7 +174,7 @@ function getOrdersWithFilters($pdo, $status = 'all', $date_from = '', $date_to =
         SELECT o.*,
                u.username,
                u.email,
-               u.profile_pic,
+               u.profile_picture,
                COUNT(oi.id) as item_count,
                (SELECT status FROM order_status_logs WHERE order_id = o.id ORDER BY created_at DESC LIMIT 1) as current_status
         FROM orders o
@@ -224,7 +224,7 @@ function getOrderForDashboard($pdo, $order_id) {
         SELECT o.*,
                u.username,
                u.email,
-               u.profile_pic,
+               u.profile_picture,
                (SELECT status FROM order_status_logs WHERE order_id = o.id ORDER BY created_at DESC LIMIT 1) as current_status
         FROM orders o
         LEFT JOIN users u ON o.user_id = u.id

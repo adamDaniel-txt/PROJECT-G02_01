@@ -1,4 +1,7 @@
 <?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
 session_start();
 require 'app/db.php';
 require 'app/order_functions.php';
@@ -340,8 +343,8 @@ foreach ($orders as $order) {
                                                 </td>
                                                 <td>
                                                     <div class="d-flex align-items-center">
-                                                        <?php if ($order['profile_pic']): ?>
-                                                            <img src="<?php echo htmlspecialchars($order['profile_pic']); ?>"
+                                                        <?php if ($order['profile_picture']): ?>
+                                                            <img src="<?php echo htmlspecialchars($order['profile_picture']); ?>"
                                                                  alt="Customer"
                                                                  class="customer-avatar me-2">
                                                         <?php else: ?>
