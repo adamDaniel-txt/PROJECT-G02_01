@@ -104,11 +104,6 @@ $categories = getMenuCategories($pdo);
                     <span>Dashboard</span>
                 </a>
 
-                <a href="analytics.php" class="nav-item">
-                    <i class="bi bi-bar-chart"></i>
-                    <span>Analytics</span>
-                </a>
-
                 <a href="sales.php" class="nav-item">
                     <i class="bi bi-cart3"></i>
                     <span>Sales</span>
@@ -127,6 +122,11 @@ $categories = getMenuCategories($pdo);
                 <a href="orders.php" class="nav-item">
                     <i class="bi bi-receipt"></i>
                     <span>Orders</span>
+                </a>
+
+                <a href="feedback.php" class="nav-item">
+                    <i class="bi bi-chat-left-text"></i>
+                    <span>Feedback</span>
                 </a>
             </nav>
 
