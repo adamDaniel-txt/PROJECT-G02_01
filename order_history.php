@@ -39,9 +39,8 @@ $paged_orders = array_slice($orders, $offset, $limit);
     <header id="header" class="header fixed-top">
         <div class="branding d-flex align-items-center">
             <div class="container position-relative d-flex align-items-center justify-content-between">
-                <a href="menu.php" class="d-flex align-items-center">
+                <a href="index.php" class="d-flex align-items-center">
                     <i class="bi bi-arrow-left-circle-fill fs-3"></i>
-                    <span class="ms-2">Back to Menu</span>
                 </a>
                 <a href="index.php" class="logo d-flex align-items-center me-auto me-xl-0">
                     <h1 class="sitename">Kafe Tiga Belas</h1>
@@ -69,11 +68,6 @@ $paged_orders = array_slice($orders, $offset, $limit);
                                 <li class="nav-item">
                                     <a class="nav-link" href="order_track.php">
                                         <i class="bi bi-truck me-2"></i>Track Order
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="profile.php">
-                                        <i class="bi bi-person me-2"></i>My Profile
                                     </a>
                                 </li>
                             </ul>
@@ -270,41 +264,28 @@ $paged_orders = array_slice($orders, $offset, $limit);
 
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script>
-        let cancelOrderId = null;
-
         function cancelOrder(orderId) {
-            cancelOrderId = orderId;
-            const modal = new bootstrap.Modal(document.getElementById('cancelModal'));
-            modal.show();
-        }
-
-        function confirmCancel() {
-            if (!cancelOrderId) return;
-
-            const reason = document.getElementById('cancelReason').value;
-
-            fetch('app/cancel_order.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    order_id: cancelOrderId,
-                    reason: reason
+            if (confirm('Are you sure you want to cancel this order? This action cannot be undone.')) {
+                fetch('app/cancel_order.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        order_id: orderId,
+                        reason: 'Customer requested cancellation'
+                    })
                 })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    location.reload();
-                } else {
-                    alert('Error: ' + (data.message || 'Failed to cancel order'));
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                alert('An error occurred while cancelling the order');
-            });
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        alert('Order cancelled successfully');
+                        location.reload();
+                    } else {
+                        alert('Error: ' + (data.message || 'Failed to cancel order'));
+                    }
+                });
+            }
         }
     </script>
 </body>

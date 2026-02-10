@@ -228,14 +228,17 @@ try {
 
             <!-- Action Buttons -->
             <div class="d-flex justify-content-center gap-3 mt-5 no-print">
-                <button onclick="window.print()" class="btn btn-primary">
-                    <i class="bi bi-printer me-2"></i>Print Receipt
+                <button onclick="window.print()" class="btn btn-success">
+                    <i class="bi bi-printer me-2"></i>Print/Save Receipt
                 </button>
-                <button onclick="downloadReceipt()" class="btn btn-success">
-                    <i class="bi bi-download me-2"></i>Download PDF
-                </button>
+                <!-- <button onclick="downloadReceipt()" class="btn btn-success"> -->
+                <!--     <i class="bi bi-download me-2"></i>Download PDF -->
+                <!-- </button> -->
                 <a href="menu.php" class="btn btn-outline-primary">
                     <i class="bi bi-cup me-2"></i>Order Again
+                </a>
+                <a href="index.php" class="btn btn-outline-primary">
+                    <i class="bi bi-cup me-2"></i>Home
                 </a>
             </div>
         </div>
@@ -255,26 +258,8 @@ try {
             // Option 1: Simple print to PDF
             window.print();
 
-            // Option 2: Using html2pdf library (requires adding the library)
-            /*
-            html2pdf()
-                .from(element)
-                .set({
-                    margin: 10,
-                    filename: 'receipt-KTB-<?php echo str_pad($order['id'] ?? '000000', 6, '0', STR_PAD_LEFT); ?>.pdf',
-                    image: { type: 'jpeg', quality: 0.98 },
-                    html2canvas: { scale: 2 },
-                    jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
-                })
-                .save();
-            */
         }
     </script>
-
-    <!-- Include html2pdf library for PDF download (optional) -->
-    <!--
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    -->
 
     <script src="assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 </body>

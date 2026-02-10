@@ -92,12 +92,9 @@ try {
                 </small>
             </div>
 
-            <div class="d-flex justify-content-center gap-3 mt-4">
+            <div class="mt-3">
                 <a href="receipt.php?order_id=<?php echo $order_id; ?>" class="btn btn-outline-success btn-sm">
                     <i class="bi bi-receipt me-1"></i>View Receipt
-                </a>
-                <a class="btn btn-outline-success btn-sm" href="order_track.php">
-                    <i class="bi bi-truck me-1"></i>Track Order
                 </a>
             </div>
         </div>

@@ -45,7 +45,6 @@ $status_display = getOrderStatusDisplay($current_status);
             <div class="container position-relative d-flex align-items-center justify-content-between">
                 <a href="order_history.php" class="d-flex align-items-center">
                     <i class="bi bi-arrow-left-circle-fill fs-3"></i>
-                    <span class="ms-2">Back to Orders</span>
                 </a>
                 <a href="index.php" class="logo d-flex align-items-center me-auto me-xl-0">
                     <h1 class="sitename">Kafe Tiga Belas</h1>

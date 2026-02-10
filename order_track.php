@@ -59,9 +59,8 @@ if ($tracking_code) {
     <header id="header" class="header fixed-top">
         <div class="branding d-flex align-items-center">
             <div class="container position-relative d-flex align-items-center justify-content-between">
-                <a href="menu.php" class="d-flex align-items-center">
+                <a href="order_history.php" class="d-flex align-items-center">
                     <i class="bi bi-arrow-left-circle-fill fs-3"></i>
-                    <span class="ms-2">Back to Menu</span>
                 </a>
                 <a href="index.php" class="logo d-flex align-items-center me-auto me-xl-0">
                     <h1 class="sitename">Kafe Tiga Belas</h1>
