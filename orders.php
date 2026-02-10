@@ -107,7 +107,7 @@
     <div class="main-content">
         <div class="col-md-13 col-lg-12 p-4">
             <!-- Messages -->
-            <?php if ($message): ?>
+            <?php if($message): ?>
                 <div class="alert alert-<?php echo $message_type === 'success' ? 'success' : 'danger'; ?> alert-dismissible fade show">
                     <?php echo htmlspecialchars($message); ?>
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>

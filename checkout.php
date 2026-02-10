@@ -90,18 +90,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/css/main.css" rel="stylesheet">
     <style>
+        body{
+           background-image:url('https://thumbs.dreamstime.com/b/empty-coffee-table-over-defocused-coffee-shop-background-copy-space-empty-coffee-table-over-defocused-coffee-shop-background-195708240.jpg');
+           background-size: cover;          
+            background-position: center;      
+            background-repeat: no-repeat;     /* Prevents tiling/repeating */
+            background-attachment: fixed;     /* Keeps background fixed when scrolling (parallax effect) */
+
+            /*darken the image*/
+            background-color: rgba(0, 0, 0, 0.5); 
+            background-blend-mode: multiply;
+        }
+
         .checkout-container {
-            max-width: 800px;
-            margin: 25px auto 50px;
+            max-width: 550px;
+            margin: 35px auto 60px;
             padding: 30px;
             background: var(--background-color);
             border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
         .order-summary {
-            background: rgba(255,255,255,0.05);
+            background: rgba(119, 84, 54, 0.45);
             border-radius: 8px;
-            padding: 20px;
+            padding: 50px;
             margin-bottom: 30px;
         }
         .summary-item {
@@ -128,22 +140,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="alert alert-danger"><?php echo htmlspecialchars($error); ?></div>
             <?php endif; ?>
 
-            <h1 class="sitename mb-4">Checkout</h1>
+            <h1 class="sitename mb-4" style="text-align: center;">Checkout</h1>
 
             <div class="order-summary">
-                <h2 class="mb-4">Order Summary</h2>
+                <h2 class="mb-4" style= "font-family: courier; font-weight: bold; text-align: center; padding-bottom: 50px;">Order Summary</h2>
+                
+                <div class="summary-item" style= "font-family: courier">
+                    <div>Items</div>
+                    <div>Price</div>
+                </div>
+
                 <?php foreach ($cart_items as $item): ?>
-                    <div class="summary-item">
+                    <div class="summary-item" style= "font-family: courier; border: none !important;">
                         <div>
-                            <h6 class="mb-1"><?php echo htmlspecialchars($item['name']); ?></h6>
+                            <h6 class="mb-1" style= "font-family: courier"><?php echo htmlspecialchars($item['name']); ?></h6>
                             <small>x<?php echo $item['quantity']; ?></small>
                         </div>
-                        <div>RM <?php echo number_format($item['price'] * $item['quantity'], 2); ?></div>
+                        <div >RM <?php echo number_format($item['price'] * $item['quantity'], 2); ?></div>
                     </div>
                 <?php endforeach; ?>
-
-                <div class="summary-item summary-total">
-                    <div>Total Amount:</div>
+                <hr>
+                <div class="summary-item summary-total" style= "font-family: courier">
+                    <div >Total Amount:</div>
                     <div>RM <?php echo number_format($cart_total, 2); ?></div>
                 </div>
             </div>
