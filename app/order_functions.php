@@ -161,11 +161,76 @@ function getOrderStatusDisplay($status) {
         'pending' => ['text' => 'Pending', 'class' => 'warning', 'icon' => 'bi-hourglass'],
         'confirmed' => ['text' => 'Confirmed', 'class' => 'info', 'icon' => 'bi-check-circle'],
         'preparing' => ['text' => 'Preparing', 'class' => 'primary', 'icon' => 'bi-cup-hot'],
-        'ready' => ['text' => 'Ready for Pickup', 'class' => 'success', 'icon' => 'bi-bell'],
+        'ready' => ['text' => 'Ready', 'class' => 'success', 'icon' => 'bi-bell'],
         'completed' => ['text' => 'Completed', 'class' => 'secondary', 'icon' => 'bi-check2-all'],
         'cancelled' => ['text' => 'Cancelled', 'class' => 'danger', 'icon' => 'bi-x-circle'],
     ];
 
     return $statuses[$status] ?? ['text' => 'Unknown', 'class' => 'dark', 'icon' => 'bi-question-circle'];
+}
+
+function getOrdersWithFilters($pdo, $status = 'all', $date_from = '', $date_to = '', $search = '') {
+    $sql = "
+        SELECT o.*,
+               u.username,
+               u.email,
+               u.profile_pic,
+               COUNT(oi.id) as item_count,
+               (SELECT status FROM order_status_logs WHERE order_id = o.id ORDER BY created_at DESC LIMIT 1) as current_status
+        FROM orders o
+        LEFT JOIN users u ON o.user_id = u.id
+        LEFT JOIN order_items oi ON o.id = oi.order_id
+        WHERE 1=1
+    ";
+
+    $params = [];
+
+    if ($status !== 'all') {
+        $sql .= " AND o.status = ?";
+        $params[] = $status;
+    }
+
+    if ($date_from) {
+        $sql .= " AND DATE(o.created_at) >= ?";
+        $params[] = $date_from;
+    }
+
+    if ($date_to) {
+        $sql .= " AND DATE(o.created_at) <= ?";
+        $params[] = $date_to;
+    }
+
+    if ($search) {
+        $sql .= " AND (
+            o.id LIKE ? OR
+            u.username LIKE ? OR
+            u.email LIKE ? OR
+            o.payment_id LIKE ? OR
+            o.pickup_code LIKE ?
+        )";
+        $search_param = "%$search%";
+        $params = array_merge($params, [$search_param, $search_param, $search_param, $search_param, $search_param]);
+    }
+
+    $sql .= " GROUP BY o.id ORDER BY o.created_at DESC LIMIT 100";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute($params);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getOrderForDashboard($pdo, $order_id) {
+    $stmt = $pdo->prepare("
+        SELECT o.*,
+               u.username,
+               u.email,
+               u.profile_pic,
+               (SELECT status FROM order_status_logs WHERE order_id = o.id ORDER BY created_at DESC LIMIT 1) as current_status
+        FROM orders o
+        LEFT JOIN users u ON o.user_id = u.id
+        WHERE o.id = ?
+    ");
+    $stmt->execute([$order_id]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 ?>
