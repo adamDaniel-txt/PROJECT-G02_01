@@ -68,6 +68,18 @@ try {
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/css/main.css" rel="stylesheet">
    <style>
+    body{
+      background-image:url('https://cdn.thespaces.com/wp-content/uploads/2019/09/Korea-Hero.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;     /* Prevents tiling/repeating */
+      background-attachment: fixed;     /* Keeps background fixed when scrolling (parallax effect) */
+
+      /*darken the image*/
+      background-color: rgba(0, 0, 0, 0.5);
+      background-blend-mode: multiply;
+    }
+    
     .receipt-container {
         max-width: 400px;                   /* Narrow like a real receipt */
         margin: 60px auto 50px;
