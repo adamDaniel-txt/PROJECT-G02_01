@@ -131,21 +131,116 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Update Username
     if (isset($_POST['update_username'])) {
-        // ... (existing username update code - keep as is) ...
+        $new_username = trim($_POST['username']);
+
+        if (empty($new_username)) {
+            $error = 'Username cannot be empty';
+        } elseif ($new_username === $user['username']) {
+            $error = 'New username is the same as current username';
+        } else {
+            // Check if username already exists
+            $check_stmt = $pdo->prepare('SELECT id FROM users WHERE username = ? AND id != ?');
+            $check_stmt->execute([$new_username, $user_id]);
+
+            if ($check_stmt->fetch()) {
+                $error = 'Username already taken';
+            } else {
+                $update_stmt = $pdo->prepare('UPDATE users SET username = ? WHERE id = ?');
+                if ($update_stmt->execute([$new_username, $user_id])) {
+                    $success = 'Username updated successfully';
+                    $user['username'] = $new_username; // Update displayed username
+                } else {
+                    $error = 'Failed to update username';
+                }
+            }
+        }
     }
     // Update Email
     elseif (isset($_POST['update_email'])) {
-        // ... (existing email update code - keep as is) ...
+        $new_email = trim($_POST['email']);
+
+        if (empty($new_email)) {
+            $error = 'Email cannot be empty';
+        } elseif (!filter_var($new_email, FILTER_VALIDATE_EMAIL)) {
+            $error = 'Please enter a valid email address';
+        } elseif ($new_email === $user['email']) {
+            $error = 'New email is the same as current email';
+        } else {
+            // Check if email already exists
+            $check_stmt = $pdo->prepare('SELECT id FROM users WHERE email = ? AND id != ?');
+            $check_stmt->execute([$new_email, $user_id]);
+
+            if ($check_stmt->fetch()) {
+                $error = 'Email already registered';
+            } else {
+                $update_stmt = $pdo->prepare('UPDATE users SET email = ? WHERE id = ?');
+                if ($update_stmt->execute([$new_email, $user_id])) {
+                    $success = 'Email updated successfully';
+                    $user['email'] = $new_email; // Update displayed email
+                } else {
+                    $error = 'Failed to update email';
+                }
+            }
+        }
     }
 
     // Change Password
     elseif (isset($_POST['change_password'])) {
-        // ... (existing password change code - keep as is) ...
+        $current_password = $_POST['current_password'];
+        $new_password = $_POST['new_password'];
+        $confirm_password = $_POST['confirm_password'];
+
+        // Verify current password
+        $current_hash = hash('sha256', $current_password);
+        $check_stmt = $pdo->prepare('SELECT password FROM users WHERE id = ?');
+        $check_stmt->execute([$user_id]);
+        $db_password = $check_stmt->fetchColumn();
+
+        if ($current_hash !== $db_password) {
+            $error = 'Current password is incorrect';
+        } elseif (strlen($new_password) < 8) {
+            $error = 'New password must be at least 8 characters';
+        } elseif ($new_password !== $confirm_password) {
+            $error = 'New passwords do not match';
+        } else {
+            $new_hash = hash('sha256', $new_password);
+            $update_stmt = $pdo->prepare('UPDATE users SET password = ? WHERE id = ?');
+            if ($update_stmt->execute([$new_hash, $user_id])) {
+                $success = 'Password changed successfully';
+            } else {
+                $error = 'Failed to change password';
+            }
+        }
     }
 
     // Delete Account
     elseif (isset($_POST['delete_account'])) {
-        // ... (existing delete account code - keep as is) ...
+        $confirm_password = $_POST['confirm_password'] ?? '';
+
+        if (empty($confirm_password)) {
+            $error = 'Please enter your password to confirm account deletion';
+        } else {
+            // Verify password
+            $check_stmt = $pdo->prepare('SELECT password FROM users WHERE id = ?');
+            $check_stmt->execute([$user_id]);
+            $db_password = $check_stmt->fetchColumn();
+
+            $input_hash = hash('sha256', $confirm_password);
+
+            if ($input_hash === $db_password) {
+                // Delete user
+                $delete_stmt = $pdo->prepare('DELETE FROM users WHERE id = ?');
+                if ($delete_stmt->execute([$user_id])) {
+                    session_destroy();
+                    header('Location: index.php?deleted=1');
+                    exit();
+                } else {
+                    $error = 'Failed to delete account. Please try again.';
+                }
+            } else {
+                $error = 'Incorrect password. Please try again.';
+            }
+        }
     }
 }
 ?>
