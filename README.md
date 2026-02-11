@@ -1,4 +1,4 @@
-# Kafe Tiga Belas - Online Ordering System
+# Kafe Tiga Belas - Online Ordering System (SPRINT 2)
 
 ## 🚀 Quick Start
 
@@ -60,35 +60,6 @@ git clone https://github.com/stripe/stripe-php.git stripe
 1. Create MySQL database named `tigaBelasCafe`
 2. Import SQL file: `tigaBelasCafe.sql`
 3. Update database credentials in `.env`
-
-## 📁 Project Structure
-```
-kafe-tiga-belas/
-├── .env.example           # Environment template
-├── .gitignore            # Git ignore file
-├── README.md             # This file
-├── app/                  # Application logic
-│   ├── config.php       # Configuration loader
-│   ├── db.php           # Database connection
-│   ├── cart_functions.php
-│   ├── order_functions.php
-│   └── menu_functions.php
-├── assets/               # Static assets
-│   ├── css/             # Stylesheets
-│   ├── js/              # JavaScript
-│   ├── vendor/          # Third-party libraries
-│   └── img/             # Images
-├── tigaBelasCafe.sql     # Database schema
-├── index.php            # Home page
-├── menu.php             # Menu page
-├── checkout.php         # Checkout page
-├── payment-success.php  # Payment success page
-├── receipt.php          # Receipt page
-├── order-history.php    # Order history page
-├── order-details.php    # Order details page
-├── order-track.php      # Order tracking page
-└── login.php           # Login page
-```
 
 ## 👥 User Accounts
 
