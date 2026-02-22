@@ -183,7 +183,11 @@ foreach ($orders as $order) {
             <div class="sidebar-footer">
                 <a href="profile.php" class="nav-item">
                     <i class="bi bi-person"></i>
-                    <span>Profile</span>
+                    <?php if (hasPermission('manage_customers')): ?>
+                    <span>Staff</span>
+                    <?php elseif (hasPermission('manage_staff')): ?>
+                    <span>Admin</span>
+                    <?php endif; ?>
                 </a>
                 <a href="index.php" class="nav-item">
                     <i class="bi bi-box-arrow-right"></i>
