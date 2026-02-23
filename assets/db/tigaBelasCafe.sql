@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 11, 2026 at 01:14 AM
+-- Generation Time: Feb 23, 2026 at 06:37 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -60,7 +60,8 @@ CREATE TABLE `feedbacks` (
 INSERT INTO `feedbacks` (`id`, `feedback_text`, `rating`, `created_at`, `user_id`) VALUES
 (5, 'Very Good, Very Nice', 5, '2026-02-10 23:26:46', 14),
 (6, 'Pretty Mid, Overrated', 3, '2026-02-10 23:29:34', 15),
-(7, 'Great Atmosphere, would come again', 5, '2026-02-10 23:36:50', 14);
+(7, 'Great Atmosphere, would come again', 5, '2026-02-10 23:36:50', 14),
+(8, 'This is soo PEAK', 5, '2026-02-11 08:54:14', 60);
 
 -- --------------------------------------------------------
 
@@ -88,7 +89,7 @@ CREATE TABLE `menu_items` (
 INSERT INTO `menu_items` (`id`, `name`, `description`, `price`, `category`, `image_url`, `is_available`, `created_at`, `updated_at`) VALUES
 (3, 'Latte', 'A smooth and comforting blend of espresso with plenty of creamy steamed milk', 11.00, 'Coffee', 'https://www.brighteyedbaker.com/wp-content/uploads/2024/07/Dulce-de-Leche-Latte-Recipe.jpg', 1, '2026-01-14 17:17:36', '2026-01-22 09:14:21'),
 (5, 'Green Tea', 'Refreshing traditional green tea', 7.00, 'Tea', 'https://tuyabeauty.com/cdn/shop/articles/Benefits_of_Green_Tea_For_Skin.jpg', 1, '2026-01-14 17:17:36', '2026-01-22 09:19:31'),
-(10, 'Americano', 'A clean and robust classic made with deep espresso shots and hot water', 7.00, 'Coffee', 'https://mocktail.net/wp-content/uploads/2022/05/homemade-Iced-Americano-recipe_5.jpg', 1, '2026-01-22 09:21:17', '2026-02-10 11:06:48'),
+(10, 'Americano', 'A clean and robust classic made with deep espresso shots and hot water', 10.00, 'Coffee', 'https://mocktail.net/wp-content/uploads/2022/05/homemade-Iced-Americano-recipe_5.jpg', 1, '2026-01-22 09:21:17', '2026-02-23 05:25:01'),
 (11, 'Cappuccino', 'A rich espresso base topped with a thick, velvety layer of steamed milk foam', 11.00, 'Coffee', 'https://www.shutterstock.com/image-photo/heart-shaped-latte-art-white-600nw-2506388167.jpg', 1, '2026-01-22 09:23:15', '2026-01-22 09:23:15'),
 (12, 'Spanish Latte', 'A rich, velvety espresso drink sweetened with a touch of condensed milk', 13.00, 'Coffee', 'https://img.freepik.com/premium-photo/cappuccino-latte-with-milk-foam-caramel-glass-with-coffee-beans-light-marble-background-with-branches-front-view-copy-space_185452-4001.jpg', 1, '2026-01-22 09:25:52', '2026-01-22 09:29:53'),
 (13, 'Hazelnut latte', 'A fragrant and nutty twist on our classic latte with sweet hazelnut notes', 13.00, 'Coffee', 'https://tyberrymuch.com/wp-content/uploads/2024/03/Hazelnut-Iced-Coffee-Hero.jpg', 1, '2026-01-22 09:28:49', '2026-01-22 09:34:06'),
@@ -132,7 +133,14 @@ INSERT INTO `orders` (`id`, `user_id`, `total_amount`, `payment_id`, `status`, `
 (33, 14, 52.00, 'cs_test_b1fcnnChkfuylLeavbs1tZ8E1kg7W9jYdzlPgg2fuQkFTj8OHJPdph4JzJ', 'preparing', '2026-02-10 16:03:10', '2026-02-10 16:27:54', '2026-02-10 17:42:54', NULL, NULL),
 (34, 14, 59.00, 'cs_test_b1n22DKlRo3W2N2dBwIfRoTtYjN8BoHxgookBFqNg8xosTKeKQUnwLkIWF', 'confirmed', '2026-02-10 16:04:06', '2026-02-10 16:27:48', NULL, NULL, NULL),
 (35, 15, 7.00, 'cs_test_a1RbLC2V5jSsexrZUF8IVBh6KFfLZGAsFljUcLwg0gfQ8nHgEBh6IeFZ7r', 'cancelled', '2026-02-10 16:05:23', '2026-02-10 16:58:46', NULL, NULL, NULL),
-(36, 15, 170.00, 'cs_test_b1cdrh0h6RbHDNkzKQsr4TXofbC2TOH352SNCz1RTXdFBn2pk64uC3Z7Mi', 'pending', '2026-02-10 16:07:09', '2026-02-10 16:07:09', NULL, NULL, NULL);
+(36, 15, 170.00, 'cs_test_b1cdrh0h6RbHDNkzKQsr4TXofbC2TOH352SNCz1RTXdFBn2pk64uC3Z7Mi', 'pending', '2026-02-10 16:07:09', '2026-02-10 16:07:09', NULL, NULL, NULL),
+(37, 60, 13.00, 'cs_test_a1rmXWlqXBnEZnT67qHgyExG79EAKPJsFXZMlbZu0bYzKPGKol7NNtvvwp', 'completed', '2026-02-11 00:55:17', '2026-02-11 00:56:30', NULL, NULL, NULL),
+(38, 60, 38.00, 'cs_test_b1LJzMGCE3l7jEFrXEiNSuQEmIxWCk6Oou6wN3ZQeRfHIbcdRObjPwBz5G', 'confirmed', '2026-02-11 01:40:25', '2026-02-11 01:48:36', NULL, NULL, NULL),
+(40, 60, 25.00, 'cs_test_b18fsvClP4c2kyN8ipGxxUq1SXvXIlHKNeNxkEwdj5cQG8RK2seMZagMkE', 'completed', '2026-02-11 02:05:10', '2026-02-11 02:08:05', NULL, NULL, NULL),
+(41, 60, 14.00, 'cs_test_a17CbEJ6za02Jy6EpnJYn5F178NVvucWvuFLuOZLY7KZ8JGDrR2LRIUyvF', 'cancelled', '2026-02-11 02:09:18', '2026-02-11 02:09:39', NULL, NULL, NULL),
+(42, 14, 70.00, 'cs_test_b17zv2WfLGD35MJyTjUexPtmQBmyGX2UlwQc00TLPMzfGTCZrVRplHahky', 'pending', '2026-02-22 15:24:39', '2026-02-22 15:24:39', NULL, NULL, NULL),
+(43, 14, 53.00, 'cs_test_b15M2H4ggJjzTd3eVXXScN7cvRATtPOTuGJ48LyM6jJxWxAl2Ao9wTBPKg', 'pending', '2026-02-22 15:26:18', '2026-02-22 15:26:18', NULL, NULL, NULL),
+(44, 15, 173.00, 'cs_test_b1UGP6Shc2CFonoLHbZ6HHJqdrUL55f3OQNa8Ny8cpCM8LAvu4lkNrsHCQ', 'pending', '2026-02-22 15:27:58', '2026-02-22 15:27:58', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -183,7 +191,39 @@ INSERT INTO `order_items` (`id`, `order_id`, `menu_item_id`, `quantity`, `price`
 (48, 36, 13, 1, 13.00),
 (49, 36, 14, 1, 14.00),
 (50, 36, 11, 1, 11.00),
-(51, 36, 10, 1, 7.00);
+(51, 36, 10, 1, 7.00),
+(52, 37, 13, 1, 13.00),
+(53, 38, 12, 1, 13.00),
+(54, 38, 17, 1, 13.00),
+(55, 38, 19, 1, 12.00),
+(56, 40, 13, 1, 13.00),
+(57, 40, 22, 1, 12.00),
+(58, 41, 14, 1, 14.00),
+(59, 42, 16, 1, 13.00),
+(60, 42, 3, 1, 11.00),
+(61, 42, 14, 1, 14.00),
+(62, 42, 10, 1, 10.00),
+(63, 42, 11, 2, 11.00),
+(64, 43, 23, 1, 7.00),
+(65, 43, 22, 1, 12.00),
+(66, 43, 3, 1, 11.00),
+(67, 43, 19, 1, 12.00),
+(68, 43, 11, 1, 11.00),
+(69, 44, 5, 1, 7.00),
+(70, 44, 23, 1, 7.00),
+(71, 44, 20, 1, 12.00),
+(72, 44, 21, 1, 12.00),
+(73, 44, 22, 1, 12.00),
+(74, 44, 18, 1, 13.00),
+(75, 44, 17, 1, 13.00),
+(76, 44, 19, 1, 12.00),
+(77, 44, 12, 1, 13.00),
+(78, 44, 16, 1, 13.00),
+(79, 44, 3, 1, 11.00),
+(80, 44, 13, 1, 13.00),
+(81, 44, 14, 1, 14.00),
+(82, 44, 11, 1, 11.00),
+(83, 44, 10, 1, 10.00);
 
 -- --------------------------------------------------------
 
@@ -222,7 +262,20 @@ INSERT INTO `order_status_logs` (`id`, `order_id`, `status`, `notes`, `created_a
 (45, 35, 'pending', '', '2026-02-10 16:31:17'),
 (46, 35, 'cancelled', 'noreson', '2026-02-10 16:31:33'),
 (47, 35, 'completed', '', '2026-02-10 16:58:01'),
-(48, 35, 'cancelled', '', '2026-02-10 16:58:46');
+(48, 35, 'cancelled', '', '2026-02-10 16:58:46'),
+(49, 37, 'pending', 'Order created and payment confirmed', '2026-02-11 00:55:17'),
+(50, 37, 'completed', '', '2026-02-11 00:56:30'),
+(51, 38, 'pending', 'Order created and payment confirmed', '2026-02-11 01:40:25'),
+(53, 38, 'confirmed', '', '2026-02-11 01:48:36'),
+(54, 40, 'pending', 'Order created and payment confirmed', '2026-02-11 02:05:10'),
+(55, 40, 'confirmed', '', '2026-02-11 02:07:36'),
+(56, 40, 'completed', '', '2026-02-11 02:07:54'),
+(57, 40, 'completed', 'Tq', '2026-02-11 02:08:05'),
+(58, 41, 'pending', 'Order created and payment confirmed', '2026-02-11 02:09:18'),
+(59, 41, 'cancelled', 'tanak', '2026-02-11 02:09:39'),
+(60, 42, 'pending', 'Order created and payment confirmed', '2026-02-22 15:24:39'),
+(61, 43, 'pending', 'Order created and payment confirmed', '2026-02-22 15:26:18'),
+(62, 44, 'pending', 'Order created and payment confirmed', '2026-02-22 15:27:58');
 
 -- --------------------------------------------------------
 
@@ -312,20 +365,24 @@ CREATE TABLE `users` (
   `email_verified` tinyint(1) DEFAULT 0,
   `verification_token` varchar(64) DEFAULT NULL,
   `token_expires` datetime DEFAULT NULL,
-  `profile_picture` varchar(255) DEFAULT 'default-profile.png'
+  `profile_picture` varchar(255) DEFAULT 'default-profile.png',
+  `is_active` tinyint(1) DEFAULT 1,
+  `banned_at` datetime DEFAULT NULL,
+  `ban_reason` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `email`, `password`, `role_id`, `email_verified`, `verification_token`, `token_expires`, `profile_picture`) VALUES
-(10, 'admin', 'admin@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, 1, NULL, NULL, NULL),
-(11, 'guest', 'guest@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 4, 1, NULL, NULL, NULL),
-(12, 'customer', 'customer@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, NULL),
-(13, 'staff', 'staff@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 2, 1, NULL, NULL, NULL),
-(14, 'anon', 'anon@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_14_1770732219.jpg'),
-(15, 'karen', 'karen@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_15_1770737387.jpeg');
+INSERT INTO `users` (`id`, `username`, `email`, `password`, `role_id`, `email_verified`, `verification_token`, `token_expires`, `profile_picture`, `is_active`, `banned_at`, `ban_reason`) VALUES
+(10, 'admin', 'admin@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_10_1770777506.jpeg', 1, NULL, NULL),
+(11, 'guest', 'guest@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 4, 1, NULL, NULL, NULL, 1, NULL, NULL),
+(12, 'customer', 'customer@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_12_1771774890.jpeg', 1, NULL, NULL),
+(13, 'staff', 'staff@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 2, 1, NULL, NULL, NULL, 1, NULL, NULL),
+(14, 'anon', 'anon@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_14_1770732219.jpg', 1, NULL, NULL),
+(15, 'karen', 'karen@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_15_1770737387.jpeg', 1, NULL, NULL),
+(60, 'dan', 'dan@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_60_1770775982.jpeg', 1, NULL, NULL);
 
 --
 -- Indexes for dumped tables
@@ -417,37 +474,37 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT for table `feedbacks`
 --
 ALTER TABLE `feedbacks`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `menu_items`
 --
 ALTER TABLE `menu_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=25;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=52;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
 
 --
 -- AUTO_INCREMENT for table `order_status_logs`
 --
 ALTER TABLE `order_status_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT for table `permissions`
@@ -465,7 +522,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- Constraints for dumped tables

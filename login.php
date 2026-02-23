@@ -25,6 +25,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
 
+        // Check if is_active column exists and user is banned
+        if (isset($user['is_active']) && $user['is_active'] == 0) {
+            $ban_message = 'Your account has been suspended.';
+
+            // Add ban reason if available
+            if (!empty($user['ban_reason'])) {
+                $ban_message .= ' Reason: ' . $user['ban_reason'];
+            }
+
+            // Add ban date if available
+            if (!empty($user['banned_at'])) {
+                $ban_message .= ' (Banned on: ' . date('d/m/Y', strtotime($user['banned_at'])) . ')';
+            }
+
+            $_SESSION['flash'] = $ban_message;
+            header('Location: login.php');
+            exit();
+        }
+
         $_SESSION['user_id'] = $user['id'];
         $_SESSION['role_id'] = $user['role_id'];
         if (hasPermission('view_dashboard')) {
