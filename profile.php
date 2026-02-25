@@ -271,7 +271,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     body{
-      background-image:url('https://cdn.thespaces.com/wp-content/uploads/2019/09/Korea-Hero.jpg');
+      background-image: url('assets/img/bg.jpg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;     /* Prevents tiling/repeating */

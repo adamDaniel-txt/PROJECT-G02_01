@@ -91,14 +91,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link href="assets/css/main.css" rel="stylesheet">
     <style>
         body{
-           background-image:url('https://thumbs.dreamstime.com/b/empty-coffee-table-over-defocused-coffee-shop-background-copy-space-empty-coffee-table-over-defocused-coffee-shop-background-195708240.jpg');
-           background-size: cover;          
-            background-position: center;      
+            background-image: url('assets/img/bg.jpg');
+            background-size: cover;
+            background-position: center;
             background-repeat: no-repeat;     /* Prevents tiling/repeating */
             background-attachment: fixed;     /* Keeps background fixed when scrolling (parallax effect) */
 
             /*darken the image*/
-            background-color: rgba(0, 0, 0, 0.5); 
+            background-color: rgba(0, 0, 0, 0.5);
             background-blend-mode: multiply;
         }
 
@@ -144,7 +144,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <div class="order-summary">
                 <h2 class="mb-4" style= "font-family: courier; font-weight: bold; text-align: center; padding-bottom: 50px;">Order Summary</h2>
-                
+
                 <div class="summary-item" style= "font-family: courier">
                     <div>Items</div>
                     <div>Price</div>
