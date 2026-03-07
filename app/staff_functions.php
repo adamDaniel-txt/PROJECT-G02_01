@@ -2,7 +2,7 @@
 // app/staff_functions.php
 
 /**
- * Get all staff and admin users
+ * Get all staff users
  */
 function getAllStaff($pdo) {
     $sql = "SELECT u.*, r.role_name
@@ -37,9 +37,9 @@ function getStaffById($pdo, $id) {
 function addStaff($pdo, $data) {
     try {
         $sql = "INSERT INTO users 
-                (username, email, password, role_id, is_active, created_at)
+                (username, email, password, role_id, is_active)
                 VALUES 
-                (:username, :email, :password, :role_id, :is_active, NOW())";
+                (:username, :email, :password, :role_id, :is_active)";
 
         // IMPORTANT: Use proper password hashing
         $hashed_password = hash('sha256', $data['password']);
@@ -49,8 +49,8 @@ function addStaff($pdo, $data) {
             ':username'   => $data['username'],
             ':email'      => $data['email'],
             ':password'   => $hashed_password,
-            ':role_id'    => $data['role_id'], // 1 = Admin, 2 = Staff
-            ':is_active'  => $data['is_active']
+            ':role_id'    => 2,
+            ':is_active'  => 1
         ]);
 
     } catch (PDOException $e) {
@@ -66,9 +66,7 @@ function updateStaff($pdo, $id, $data) {
     try {
         $sql = "UPDATE users SET
                 username = :username,
-                email = :email,
-                role_id = :role_id,
-                is_active = :is_active
+                email = :email
                 WHERE id = :id
                 AND role_id = 2";
 
@@ -77,8 +75,6 @@ function updateStaff($pdo, $id, $data) {
             ':id'         => $id,
             ':username'   => $data['username'],
             ':email'      => $data['email'],
-            ':role_id'    => $data['role_id'],
-            ':is_active'  => $data['is_active']
         ]);
 
     } catch (PDOException $e) {
@@ -148,24 +144,26 @@ function activateStaff($pdo, $id) {
  * (Prevents deleting yourself)
  */
 function deleteStaff($pdo, $id, $reason) {
+
     try {
 
         if ($id == $_SESSION['user_id']) {
             return false;
         }
 
-        // Optional: log delete reason before deleting
-        $logSql = "INSERT INTO order_status_logs (order_id, status, notes)
-                   VALUES (NULL, 'staff_deleted', :reason)";
-        // You can create a proper staff_logs table later
-
-        $sql = "DELETE FROM users
+        $sql = "UPDATE users SET
+                is_active = 0,
+                banned_at = NOW(),
+                ban_reason = :reason
                 WHERE id = :id
                 AND role_id = 2";
 
         $stmt = $pdo->prepare($sql);
 
-        return $stmt->execute([':id' => $id]);
+        return $stmt->execute([
+            ':id' => $id,
+            ':reason' => $reason
+        ]);
 
     } catch (PDOException $e) {
         error_log("Error deleting staff: " . $e->getMessage());
@@ -212,5 +210,29 @@ function getInactiveStaffCount($pdo) {
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['count'];
+}
+
+/**
+ * Permanently delete staff
+ */
+function permanentlyDeleteStaff($pdo, $id) {
+
+    try {
+
+        $sql = "DELETE FROM users
+                WHERE id = :id
+                AND role_id = 2
+                AND is_active = 0";
+
+        $stmt = $pdo->prepare($sql);
+
+        return $stmt->execute([
+            ':id' => $id
+        ]);
+
+    } catch (PDOException $e) {
+        error_log("Error permanently deleting staff: " . $e->getMessage());
+        return false;
+    }
 }
 ?>
