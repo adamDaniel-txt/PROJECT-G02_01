@@ -289,7 +289,11 @@ $inactive_count = getInactiveStaffCount($pdo);
                                                 <?php if ($staff['is_active']): ?>
                                                     <span class="badge bg-success">Active</span>
                                                 <?php else: ?>
-                                                    <span class="badge bg-secondary">Deleted</span>
+                                                    <span class="badge bg-secondary"
+                                                        style="cursor:pointer;"
+                                                        onclick='viewDeleteReason(<?= json_encode($staff["ban_reason"]); ?>)'>
+                                                        Deleted
+                                                    </span>
                                                 <?php endif; ?>
                                             </td>
                                             <td>
@@ -451,6 +455,26 @@ $inactive_count = getInactiveStaffCount($pdo);
                     </div>
                 </div>
 
+                <!-- Delete Reason Modal -->
+                <div class="modal fade" id="reasonModal" tabindex="-1">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                        <div class="modal-header">
+                            <h5 class="modal-title">
+                                <i class="bi bi-info-circle"></i> Delete Reason
+                            </h5>
+                            <button class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+
+                        <div class="modal-body">
+                            <p id="deleteReasonText"></p>
+                        </div>
+
+                        </div>
+                    </div>
+                    </div>
+
                 <!-- Add Staff Modal -->
                 <div class="modal fade" id="addStaffModal" tabindex="-1">
                     <div class="modal-dialog">
@@ -534,22 +558,32 @@ $inactive_count = getInactiveStaffCount($pdo);
     </script>
 
     <script>
-function confirmDelete() {
+    function confirmDelete() {
 
-    const form = document.getElementById('deleteStaffForm');
-    const reason = form.querySelector('textarea[name="delete_reason"]').value.trim();
+        const form = document.getElementById('deleteStaffForm');
+        const reason = form.querySelector('textarea[name="delete_reason"]').value.trim();
 
-    if (reason === "") {
-        alert("Please provide a reason before deleting.");
-        return;
+        if (reason === "") {
+            alert("Please provide a reason before deleting.");
+            return;
+        }
+
+        const confirmAction = confirm("Are you sure you want to delete this staff?");
+
+        if (confirmAction) {
+            form.submit();
+        }
     }
+    </script>
 
-    const confirmAction = confirm("Are you sure you want to delete this staff?");
+    <script>
+    function viewDeleteReason(reason) {
 
-    if (confirmAction) {
-        form.submit();
+        document.getElementById("deleteReasonText").innerText = reason;
+
+        const modal = new bootstrap.Modal(document.getElementById('reasonModal'));
+        modal.show();
     }
-}
-</script>
+    </script>
 </body>
 </html>
