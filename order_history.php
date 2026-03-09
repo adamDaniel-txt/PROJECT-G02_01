@@ -37,14 +37,14 @@ $paged_orders = array_slice($orders, $offset, $limit);
 
 <style>
     body{
-      background-image:url('https://wallpapercave.com/wp/wp8210019.jpg');
+      background-image:url('assets/img/bg2.jpg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;     /* Prevents tiling/repeating */
       background-attachment: fixed;     /* Keeps background fixed when scrolling (parallax effect) */
 
     }
-</style>  
+</style>
 
 </head>
 <body class="index-page">
