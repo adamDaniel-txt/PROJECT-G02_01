@@ -4,18 +4,22 @@ require 'app/db.php';
 require 'app/menu_functions.php';
 require 'app/permission.php';
 require 'app/customer_functions.php';
+
 // Check if user have permission
 if (!hasPermission('view_dashboard')) {
     header('Location: index.php');
     exit();
 }
+
 // Additional check for customer management permission
 if (!hasPermission('manage_customers')) {
     header('Location: dashboard.php');
     exit();
 }
+
 $message = '';
 $message_type = '';
+
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['update_customer'])) {
@@ -75,10 +79,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
 // Get filter from URL
 $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
+
 // Get all customers
 $customers = getAllCustomers($pdo);
+
 // Get statistics
 $banned_count = getBannedCustomersCount($pdo);
 $active_count = getActiveCustomersCount($pdo);
@@ -151,6 +158,7 @@ $active_count = getActiveCustomersCount($pdo);
                 </a>
             </div>
         </aside>
+
         <!-- Main Content -->
         <div class="main-content">
             <div class="p-4">
@@ -161,6 +169,7 @@ $active_count = getActiveCustomersCount($pdo);
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
                 <?php endif; ?>
+
                 <div class="top-bar d-flex justify-content-between align-items-center mb-4">
                     <h1 class="h3 mb-0">
                         <i class="bi bi-people me-2"></i>Customer Management
@@ -178,6 +187,7 @@ $active_count = getActiveCustomersCount($pdo);
                         </div>
                     </div>
                 </div>
+
                 <!-- Filter Buttons -->
                 <div class="filter-buttons">
                     <a href="?filter=all" class="btn btn-sm <?php echo $filter == 'all' ? 'btn-primary' : 'btn-outline-primary'; ?>">
@@ -190,6 +200,7 @@ $active_count = getActiveCustomersCount($pdo);
                         <i class="bi bi-ban"></i> Banned
                     </a>
                 </div>
+
                 <!-- Customers Table -->
                 <div class="card">
                     <div class="card-body">
@@ -227,10 +238,15 @@ $active_count = getActiveCustomersCount($pdo);
                                     <?php foreach ($filtered_customers as $customer): ?>
                                     <tr class="<?php echo $customer['is_active'] == 0 ? 'banned-row' : ''; ?>">
                                         <td>
-                                            <img src="<?php echo htmlspecialchars($customer['profile_picture'] ?? 'assets/img/default-avatar.png'); ?>"
+                                            <?php if (!empty($customer['profile_picture'])): ?>
+                                            <img src="<?php echo htmlspecialchars($customer['profile_picture']); ?>"
                                                 alt="Avatar"
                                                 class="customer-avatar"
-                                                onerror="this.src='assets/img/default-avatar.png'">
+                                                onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                            <i class="bi bi-person-circle avatar-icon" style="display:none;"></i>
+                                            <?php else: ?>
+                                            <i class="bi bi-person-circle avatar-icon"></i>
+                                            <?php endif; ?>
                                         </td>
                                         <td><?php echo htmlspecialchars($customer['username']); ?></td>
                                         <td><?php echo htmlspecialchars($customer['email']); ?></td>
@@ -248,12 +264,12 @@ $active_count = getActiveCustomersCount($pdo);
                                             <?php endif; ?>
                                         </td>
                                         <td>
-                                            <span class="badge <?php echo $customer['total_orders'] > 0 ? 'bg-success' : 'bg-secondary'; ?>">
+                                            <span class="badge <?php echo ($customer['total_orders'] ?? 0) > 0 ? 'bg-success' : 'bg-secondary'; ?>">
                                                 <?php echo $customer['total_orders'] ?? 0; ?>
                                             </span>
                                         </td>
                                         <td>
-                                            <?php if ($customer['total_spent'] > 0): ?>
+                                            <?php if (($customer['total_spent'] ?? 0) > 0): ?>
                                             RM <?php echo number_format($customer['total_spent'], 2); ?>
                                             <?php else: ?>
                                             -
