@@ -34,6 +34,21 @@ $paged_orders = array_slice($orders, $offset, $limit);
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/css/main.css" rel="stylesheet">
+
+<style>
+    body{
+      background-image:url('https://cdn.thespaces.com/wp-content/uploads/2019/09/Korea-Hero.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;     /* Prevents tiling/repeating */
+      background-attachment: fixed;     /* Keeps background fixed when scrolling (parallax effect) */
+
+      /*darken the image*/
+      background-color: rgba(0, 0, 0, 0.5);
+      background-blend-mode: multiply;
+    }
+</style>  
+
 </head>
 <body class="index-page">
     <header id="header" class="header fixed-top">
@@ -61,12 +76,12 @@ $paged_orders = array_slice($orders, $offset, $limit);
                             <h5 class="card-title">Order Management</h5>
                             <ul class="nav nav-pills flex-column">
                                 <li class="nav-item">
-                                    <a class="nav-link active" href="order_history.php">
+                                    <a class="nav-link active" href="order_history.php" style = "background-color: #6D4C1E">
                                         <i class="bi bi-clock-history me-2"></i>Order History
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="order_track.php">
+                                    <a class="nav-link" href="order_track.php" style = "color: #6D4C1E">
                                         <i class="bi bi-truck me-2"></i>Track Order
                                     </a>
                                 </li>
@@ -108,7 +123,7 @@ $paged_orders = array_slice($orders, $offset, $limit);
                     <div class="d-flex justify-content-between align-items-center mb-4">
                         <h2>Order History</h2>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown">
+                            <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" style="--bs-btn-color: #a78e6aff; --bs-btn-border-color: #a78e6aff;">
                                 Filter by Status
                             </button>
                             <ul class="dropdown-menu">
@@ -188,7 +203,7 @@ $paged_orders = array_slice($orders, $offset, $limit);
                                 <div class="col-md-4 text-end">
                                     <div class="d-flex flex-column gap-2">
                                         <a href="order_details.php?order_id=<?php echo $order['id']; ?>"
-                                           class="btn btn-outline-primary btn-sm">
+                                           class="btn btn-outline-primary btn-sm" style="--bs-btn-color: #a78e6aff; --bs-btn-border-color: #a78e6aff;">
                                             <i class="bi bi-eye me-1"></i>View Details
                                         </a>
                                         <a href="receipt.php?order_id=<?php echo $order['id']; ?>"
