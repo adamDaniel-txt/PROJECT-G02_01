@@ -79,7 +79,7 @@ $categories = getMenuCategories($pdo);
     <title>Products</title>
 
     <!-- Same CSS as dashboard -->
-    <link rel="stylesheet" href="assets/css/dashStyle.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
 
     <!-- Bootstrap Icons only (Font Awesome removed) -->
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">

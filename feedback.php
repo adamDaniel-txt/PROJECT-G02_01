@@ -3,20 +3,16 @@ session_start();
 require 'app/db.php';
 require 'app/feedback_functions.php';
 require 'app/permission.php';
-
 // Check if user have permission
 if (!hasPermission('view_dashboard')) {
     header('Location: index.php');
     exit();
 }
-
 $message = '';
 $message_type = '';
-
 // Handle delete action
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_feedback'])) {
     $id = intval($_POST['feedback_id']);
-
     if (deleteFeedback($pdo, $id)) {
         $message = 'Feedback deleted successfully!';
         $message_type = 'success';
@@ -25,7 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_feedback'])) {
         $message_type = 'error';
     }
 }
-
 // Handle filter form submission
 $orderBy = 'created_at DESC';
 if (isset($_GET['sort'])) {
@@ -44,14 +39,11 @@ if (isset($_GET['sort'])) {
             break;
     }
 }
-
 // Get filter parameters
 $ratingFilter = isset($_GET['rating']) ? intval($_GET['rating']) : null;
 $searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
-
 // Get all feedback using your existing function
 $feedback_items = getAllFeedbacks($pdo);
-
 // Apply sorting
 usort($feedback_items, function($a, $b) use ($orderBy) {
     if ($orderBy === 'rating DESC, created_at DESC') {
@@ -66,110 +58,56 @@ usort($feedback_items, function($a, $b) use ($orderBy) {
         return $a['rating'] - $b['rating'];
     } elseif ($orderBy === 'created_at ASC') {
         return strtotime($a['created_at']) - strtotime($b['created_at']);
-    } else { // 'created_at DESC' (default)
+    } else {
         return strtotime($b['created_at']) - strtotime($a['created_at']);
     }
 });
-
 // Apply filters
 if ($ratingFilter) {
     $feedback_items = array_filter($feedback_items, function($item) use ($ratingFilter) {
         return $item['rating'] == $ratingFilter;
     });
 }
-
 if ($searchQuery) {
     $feedback_items = array_filter($feedback_items, function($item) use ($searchQuery) {
         return stripos($item['feedback_text'], $searchQuery) !== false ||
-               stripos($item['display_name'], $searchQuery) !== false;
+            stripos($item['display_name'], $searchQuery) !== false;
     });
 }
-
 // Get statistics using the new function
 $stats = getFeedbackStats($pdo);
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Feedback Management</title>
-
-    <!-- Same CSS as dashboard -->
-    <link rel="stylesheet" href="assets/css/dashStyle.css">
-
-    <!-- Bootstrap Icons only (Font Awesome removed) -->
+    <link rel="stylesheet" href="assets/css/dashboard.css">
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-    <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-    <style>
-        .card { border-radius: 10px; border: none; }
-        .table-actions { white-space: nowrap; }
-        .feedback-text {
-            max-height: 100px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-        }
-        .feedback-text.expanded {
-            max-height: none;
-            -webkit-line-clamp: unset;
-        }
-        .read-more {
-            color: #0d6efd;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-        .rating-stars {
-            font-size: 1.1rem;
-        }
-        .stat-card {
-            border-radius: 10px;
-            padding: 20px;
-            margin-bottom: 15px;
-            color: white;
-        }
-        .stat-card.total { background: #6f42c1; }
-        .stat-card.days { background: #0d6efd; }
-        .stat-card.avg { background: #198754; }
-        .stat-card.displayed { background: #fd7e14; }
-        .rating-badge {
-            font-size: 0.75rem;
-            padding: 0.25em 0.6em;
-        }
-    </style>
 </head>
-
 <body>
     <div class="app-container">
-
         <!-- Side Bar-->
         <aside class="sidebar" id="sidebar">
             <div class="logo">
                 <div class="logo-text">Dashboard</div>
             </div>
-
             <nav class="nav-section">
                 <div class="nav-label">Main Menu</div>
                 <a href="dashboard.php" class="nav-item">
                     <i class="bi bi-graph-up"></i>
                     <span>Dashboard</span>
                 </a>
-
                 <a href="sales.php" class="nav-item">
                     <i class="bi bi-cart3"></i>
                     <span>Sales</span>
                 </a>
-
                 <a href="menu_items.php" class="nav-item">
                     <i class="bi bi-box"></i>
                     <span>Menu Items</span>
                 </a>
-
                 <?php if (hasPermission('manage_customers')): ?>
                 <a href="customers.php" class="nav-item">
                     <i class="bi bi-people"></i>
@@ -181,12 +119,10 @@ $stats = getFeedbackStats($pdo);
                     <span>Staff</span>
                 </a>
                 <?php endif; ?>
-
                 <a href="orders.php" class="nav-item">
                     <i class="bi bi-receipt"></i>
                     <span>Orders</span>
                 </a>
-
                 <?php if (hasPermission('manage_feedback')): ?>
                 <a href="#" class="nav-item active">
                     <i class="bi bi-chat-left-text"></i>
@@ -194,7 +130,6 @@ $stats = getFeedbackStats($pdo);
                 </a>
                 <?php endif; ?>
             </nav>
-
             <div class="sidebar-footer">
                 <a href="profile.php" class="nav-item">
                     <i class="bi bi-person"></i>
@@ -210,19 +145,16 @@ $stats = getFeedbackStats($pdo);
                 </a>
             </div>
         </aside>
-
         <!-- Main Content -->
         <div class="main-content">
-
-            <div class="col-md-13 col-lg-12 p-4">
+            <div class="p-4">
                 <!-- Messages -->
                 <?php if ($message): ?>
-                    <div class="alert alert-<?php echo $message_type === 'success' ? 'success' : 'danger'; ?> alert-dismissible fade show">
-                        <?php echo htmlspecialchars($message); ?>
-                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-                    </div>
+                <div class="alert alert-<?php echo $message_type === 'success' ? 'success' : 'danger'; ?> alert-dismissible fade show">
+                    <?php echo htmlspecialchars($message); ?>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
                 <?php endif; ?>
-
                 <div class="top-bar d-flex justify-content-between align-items-center mb-4">
                     <h1 class="h3 mb-0">
                         <i class="bi bi-chat-left-text me-2"></i>Feedback Management
@@ -236,11 +168,10 @@ $stats = getFeedbackStats($pdo);
                         </button>
                     </div>
                 </div>
-
                 <!-- Statistics Cards -->
                 <div class="row mb-4">
                     <div class="col-md-3">
-                        <div class="stat-card total shadow-sm">
+                        <div class="stat-card total">
                             <div class="text-center">
                                 <h1 class="display-5"><?php echo $stats['total']; ?></h1>
                                 <p class="mb-0">Total Feedback</p>
@@ -248,31 +179,30 @@ $stats = getFeedbackStats($pdo);
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="stat-card days shadow-sm">
-                            <div class="card-body text-center">
+                        <div class="stat-card preparing">
+                            <div class="text-center">
                                 <h1 class="display-5"><?php echo $stats['recent']; ?></h1>
                                 <p class="mb-0">Last 30 Days</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="stat-card avg shadow-sm">
-                            <div class="card-body text-center">
+                        <div class="stat-card ready">
+                            <div class="text-center">
                                 <h1 class="display-5"><?php echo $stats['average_rating']; ?></h1>
                                 <p class="mb-0">Average Rating</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <div class="stat-card displayed shadow-sm">
-                            <div class="card-body text-center">
+                        <div class="stat-card total">
+                            <div class="text-center">
                                 <h1 class="display-5"><?php echo count($feedback_items); ?></h1>
                                 <p class="mb-0">Displayed</p>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <!-- Filter Section -->
                 <div class="collapse mb-4" id="filterSection">
                     <div class="card">
@@ -292,17 +222,17 @@ $stats = getFeedbackStats($pdo);
                                     <select class="form-select" name="rating">
                                         <option value="">All Ratings</option>
                                         <?php for ($i = 5; $i >= 1; $i--): ?>
-                                            <option value="<?php echo $i; ?>" <?php echo (isset($_GET['rating']) && $_GET['rating'] == $i) ? 'selected' : ''; ?>>
-                                                <?php echo str_repeat('★', $i); ?> (<?php echo $i; ?> stars)
-                                            </option>
+                                        <option value="<?php echo $i; ?>" <?php echo (isset($_GET['rating']) && $_GET['rating'] == $i) ? 'selected' : ''; ?>>
+                                            <?php echo str_repeat('★', $i); ?> (<?php echo $i; ?> stars)
+                                        </option>
                                         <?php endfor; ?>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
                                     <label class="form-label">Search</label>
                                     <input type="text" class="form-control" name="search"
-                                           placeholder="Search in feedback or user..."
-                                           value="<?php echo htmlspecialchars($searchQuery); ?>">
+                                        placeholder="Search in feedback or user..."
+                                        value="<?php echo htmlspecialchars($searchQuery); ?>">
                                 </div>
                                 <div class="col-md-1 d-flex align-items-end">
                                     <button type="submit" class="btn btn-primary w-100">Apply</button>
@@ -316,9 +246,8 @@ $stats = getFeedbackStats($pdo);
                         </div>
                     </div>
                 </div>
-
                 <!-- Feedback Table -->
-                <div class="card shadow-sm mb-4">
+                <div class="card mb-4">
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-hover">
@@ -334,63 +263,63 @@ $stats = getFeedbackStats($pdo);
                                 </thead>
                                 <tbody>
                                     <?php if (empty($feedback_items)): ?>
-                                        <tr>
-                                            <td colspan="6" class="text-center text-muted py-4">
-                                                No feedback found.
-                                            </td>
-                                        </tr>
+                                    <tr>
+                                        <td colspan="6" class="text-center text-muted py-4">
+                                            No feedback found.
+                                        </td>
+                                    </tr>
                                     <?php else: ?>
-                                        <?php foreach ($feedback_items as $feedback): ?>
-                                            <tr>
-                                                <td><?php echo $feedback['id']; ?></td>
-                                                <td>
-                                                    <div>
-                                                        <strong><?php echo htmlspecialchars($feedback['display_name']); ?></strong>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="rating-stars">
-                                                        <?php echo formatRatingDashboard($feedback['rating']); ?>
-                                                        <span class="badge bg-warning text-dark rating-badge ms-1">
-                                                            <?php echo $feedback['rating']; ?>/5
-                                                        </span>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <div class="feedback-text" id="feedback-text-<?php echo $feedback['id']; ?>">
-                                                        <?php echo nl2br(htmlspecialchars($feedback['feedback_text'])); ?>
-                                                    </div>
-                                                    <?php if (strlen($feedback['feedback_text']) > 150): ?>
-                                                        <a href="#" class="read-more" onclick="toggleFeedbackText(<?php echo $feedback['id']; ?>)">Read more</a>
-                                                    <?php endif; ?>
-                                                </td>
-                                                <td class="text-muted small">
-                                                    <?php echo formatFeedbackDateDashboard($feedback['created_at']); ?>
-                                                    <div class="text-muted">
-                                                        <?php echo date('M j, Y g:i A', strtotime($feedback['created_at'])); ?>
-                                                    </div>
-                                                </td>
-                                                <td class="table-actions">
-                                                    <button class="btn btn-sm btn-outline-info"
-                                                            data-bs-toggle="modal"
-                                                            data-bs-target="#viewFeedbackModal"
-                                                            data-feedback-id="<?php echo $feedback['id']; ?>"
-                                                            data-feedback-name="<?php echo htmlspecialchars($feedback['display_name']); ?>"
-                                                            data-feedback-rating="<?php echo $feedback['rating']; ?>"
-                                                            data-feedback-text="<?php echo htmlspecialchars($feedback['feedback_text']); ?>"
-                                                            data-feedback-date="<?php echo date('F j, Y g:i A', strtotime($feedback['created_at'])); ?>"
-                                                            onclick="viewFeedback(this)">
-                                                        <i class="bi bi-eye"></i>
-                                                    </button>
-                                                    <form method="POST" class="d-inline" onsubmit="return confirm('Delete this feedback? This action cannot be undone.');">
-                                                        <input type="hidden" name="feedback_id" value="<?php echo $feedback['id']; ?>">
-                                                        <button type="submit" name="delete_feedback" class="btn btn-sm btn-outline-danger">
-                                                            <i class="bi bi-trash"></i>
-                                                        </button>
-                                                    </form>
-                                                </td>
-                                            </tr>
-                                        <?php endforeach; ?>
+                                    <?php foreach ($feedback_items as $feedback): ?>
+                                    <tr>
+                                        <td><?php echo $feedback['id']; ?></td>
+                                        <td>
+                                            <div>
+                                                <strong><?php echo htmlspecialchars($feedback['display_name']); ?></strong>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="rating-stars">
+                                                <?php echo formatRatingDashboard($feedback['rating']); ?>
+                                                <span class="badge bg-warning rating-badge ms-1">
+                                                    <?php echo $feedback['rating']; ?>/5
+                                                </span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="feedback-text" id="feedback-text-<?php echo $feedback['id']; ?>">
+                                                <?php echo nl2br(htmlspecialchars($feedback['feedback_text'])); ?>
+                                            </div>
+                                            <?php if (strlen($feedback['feedback_text']) > 150): ?>
+                                            <a href="#" class="read-more" onclick="toggleFeedbackText(<?php echo $feedback['id']; ?>)">Read more</a>
+                                            <?php endif; ?>
+                                        </td>
+                                        <td class="text-muted small">
+                                            <?php echo formatFeedbackDateDashboard($feedback['created_at']); ?>
+                                            <div class="text-muted">
+                                                <?php echo date('M j, Y g:i A', strtotime($feedback['created_at'])); ?>
+                                            </div>
+                                        </td>
+                                        <td class="table-actions">
+                                            <button class="btn btn-sm btn-outline-info"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#viewFeedbackModal"
+                                                data-feedback-id="<?php echo $feedback['id']; ?>"
+                                                data-feedback-name="<?php echo htmlspecialchars($feedback['display_name']); ?>"
+                                                data-feedback-rating="<?php echo $feedback['rating']; ?>"
+                                                data-feedback-text="<?php echo htmlspecialchars($feedback['feedback_text']); ?>"
+                                                data-feedback-date="<?php echo date('F j, Y g:i A', strtotime($feedback['created_at'])); ?>"
+                                                onclick="viewFeedback(this)">
+                                                <i class="bi bi-eye"></i>
+                                            </button>
+                                            <form method="POST" class="d-inline" onsubmit="return confirm('Delete this feedback? This action cannot be undone.');">
+                                                <input type="hidden" name="feedback_id" value="<?php echo $feedback['id']; ?>">
+                                                <button type="submit" name="delete_feedback" class="btn btn-sm btn-outline-danger">
+                                                    <i class="bi bi-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <?php endforeach; ?>
                                     <?php endif; ?>
                                 </tbody>
                             </table>
@@ -400,7 +329,6 @@ $stats = getFeedbackStats($pdo);
             </div>
         </div>
     </div>
-
     <!-- View Feedback Modal -->
     <div class="modal fade" id="viewFeedbackModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
@@ -443,22 +371,17 @@ $stats = getFeedbackStats($pdo);
             </div>
         </div>
     </div>
-
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Function to view feedback details in modal
         function viewFeedback(button) {
             const feedbackId = button.getAttribute('data-feedback-id');
             const userName = button.getAttribute('data-feedback-name');
             const rating = button.getAttribute('data-feedback-rating');
             const feedbackText = button.getAttribute('data-feedback-text');
             const date = button.getAttribute('data-feedback-date');
-
             document.getElementById('viewUserName').textContent = userName;
             document.getElementById('viewDate').textContent = date;
             document.getElementById('deleteFeedbackId').value = feedbackId;
-
-            // Display rating stars
             let stars = '';
             for (let i = 1; i <= 5; i++) {
                 if (i <= rating) {
@@ -469,16 +392,11 @@ $stats = getFeedbackStats($pdo);
             }
             stars += ` <span class="ms-2 fs-6">(${rating}/5)</span>`;
             document.getElementById('viewRating').innerHTML = stars;
-
-            // Display feedback text with line breaks
             document.getElementById('viewFeedbackText').innerHTML = feedbackText.replace(/\n/g, '<br>');
         }
-
-        // Toggle feedback text between truncated and full view
         function toggleFeedbackText(feedbackId) {
             const element = document.getElementById(`feedback-text-${feedbackId}`);
             const link = element.nextElementSibling;
-
             if (element.classList.contains('expanded')) {
                 element.classList.remove('expanded');
                 link.textContent = 'Read more';
@@ -487,23 +405,6 @@ $stats = getFeedbackStats($pdo);
                 link.textContent = 'Show less';
             }
         }
-
-        // Auto-dismiss alerts after 5 seconds
-        setTimeout(() => {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(alert => {
-                const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            });
-        }, 5000);
-
-        // Initialize tooltips
-        document.addEventListener('DOMContentLoaded', function() {
-            const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
-            tooltipTriggerList.map(function (tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl);
-            });
-        });
     </script>
 </body>
 </html>

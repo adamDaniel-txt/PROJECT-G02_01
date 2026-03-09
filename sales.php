@@ -70,7 +70,7 @@ if (isset($_GET['export'])) {
     <title>Sales Reports</title>
 
     <!-- Same CSS as dashboard -->
-    <link rel="stylesheet" href="assets/css/dashStyle.css">
+    <link rel="stylesheet" href="assets/css/dashboard.css">
 
     <!-- Bootstrap Icons only -->
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
