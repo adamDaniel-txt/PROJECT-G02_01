@@ -211,6 +211,10 @@ a {
     background: rgba(204, 36, 29, 0.1);
 }
 
+.banned-row:hover {
+    background: rgba(204, 36, 29, 0.2);
+}
+
 /* Buttons */
 .btn {
     border: var(--border-width) solid var(--foreground);
@@ -487,7 +491,6 @@ a {
 }
 
 .tab-content {
-    border: var(--border-width) solid var(--foreground);
     border-top: none;
     background: var(--surface);
     padding: 20px;
@@ -506,6 +509,20 @@ a {
     border: var(--border-width) solid var(--foreground);
 }
 
+/* Staff Avatar Icon (when no profile picture) */
+.avatar-icon {
+    font-size: 2rem;
+    color: var(--faded-foreground);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background-color: var(--surface-highlight);
+    border-radius: 50%;
+    border: var(--border-width) solid var(--foreground);
+}
+
 .status-badge {
     font-size: 0.85rem;
     padding: 5px 10px;
@@ -516,6 +533,11 @@ a {
 }
 
 .filter-buttons .btn {
+    margin-right: 10px;
+    margin-bottom: 10px;
+}
+
+.action-buttons button {
     margin-right: 5px;
 }
 
@@ -558,6 +580,10 @@ a {
 
 .edit-modal-tabs .nav-link i {
     margin-right: 8px;
+}
+
+.edit-modal-tabs .nav-link.text-danger.active {
+    color: var(--danger);
 }
 
 /* Info/Warning/Danger Boxes */
@@ -741,9 +767,11 @@ a {
     .sidebar {
         transform: translateX(-100%);
     }
+
     .main-content {
         margin-left: 0;
     }
+
     .sidebar.active {
         transform: translateX(0);
     }
