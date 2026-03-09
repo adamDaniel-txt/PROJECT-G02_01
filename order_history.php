@@ -37,15 +37,12 @@ $paged_orders = array_slice($orders, $offset, $limit);
 
 <style>
     body{
-      background-image:url('https://cdn.thespaces.com/wp-content/uploads/2019/09/Korea-Hero.jpg');
+      background-image:url('https://wallpapercave.com/wp/wp8210019.jpg');
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;     /* Prevents tiling/repeating */
       background-attachment: fixed;     /* Keeps background fixed when scrolling (parallax effect) */
 
-      /*darken the image*/
-      background-color: rgba(0, 0, 0, 0.5);
-      background-blend-mode: multiply;
     }
 </style>  
 
@@ -73,7 +70,7 @@ $paged_orders = array_slice($orders, $offset, $limit);
                     <!-- Sidebar Navigation -->
                     <div class="card mb-4">
                         <div class="card-body">
-                            <h5 class="card-title">Order Management</h5>
+                            <h5 class="card-title" style= "font-weight: bolder">Order Management</h5>
                             <ul class="nav nav-pills flex-column">
                                 <li class="nav-item">
                                     <a class="nav-link active" href="order_history.php" style = "background-color: #6D4C1E">
@@ -121,9 +118,9 @@ $paged_orders = array_slice($orders, $offset, $limit);
                 <div class="col-lg-9">
                     <!-- Orders List -->
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h2>Order History</h2>
+                        <h2 style="font-family: Avantgarde; font-weight:bolder; color: #CDA45E ">Order History</h2>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" style="--bs-btn-color: #a78e6aff; --bs-btn-border-color: #a78e6aff;">
+                            <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" style="--bs-btn-color: #FFC107; --bs-btn-border-color: #FFC107;">
                                 Filter by Status
                             </button>
                             <ul class="dropdown-menu">
