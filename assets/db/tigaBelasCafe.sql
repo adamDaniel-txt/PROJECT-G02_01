@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Feb 23, 2026 at 06:37 AM
+-- Generation Time: Mar 11, 2026 at 06:09 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.0.30
 
@@ -140,7 +140,12 @@ INSERT INTO `orders` (`id`, `user_id`, `total_amount`, `payment_id`, `status`, `
 (41, 60, 14.00, 'cs_test_a17CbEJ6za02Jy6EpnJYn5F178NVvucWvuFLuOZLY7KZ8JGDrR2LRIUyvF', 'cancelled', '2026-02-11 02:09:18', '2026-02-11 02:09:39', NULL, NULL, NULL),
 (42, 14, 70.00, 'cs_test_b17zv2WfLGD35MJyTjUexPtmQBmyGX2UlwQc00TLPMzfGTCZrVRplHahky', 'pending', '2026-02-22 15:24:39', '2026-02-22 15:24:39', NULL, NULL, NULL),
 (43, 14, 53.00, 'cs_test_b15M2H4ggJjzTd3eVXXScN7cvRATtPOTuGJ48LyM6jJxWxAl2Ao9wTBPKg', 'pending', '2026-02-22 15:26:18', '2026-02-22 15:26:18', NULL, NULL, NULL),
-(44, 15, 173.00, 'cs_test_b1UGP6Shc2CFonoLHbZ6HHJqdrUL55f3OQNa8Ny8cpCM8LAvu4lkNrsHCQ', 'pending', '2026-02-22 15:27:58', '2026-02-22 15:27:58', NULL, NULL, NULL);
+(44, 15, 173.00, 'cs_test_b1UGP6Shc2CFonoLHbZ6HHJqdrUL55f3OQNa8Ny8cpCM8LAvu4lkNrsHCQ', 'pending', '2026-02-22 15:27:58', '2026-02-22 15:27:58', NULL, NULL, NULL),
+(45, 14, 83.00, 'cs_test_b13nI9pS7DHRYeY6dkh63hyWqwt5YSLFYzMq0UW8NeiKKu39RYpvTjkFhj', 'pending', '2026-02-25 08:46:41', '2026-02-25 08:46:41', NULL, NULL, NULL),
+(46, 14, 72.00, 'cs_test_b1VcuZAKF8grDk98WvfsOlL8QsYhPvRGpH10WQZibv2dN8lz7tF7XA9reR', 'pending', '2026-02-27 12:55:13', '2026-02-27 12:55:13', NULL, NULL, NULL),
+(47, 15, 75.00, 'cs_test_b1kHqiy441PuIEdAxncQReFAw9DxCoKSI8EZ2PnbGTowIPkQniAlYkqJrT', 'pending', '2026-02-27 12:56:14', '2026-02-27 12:56:14', NULL, NULL, NULL),
+(48, 14, 35.00, 'cs_test_b1cg3EHfWtY2tmrvqCmyzzl1ZyG5v4XxTt1PAjiFXJj9jMOvZHJU4uTYSf', 'pending', '2026-03-05 06:07:25', '2026-03-05 06:07:25', NULL, NULL, NULL),
+(50, 15, 73.00, 'cs_test_b1oxM4Y00dyhToHOAX802ID355FDmFM8avVt8TmO1fkWjA8l8fWpI6bK8A', 'pending', '2026-03-08 17:17:36', '2026-03-08 17:17:36', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -223,7 +228,32 @@ INSERT INTO `order_items` (`id`, `order_id`, `menu_item_id`, `quantity`, `price`
 (80, 44, 13, 1, 13.00),
 (81, 44, 14, 1, 14.00),
 (82, 44, 11, 1, 11.00),
-(83, 44, 10, 1, 10.00);
+(83, 44, 10, 1, 10.00),
+(84, 45, 20, 1, 12.00),
+(85, 45, 18, 3, 13.00),
+(86, 45, 3, 1, 11.00),
+(87, 45, 11, 1, 11.00),
+(88, 45, 10, 1, 10.00),
+(89, 46, 5, 1, 7.00),
+(90, 46, 23, 1, 7.00),
+(91, 46, 20, 1, 12.00),
+(92, 46, 17, 1, 13.00),
+(93, 46, 19, 1, 12.00),
+(94, 46, 10, 1, 10.00),
+(95, 46, 11, 1, 11.00),
+(96, 47, 5, 2, 7.00),
+(97, 47, 20, 1, 12.00),
+(98, 47, 18, 1, 13.00),
+(99, 47, 12, 1, 13.00),
+(100, 47, 13, 1, 13.00),
+(101, 47, 10, 1, 10.00),
+(102, 48, 14, 1, 14.00),
+(103, 48, 11, 1, 11.00),
+(104, 48, 10, 1, 10.00),
+(105, 50, 21, 1, 12.00),
+(106, 50, 22, 1, 12.00),
+(107, 50, 13, 3, 13.00),
+(108, 50, 10, 1, 10.00);
 
 -- --------------------------------------------------------
 
@@ -275,7 +305,12 @@ INSERT INTO `order_status_logs` (`id`, `order_id`, `status`, `notes`, `created_a
 (59, 41, 'cancelled', 'tanak', '2026-02-11 02:09:39'),
 (60, 42, 'pending', 'Order created and payment confirmed', '2026-02-22 15:24:39'),
 (61, 43, 'pending', 'Order created and payment confirmed', '2026-02-22 15:26:18'),
-(62, 44, 'pending', 'Order created and payment confirmed', '2026-02-22 15:27:58');
+(62, 44, 'pending', 'Order created and payment confirmed', '2026-02-22 15:27:58'),
+(63, 45, 'pending', 'Order created and payment confirmed', '2026-02-25 08:46:41'),
+(64, 46, 'pending', 'Order created and payment confirmed', '2026-02-27 12:55:13'),
+(65, 47, 'pending', 'Order created and payment confirmed', '2026-02-27 12:56:14'),
+(66, 48, 'pending', 'Order created and payment confirmed', '2026-03-05 06:07:25'),
+(68, 50, 'pending', 'Order created and payment confirmed', '2026-03-08 17:17:36');
 
 -- --------------------------------------------------------
 
@@ -379,7 +414,7 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `role_id`, `email_ve
 (10, 'admin', 'admin@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_10_1770777506.jpeg', 1, NULL, NULL),
 (11, 'guest', 'guest@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 4, 1, NULL, NULL, NULL, 1, NULL, NULL),
 (12, 'customer', 'customer@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_12_1771774890.jpeg', 1, NULL, NULL),
-(13, 'staff', 'staff@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 2, 1, NULL, NULL, NULL, 1, NULL, NULL),
+(13, 'staff', 'staff@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 2, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_13_1773071948.jpeg', 1, NULL, NULL),
 (14, 'anon', 'anon@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_14_1770732219.jpg', 1, NULL, NULL),
 (15, 'karen', 'karen@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_15_1770737387.jpeg', 1, NULL, NULL),
 (60, 'dan', 'dan@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_60_1770775982.jpeg', 1, NULL, NULL);
@@ -474,7 +509,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
 
 --
 -- AUTO_INCREMENT for table `feedbacks`
@@ -492,19 +527,19 @@ ALTER TABLE `menu_items`
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
 
 --
 -- AUTO_INCREMENT for table `order_status_logs`
 --
 ALTER TABLE `order_status_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `permissions`
@@ -522,7 +557,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
 
 --
 -- Constraints for dumped tables
