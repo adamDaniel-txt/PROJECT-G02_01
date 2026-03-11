@@ -128,6 +128,31 @@ $status_display = getOrderStatusDisplay($current_status);
     70% { box-shadow: 0 0 0 10px rgba(13, 110, 253, 0); }
     100% { box-shadow: 0 0 0 0 rgba(13, 110, 253, 0); }
 }
+
+.floating-image {
+  position: absolute;
+  right: 10%;
+  bottom: -80px; /* This pushes the image into the section below */
+  width: 350px;
+  z-index: 10; /* Ensures it stays on top of the bottom section */
+  
+  /* The "Pop" - Multi-layered shadow for realism */
+  filter: drop-shadow(0 10px 10px rgba(0,0,0,0.1)) 
+          drop-shadow(0 25px 30px rgba(0,0,0,0.2));
+  
+  /* Adding a slight lift effect on hover */
+  transition: transform 0.3s ease;
+}
+
+.floating-image:hover {
+  transform: translateY(-10px) scale(1.02);
+}
+
+.features {
+  background-color: #f4eee0;
+  padding: 120px 10% 60px; /* Extra top padding so text doesn't hide under the cup */
+  text-align: left;
+}
 </style>
 </head>
 <body class="index-page">
@@ -230,14 +255,15 @@ $status_display = getOrderStatusDisplay($current_status);
                                     </div>
                                 </div>
                                 <?php endforeach; ?>
+                                <img src="assets/img/coffee.png" alt="Coffee" class="floating-image">
                             </div>
                         </div>
                     </div>
 
                     <!-- Order Items -->
-                    <div class="card mb-4">
+                    <div class="card mb-4" style="background-color: white">
                         <div class="card-body">
-                            <h5 class="card-title mb-3">Order Items</h5>
+                            <h5 class="card-title mb-3" style = "color: #6D4C1E; font-weight: bolder">Order Items</h5>
                             <div class="table-responsive">
                                 <table class="table">
                                     <thead>

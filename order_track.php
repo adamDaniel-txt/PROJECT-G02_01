@@ -54,6 +54,16 @@ if ($tracking_code) {
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/css/main.css" rel="stylesheet">
+    <style>
+    body{
+      background-image:url('assets/img/bg3.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-attachment: fixed; 
+
+    }
+    </style>
 </head>
 <body class="index-page">
     <header id="header" class="header fixed-top">
