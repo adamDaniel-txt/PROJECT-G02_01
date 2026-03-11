@@ -38,6 +38,97 @@ $status_display = getOrderStatusDisplay($current_status);
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link href="assets/css/main.css" rel="stylesheet">
+    <style> 
+    body{
+        background-image:url('assets/img/bg2.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+    }
+    .card {
+        background: #29261F;
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        box-shadow: 0 8px 32px 0 rgba(58, 61, 104, 0.1);
+    }
+
+    .h1, h2{
+        font-family: Montserrat;
+    }
+
+    /* Progress Tracker Styling */
+.status-tracker {
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    margin-bottom: 30px;
+    padding: 0 10px;
+}
+
+/* The connecting line */
+.status-tracker::before {
+    content: '';
+    position: absolute;
+    top: 20px;
+    left: 50px;
+    right: 50px;
+    height: 3px;
+    background: #e0e0e0;
+    z-index: 1;
+}
+
+.step-node {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    width: 80px;
+}
+
+.step-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #fff;
+    border: 3px solid #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 10px;
+    transition: all 0.3s ease;
+    font-size: 1.2rem;
+    color: #adb5bd;
+}
+
+/* Active/Completed States */
+.step-node.active .step-icon {
+    border-color: #0d6efd;
+    color: #0d6efd;
+    box-shadow: 0 0 15px rgba(13, 110, 253, 0.4);
+    transform: scale(1.1);
+    animation: pulse-blue 2s infinite;
+}
+
+.step-node.completed .step-icon {
+    background: #198754;
+    border-color: #198754;
+    color: #fff;
+}
+
+.step-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    color: #6c757d;
+}
+
+@keyframes pulse-blue {
+    0% { box-shadow: 0 0 0 0 rgba(13, 110, 253, 0.7); }
+    70% { box-shadow: 0 0 0 10px rgba(13, 110, 253, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(13, 110, 253, 0); }
+}
+</style>
 </head>
 <body class="index-page">
     <header id="header" class="header fixed-top">
@@ -96,7 +187,7 @@ $status_display = getOrderStatusDisplay($current_status);
                             </div>
                             <?php endif; ?>
 
-                            <!-- Status Timeline -->
+                            <!-- Status Timeline--> 
                             <h6 class="mt-4 mb-3">Order Progress</h6>
                             <div class="status-timeline">
                                 <?php

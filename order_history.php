@@ -44,6 +44,14 @@ $paged_orders = array_slice($orders, $offset, $limit);
       background-attachment: fixed;     /* Keeps background fixed when scrolling (parallax effect) */
 
     }
+
+    .card {
+    background: #29261F;
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 30px;
+    box-shadow: 0 8px 32px 0 rgba(58, 61, 104, 0.1);
+}
 </style>
 
 </head>
@@ -118,9 +126,21 @@ $paged_orders = array_slice($orders, $offset, $limit);
                 <div class="col-lg-9">
                     <!-- Orders List -->
                     <div class="d-flex justify-content-between align-items-center mb-4">
-                        <h2 style="font-family: Avantgarde; font-weight:bolder; color: #CDA45E ">Order History</h2>
+                        <p style="font-family: Avantgarde; font-weight:bolder; font-size: 40px; color: #deb268ff ">Order History</p>
                         <div class="btn-group">
-                            <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" style="--bs-btn-color: #FFC107; --bs-btn-border-color: #FFC107;">
+                            <button type="button" class="btn btn-outline-primary dropdown-toggle" data-bs-toggle="dropdown" 
+                            style="--bs-btn-color: #FFC107;
+                                    --bs-btn-border-color: #FFC107;
+          
+                                    --bs-btn-hover-color: #212529;
+                                    --bs-btn-hover-bg: #ffca2c;
+                                    --bs-btn-hover-border-color: #ffca2c;
+          
+                                    --bs-btn-active-color: #212529;
+                                    --bs-btn-active-bg: #CDA45E;
+                                    --bs-btn-active-border-color: #CDA45E;
+          
+                                   --bs-btn-focus-shadow-rgb: 205, 164, 94;">
                                 Filter by Status
                             </button>
                             <ul class="dropdown-menu">
@@ -200,7 +220,19 @@ $paged_orders = array_slice($orders, $offset, $limit);
                                 <div class="col-md-4 text-end">
                                     <div class="d-flex flex-column gap-2">
                                         <a href="order_details.php?order_id=<?php echo $order['id']; ?>"
-                                           class="btn btn-outline-primary btn-sm" style="--bs-btn-color: #a78e6aff; --bs-btn-border-color: #a78e6aff;">
+                                           class="btn btn-outline-primary btn-sm" 
+                                           style="--bs-btn-color: #FFC107;
+                                                --bs-btn-border-color: #FFC107;
+          
+                                                --bs-btn-hover-color: #212529;
+                                                --bs-btn-hover-bg: #ffca2c;
+                                                --bs-btn-hover-border-color: #ffca2c;
+          
+                                                --bs-btn-active-color: #212529;
+                                                --bs-btn-active-bg: #CDA45E;
+                                                --bs-btn-active-border-color: #CDA45E;
+          
+          -                                     --bs-btn-focus-shadow-rgb: 205, 164, 94;">
                                             <i class="bi bi-eye me-1"></i>View Details
                                         </a>
                                         <a href="receipt.php?order_id=<?php echo $order['id']; ?>"
