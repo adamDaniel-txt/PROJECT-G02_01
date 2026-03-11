@@ -9,6 +9,17 @@ if (!hasPermission('view_dashboard')) {
     header('Location: index.php');
     exit();
 }
+// Get current user data
+$current_user = null;
+if (isset($_SESSION['user_id'])) {
+    $stmt = $pdo->prepare("SELECT username, profile_picture FROM users WHERE id = ?");
+    $stmt->execute([$_SESSION['user_id']]);
+    $current_user = $stmt->fetch(PDO::FETCH_ASSOC);
+}
+
+// Set profile picture (keep as-is from database, can be NULL or path)
+$profile_picture = $current_user['profile_picture'] ?? null;
+$username = $current_user['username'] ?? 'USER';
 
 $message = '';
 $message_type = '';
@@ -64,17 +75,28 @@ foreach ($category_revenue as $row) {
     <div class="app-container">
         <!-- Side Bar-->
         <aside class="sidebar" id="sidebar">
-            <div class="logo">
-                <div class="logo-text">Dashboard</div>
-            </div>
+            <a href="profile.php" class="logo" style="text-decoration: none; color: inherit;">
+                <div class="d-flex align-items-center">
+                    <?php if (!empty($profile_picture) && $profile_picture !== 'default-profile.png' && file_exists($profile_picture)): ?>
+                        <img src="<?php echo htmlspecialchars($profile_picture); ?>"
+                             alt="Profile"
+                             class="rounded-circle me-3"
+                             style="width: 40px; height: 40px; object-fit: cover; border: 2px solid #458588;">
+                    <?php else: ?>
+                        <i class="rounded-circle bi bi-person-circle avatar-icon me-3"
+                           style="font-size: 40px; color: #458588;"></i>
+                    <?php endif; ?>
+                    <span class="logo-text text-uppercase fw-bold"><?php echo htmlspecialchars(strtoupper($username)); ?></span>
+                </div>
+            </a>
             <nav class="nav-section">
                 <div class="nav-label">Main Menu</div>
-                <a href="dashboard.php" class="nav-item active">
-                    <i class="bi bi-graph-up"></i>
-                    <span>Dashboard</span>
+                <a href="#" class="nav-item active">
+                    <i class="bi bi-house"></i>
+                    <span>Home</span>
                 </a>
                 <a href="sales.php" class="nav-item">
-                    <i class="bi bi-cart3"></i>
+                    <i class="bi bi-graph-up"></i>
                     <span>Sales</span>
                 </a>
                 <a href="menu_items.php" class="nav-item">
@@ -104,14 +126,6 @@ foreach ($category_revenue as $row) {
                 <?php endif; ?>
             </nav>
             <div class="sidebar-footer">
-                <a href="profile.php" class="nav-item">
-                    <i class="bi bi-person"></i>
-                    <?php if (hasPermission('manage_customers')): ?>
-                    <span>Staff</span>
-                    <?php elseif (hasPermission('manage_staff')): ?>
-                    <span>Admin</span>
-                    <?php endif; ?>
-                </a>
                 <a href="index.php" class="nav-item">
                     <i class="bi bi-box-arrow-right"></i>
                     <span>Go Home</span>
