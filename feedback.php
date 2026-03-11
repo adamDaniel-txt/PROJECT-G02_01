@@ -3,13 +3,16 @@ session_start();
 require 'app/db.php';
 require 'app/feedback_functions.php';
 require 'app/permission.php';
+
 // Check if user have permission
 if (!hasPermission('view_dashboard')) {
     header('Location: index.php');
     exit();
 }
+
 $message = '';
 $message_type = '';
+
 // Handle delete action
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_feedback'])) {
     $id = intval($_POST['feedback_id']);
@@ -18,11 +21,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['delete_feedback'])) {
         $message_type = 'success';
     } else {
         $message = 'Failed to delete feedback.';
-        $message_type = 'error';
+        $message_type = 'danger';
     }
 }
-// Handle filter form submission
+
+// Get filter parameters
 $orderBy = 'created_at DESC';
+$ratingFilter = isset($_GET['rating']) ? intval($_GET['rating']) : null;
+$searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
+
+// Get sort parameter
 if (isset($_GET['sort'])) {
     switch ($_GET['sort']) {
         case 'rating_high':
@@ -39,11 +47,10 @@ if (isset($_GET['sort'])) {
             break;
     }
 }
-// Get filter parameters
-$ratingFilter = isset($_GET['rating']) ? intval($_GET['rating']) : null;
-$searchQuery = isset($_GET['search']) ? trim($_GET['search']) : '';
+
 // Get all feedback using your existing function
 $feedback_items = getAllFeedbacks($pdo);
+
 // Apply sorting
 usort($feedback_items, function($a, $b) use ($orderBy) {
     if ($orderBy === 'rating DESC, created_at DESC') {
@@ -62,20 +69,28 @@ usort($feedback_items, function($a, $b) use ($orderBy) {
         return strtotime($b['created_at']) - strtotime($a['created_at']);
     }
 });
+
 // Apply filters
 if ($ratingFilter) {
     $feedback_items = array_filter($feedback_items, function($item) use ($ratingFilter) {
         return $item['rating'] == $ratingFilter;
     });
 }
+
 if ($searchQuery) {
     $feedback_items = array_filter($feedback_items, function($item) use ($searchQuery) {
         return stripos($item['feedback_text'], $searchQuery) !== false ||
-            stripos($item['display_name'], $searchQuery) !== false;
+               stripos($item['display_name'], $searchQuery) !== false;
     });
 }
+
 // Get statistics using the new function
 $stats = getFeedbackStats($pdo);
+
+// Get current filter values for display
+$currentSort = $_GET['sort'] ?? 'newest';
+$currentRating = $_GET['rating'] ?? '';
+$currentSearch = $_GET['search'] ?? '';
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -145,9 +160,10 @@ $stats = getFeedbackStats($pdo);
                 </a>
             </div>
         </aside>
+
         <!-- Main Content -->
         <div class="main-content">
-            <div class="p-4">
+            <div class="col-md-13 col-lg-12 p-4">
                 <!-- Messages -->
                 <?php if ($message): ?>
                 <div class="alert alert-<?php echo $message_type === 'success' ? 'success' : 'danger'; ?> alert-dismissible fade show">
@@ -155,20 +171,59 @@ $stats = getFeedbackStats($pdo);
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
                 <?php endif; ?>
+
                 <div class="top-bar d-flex justify-content-between align-items-center mb-4">
                     <h1 class="h3 mb-0">
                         <i class="bi bi-chat-left-text me-2"></i>Feedback Management
                     </h1>
-                    <div>
-                        <span class="text-muted me-3">
-                            <i class="bi bi-star-fill text-warning"></i> Avg Rating: <?php echo $stats['average_rating']; ?>/5
+                    <div class="d-flex gap-2 align-items-center">
+                        <span class="text-muted me-2">
+                            <i class="bi bi-star-fill text-warning"></i> Avg: <?php echo $stats['average_rating']; ?>/5
                         </span>
-                        <button class="btn btn-outline-primary" data-bs-toggle="collapse" data-bs-target="#filterSection">
-                            <i class="bi bi-funnel me-1"></i>Filters
-                        </button>
+                        <div class="filter-wrapper">
+                            <button class="btn btn-primary btn-sm" id="filterBtn" type="button">
+                                <i class="bi bi-funnel me-1"></i>Filter
+                            </button>
+                            <div class="filter-dropdown" id="filterDropdown">
+                                <form method="GET" class="row g-3">
+                                    <div class="col-12">
+                                        <label class="form-label">Sort by</label>
+                                        <select class="form-select" name="sort">
+                                            <option value="newest" <?php echo $currentSort == 'newest' ? 'selected' : ''; ?>>Newest First</option>
+                                            <option value="oldest" <?php echo $currentSort == 'oldest' ? 'selected' : ''; ?>>Oldest First</option>
+                                            <option value="rating_high" <?php echo $currentSort == 'rating_high' ? 'selected' : ''; ?>>Highest Rating</option>
+                                            <option value="rating_low" <?php echo $currentSort == 'rating_low' ? 'selected' : ''; ?>>Lowest Rating</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Filter by Rating</label>
+                                        <select class="form-select" name="rating">
+                                            <option value="">All Ratings</option>
+                                            <?php for ($i = 5; $i >= 1; $i--): ?>
+                                            <option value="<?php echo $i; ?>" <?php echo $currentRating == $i ? 'selected' : ''; ?>>
+                                                <?php echo str_repeat('★', $i); ?> (<?php echo $i; ?> stars)
+                                            </option>
+                                            <?php endfor; ?>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Search</label>
+                                        <input type="text" class="form-control" name="search"
+                                               placeholder="Search feedback or user..."
+                                               value="<?php echo htmlspecialchars($currentSearch); ?>">
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="bi bi-search me-1"></i>Apply Filter
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <!-- Statistics Cards -->
+
+                <!-- Statistics Cards (UNCHANGED) -->
                 <div class="row mb-4">
                     <div class="col-md-3">
                         <div class="stat-card total">
@@ -203,83 +258,73 @@ $stats = getFeedbackStats($pdo);
                         </div>
                     </div>
                 </div>
-                <!-- Filter Section -->
-                <div class="collapse mb-4" id="filterSection">
-                    <div class="card">
-                        <div class="card-body">
-                            <form method="GET" class="row g-3">
-                                <div class="col-md-4">
-                                    <label class="form-label">Sort by</label>
-                                    <select class="form-select" name="sort">
-                                        <option value="newest" <?php echo (!isset($_GET['sort']) || $_GET['sort'] == 'newest') ? 'selected' : ''; ?>>Newest First</option>
-                                        <option value="oldest" <?php echo (isset($_GET['sort']) && $_GET['sort'] == 'oldest') ? 'selected' : ''; ?>>Oldest First</option>
-                                        <option value="rating_high" <?php echo (isset($_GET['sort']) && $_GET['sort'] == 'rating_high') ? 'selected' : ''; ?>>Highest Rating</option>
-                                        <option value="rating_low" <?php echo (isset($_GET['sort']) && $_GET['sort'] == 'rating_low') ? 'selected' : ''; ?>>Lowest Rating</option>
-                                    </select>
-                                </div>
-                                <div class="col-md-3">
-                                    <label class="form-label">Filter by Rating</label>
-                                    <select class="form-select" name="rating">
-                                        <option value="">All Ratings</option>
-                                        <?php for ($i = 5; $i >= 1; $i--): ?>
-                                        <option value="<?php echo $i; ?>" <?php echo (isset($_GET['rating']) && $_GET['rating'] == $i) ? 'selected' : ''; ?>>
-                                            <?php echo str_repeat('★', $i); ?> (<?php echo $i; ?> stars)
-                                        </option>
-                                        <?php endfor; ?>
-                                    </select>
-                                </div>
-                                <div class="col-md-4">
-                                    <label class="form-label">Search</label>
-                                    <input type="text" class="form-control" name="search"
-                                        placeholder="Search in feedback or user..."
-                                        value="<?php echo htmlspecialchars($searchQuery); ?>">
-                                </div>
-                                <div class="col-md-1 d-flex align-items-end">
-                                    <button type="submit" class="btn btn-primary w-100">Apply</button>
-                                </div>
-                                <?php if (isset($_GET['sort']) || isset($_GET['rating']) || $searchQuery): ?>
-                                <div class="col-12">
-                                    <a href="feedback.php" class="btn btn-sm btn-outline-secondary">Clear Filters</a>
-                                </div>
-                                <?php endif; ?>
-                            </form>
-                        </div>
-                    </div>
+
+                <!-- Filter Summary -->
+                <?php if ($currentRating || $currentSearch || $currentSort !== 'newest'): ?>
+                <div class="alert alert-info mb-4">
+                    <i class="bi bi-funnel me-2"></i>
+                    <strong>Active Filters:</strong>
+                    <?php
+                    $filters = [];
+                    if ($currentSort !== 'newest') $filters[] = "Sort: " . ucfirst(str_replace('_', ' ', $currentSort));
+                    if ($currentRating) $filters[] = "Rating: " . $currentRating . " stars";
+                    if ($currentSearch) $filters[] = "Search: \"" . htmlspecialchars($currentSearch) . "\"";
+                    echo implode(', ', $filters);
+                    ?>
+                    <a href="feedback.php" class="float-end">Clear filters</a>
                 </div>
+                <?php endif; ?>
+
                 <!-- Feedback Table -->
-                <div class="card mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-table me-2"></i>Feedback List
+                    </div>
                     <div class="card-body">
+                        <?php if (empty($feedback_items)): ?>
+                        <div class="text-center text-muted py-5">
+                            <i class="bi bi-chat-left-text display-1 opacity-25"></i>
+                            <h4 class="mt-3">No feedback found</h4>
+                            <p>Try adjusting your filters or check back later.</p>
+                        </div>
+                        <?php else: ?>
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-hover table-striped">
                                 <thead class="table-light">
                                     <tr>
-                                        <th>ID</th>
                                         <th>User</th>
                                         <th>Rating</th>
                                         <th>Feedback</th>
                                         <th>Submitted</th>
-                                        <th>Actions</th>
+                                        <th class="table-actions">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php if (empty($feedback_items)): ?>
-                                    <tr>
-                                        <td colspan="6" class="text-center text-muted py-4">
-                                            No feedback found.
-                                        </td>
-                                    </tr>
-                                    <?php else: ?>
                                     <?php foreach ($feedback_items as $feedback): ?>
-                                    <tr>
-                                        <td><?php echo $feedback['id']; ?></td>
+                                    <tr class="<?php echo $feedback['rating'] <= 2 ? 'banned-row' : ''; ?>">
                                         <td>
-                                            <div>
-                                                <strong><?php echo htmlspecialchars($feedback['display_name']); ?></strong>
+                                            <div class="d-flex align-items-center">
+                                                <?php if (isset($feedback['profile_picture']) && $feedback['profile_picture']): ?>
+                                                <img src="<?php echo htmlspecialchars($feedback['profile_picture']); ?>"
+                                                     alt="User"
+                                                     class="customer-avatar me-2">
+                                                <?php else: ?>
+                                                <div class="avatar-icon me-2">
+                                                    <i class="bi bi-person"></i>
+                                                </div>
+                                                <?php endif; ?>
+                                                <div>
+                                                    <strong><?php echo htmlspecialchars($feedback['display_name']); ?></strong>
+                                                </div>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="rating-stars">
-                                                <?php echo formatRatingDashboard($feedback['rating']); ?>
+                                                <?php
+                                                for ($i = 1; $i <= 5; $i++):
+                                                ?>
+                                                <i class="bi bi-star<?php echo $i <= $feedback['rating'] ? '-fill' : ''; ?> <?php echo $i <= $feedback['rating'] ? 'text-warning' : 'text-muted'; ?>"></i>
+                                                <?php endfor; ?>
                                                 <span class="badge bg-warning rating-badge ms-1">
                                                     <?php echo $feedback['rating']; ?>/5
                                                 </span>
@@ -290,25 +335,26 @@ $stats = getFeedbackStats($pdo);
                                                 <?php echo nl2br(htmlspecialchars($feedback['feedback_text'])); ?>
                                             </div>
                                             <?php if (strlen($feedback['feedback_text']) > 150): ?>
-                                            <a href="#" class="read-more" onclick="toggleFeedbackText(<?php echo $feedback['id']; ?>)">Read more</a>
+                                            <a href="#" class="read-more" onclick="toggleFeedbackText(<?php echo $feedback['id']; ?>); return false;">Read more</a>
                                             <?php endif; ?>
                                         </td>
                                         <td class="text-muted small">
-                                            <?php echo formatFeedbackDateDashboard($feedback['created_at']); ?>
-                                            <div class="text-muted">
-                                                <?php echo date('M j, Y g:i A', strtotime($feedback['created_at'])); ?>
-                                            </div>
+                                            <?php echo date('M j, Y', strtotime($feedback['created_at'])); ?>
+                                            <br>
+                                            <small>
+                                                <?php echo date('g:i A', strtotime($feedback['created_at'])); ?>
+                                            </small>
                                         </td>
                                         <td class="table-actions">
-                                            <button class="btn btn-sm btn-outline-info"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#viewFeedbackModal"
-                                                data-feedback-id="<?php echo $feedback['id']; ?>"
-                                                data-feedback-name="<?php echo htmlspecialchars($feedback['display_name']); ?>"
-                                                data-feedback-rating="<?php echo $feedback['rating']; ?>"
-                                                data-feedback-text="<?php echo htmlspecialchars($feedback['feedback_text']); ?>"
-                                                data-feedback-date="<?php echo date('F j, Y g:i A', strtotime($feedback['created_at'])); ?>"
-                                                onclick="viewFeedback(this)">
+                                            <button class="btn btn-sm btn-outline-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#viewFeedbackModal"
+                                                    data-feedback-id="<?php echo $feedback['id']; ?>"
+                                                    data-feedback-name="<?php echo htmlspecialchars($feedback['display_name']); ?>"
+                                                    data-feedback-rating="<?php echo $feedback['rating']; ?>"
+                                                    data-feedback-text="<?php echo htmlspecialchars($feedback['feedback_text']); ?>"
+                                                    data-feedback-date="<?php echo date('F j, Y g:i A', strtotime($feedback['created_at'])); ?>"
+                                                    onclick="viewFeedback(this)">
                                                 <i class="bi bi-eye"></i>
                                             </button>
                                             <form method="POST" class="d-inline" onsubmit="return confirm('Delete this feedback? This action cannot be undone.');">
@@ -320,21 +366,25 @@ $stats = getFeedbackStats($pdo);
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>
-                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
+                        <?php endif; ?>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
+
     <!-- View Feedback Modal -->
     <div class="modal fade" id="viewFeedbackModal" tabindex="-1">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Feedback Details</h5>
+                    <h5 class="modal-title">
+                        <i class="bi bi-chat-left-text me-2"></i>Feedback Details
+                    </h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -343,16 +393,14 @@ $stats = getFeedbackStats($pdo);
                             <label class="form-label fw-bold">User</label>
                             <div id="viewUserName" class="p-2 bg-light rounded"></div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <label class="form-label fw-bold">Rating</label>
-                            <div id="viewRating" class="p-2 bg-light rounded"></div>
-                        </div>
                         <div class="col-md-6 mb-3">
                             <label class="form-label fw-bold">Submitted</label>
                             <div id="viewDate" class="p-2 bg-light rounded"></div>
                         </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-bold">Rating</label>
+                        <div id="viewRating" class="p-2 bg-light rounded"></div>
                     </div>
                     <div class="mb-3">
                         <label class="form-label fw-bold">Feedback</label>
@@ -362,49 +410,70 @@ $stats = getFeedbackStats($pdo);
                 <div class="modal-footer">
                     <form method="POST" onsubmit="return confirm('Delete this feedback?');">
                         <input type="hidden" name="feedback_id" id="deleteFeedbackId">
-                        <button type="submit" name="delete_feedback" class="btn btn-danger">
+                        <button type="submit" name="delete_feedback" class="btn btn-danger btn-sm">
                             <i class="bi bi-trash me-1"></i>Delete
                         </button>
                     </form>
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Close</button>
                 </div>
             </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function viewFeedback(button) {
-            const feedbackId = button.getAttribute('data-feedback-id');
-            const userName = button.getAttribute('data-feedback-name');
-            const rating = button.getAttribute('data-feedback-rating');
-            const feedbackText = button.getAttribute('data-feedback-text');
-            const date = button.getAttribute('data-feedback-date');
-            document.getElementById('viewUserName').textContent = userName;
-            document.getElementById('viewDate').textContent = date;
-            document.getElementById('deleteFeedbackId').value = feedbackId;
-            let stars = '';
-            for (let i = 1; i <= 5; i++) {
-                if (i <= rating) {
-                    stars += '<i class="bi bi-star-fill text-warning fs-5"></i>';
-                } else {
-                    stars += '<i class="bi bi-star text-secondary fs-5"></i>';
-                }
+    // Filter Dropdown Toggle
+    const filterBtn = document.getElementById('filterBtn');
+    const filterDropdown = document.getElementById('filterDropdown');
+
+    if (filterBtn && filterDropdown) {
+        filterBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            filterDropdown.classList.toggle('show');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!filterDropdown.contains(e.target) && e.target !== filterBtn) {
+                filterDropdown.classList.remove('show');
             }
-            stars += ` <span class="ms-2 fs-6">(${rating}/5)</span>`;
-            document.getElementById('viewRating').innerHTML = stars;
-            document.getElementById('viewFeedbackText').innerHTML = feedbackText.replace(/\n/g, '<br>');
-        }
-        function toggleFeedbackText(feedbackId) {
-            const element = document.getElementById(`feedback-text-${feedbackId}`);
-            const link = element.nextElementSibling;
-            if (element.classList.contains('expanded')) {
-                element.classList.remove('expanded');
-                link.textContent = 'Read more';
+        });
+    }
+
+    function viewFeedback(button) {
+        const feedbackId = button.getAttribute('data-feedback-id');
+        const userName = button.getAttribute('data-feedback-name');
+        const rating = button.getAttribute('data-feedback-rating');
+        const feedbackText = button.getAttribute('data-feedback-text');
+        const date = button.getAttribute('data-feedback-date');
+
+        document.getElementById('viewUserName').textContent = userName;
+        document.getElementById('viewDate').textContent = date;
+        document.getElementById('deleteFeedbackId').value = feedbackId;
+
+        let stars = '';
+        for (let i = 1; i <= 5; i++) {
+            if (i <= rating) {
+                stars += '<i class="bi bi-star-fill text-warning fs-5"></i>';
             } else {
-                element.classList.add('expanded');
-                link.textContent = 'Show less';
+                stars += '<i class="bi bi-star text-muted fs-5"></i>';
             }
         }
+        stars += ` <span class="ms-2 fs-6">(${rating}/5)</span>`;
+        document.getElementById('viewRating').innerHTML = stars;
+        document.getElementById('viewFeedbackText').innerHTML = feedbackText.replace(/\n/g, '<br>');
+    }
+
+    function toggleFeedbackText(feedbackId) {
+        const element = document.getElementById(`feedback-text-${feedbackId}`);
+        const link = element.nextElementSibling;
+        if (element.classList.contains('expanded')) {
+            element.classList.remove('expanded');
+            link.textContent = 'Read more';
+        } else {
+            element.classList.add('expanded');
+            link.textContent = 'Show less';
+        }
+    }
     </script>
 </body>
 </html>

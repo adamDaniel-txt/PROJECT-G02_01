@@ -26,7 +26,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $username = trim($_POST['username']);
         $email = trim($_POST['email']);
         $password = $_POST['password'] ?? 'password';
-
         if (empty($username) || empty($email)) {
             $message = 'Username and email are required.';
             $message_type = 'error';
@@ -57,7 +56,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $id = intval($_POST['staff_id']);
         $username = trim($_POST['username']);
         $email = trim($_POST['email']);
-
         if (empty($username) || empty($email)) {
             $message = 'Username and email are required.';
             $message_type = 'error';
@@ -120,10 +118,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Get filter parameters
 $filter = isset($_GET['filter']) ? $_GET['filter'] : 'all';
+$search = isset($_GET['search']) ? trim($_GET['search']) : '';
+
 $staff = getAllStaff($pdo);
 $banned_count = getBannedStaffCount($pdo);
 $active_count = getActiveStaffCount($pdo);
+
+// Apply filters
+if ($filter == 'active') {
+    $staff = array_filter($staff, function($s) { return $s['is_active'] == 1; });
+} elseif ($filter == 'banned') {
+    $staff = array_filter($staff, function($s) { return $s['is_active'] == 0; });
+}
+
+if ($search) {
+    $staff = array_filter($staff, function($s) use ($search) {
+        return stripos($s['username'], $search) !== false || stripos($s['email'], $search) !== false;
+    });
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -163,7 +177,7 @@ $active_count = getActiveStaffCount($pdo);
                 </a>
                 <?php endif; ?>
                 <?php if (hasPermission('manage_staff')): ?>
-                <a href="staff.php" class="nav-item active">
+                <a href="#" class="nav-item active">
                     <i class="bi bi-people"></i>
                     <span>Staff</span>
                 </a>
@@ -193,7 +207,8 @@ $active_count = getActiveStaffCount($pdo);
 
         <!-- Main Content -->
         <div class="main-content">
-            <div class="p-4">
+            <div class="col-md-13 col-lg-12 p-4">
+                <!-- Messages -->
                 <?php if ($message): ?>
                 <div class="alert alert-<?php echo $message_type === 'success' ? 'success' : 'danger'; ?> alert-dismissible fade show">
                     <?php echo htmlspecialchars($message); ?>
@@ -205,64 +220,107 @@ $active_count = getActiveStaffCount($pdo);
                     <h1 class="h3 mb-0">
                         <i class="bi bi-people me-2"></i>Staff Management
                     </h1>
-                    <div class="d-flex gap-2">
-                        <div class="badge bg-primary p-2">
-                            <i class="bi bi-person-badge"></i> Total: <?php echo count($staff); ?>
+                    <div class="d-flex gap-2 align-items-center">
+                        <div class="filter-wrapper">
+                            <button class="btn btn-primary btn-sm" id="filterBtn" type="button">
+                                <i class="bi bi-funnel me-1"></i>Filter
+                            </button>
+                            <div class="filter-dropdown" id="filterDropdown">
+                                <form method="GET" class="row g-3">
+                                    <div class="col-12">
+                                        <label class="form-label">Filter by Status</label>
+                                        <select class="form-select" name="filter">
+                                            <option value="all" <?php echo $filter == 'all' ? 'selected' : ''; ?>>All Staff</option>
+                                            <option value="active" <?php echo $filter == 'active' ? 'selected' : ''; ?>>Active Only</option>
+                                            <option value="banned" <?php echo $filter == 'banned' ? 'selected' : ''; ?>>Banned Only</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Search</label>
+                                        <input type="text" class="form-control" name="search"
+                                               placeholder="Search username or email..."
+                                               value="<?php echo htmlspecialchars($search); ?>">
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="bi bi-search me-1"></i>Apply Filter
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <div class="badge bg-success p-2">
-                            <i class="bi bi-check-circle"></i> Active: <?php echo $active_count; ?>
-                        </div>
-                        <div class="badge bg-danger p-2">
-                            <i class="bi bi-ban"></i> Banned: <?php echo $banned_count; ?>
-                        </div>
-                        <button class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#addStaffModal">
-                            <i class="bi bi-plus-lg"></i> Add Staff
+                        <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addStaffModal">
+                            <i class="bi bi-plus-lg me-1"></i>Add Staff
                         </button>
                     </div>
                 </div>
 
-                <div class="filter-buttons">
-                    <a href="?filter=all" class="btn btn-sm <?php echo $filter == 'all' ? 'btn-primary' : 'btn-outline-primary'; ?>">
-                        <i class="bi bi-list"></i> All Staff
-                    </a>
-                    <a href="?filter=active" class="btn btn-sm <?php echo $filter == 'active' ? 'btn-success' : 'btn-outline-success'; ?>">
-                        <i class="bi bi-check-circle"></i> Active
-                    </a>
-                    <a href="?filter=banned" class="btn btn-sm <?php echo $filter == 'banned' ? 'btn-danger' : 'btn-outline-danger'; ?>">
-                        <i class="bi bi-ban"></i> Banned
-                    </a>
+                <!-- Statistics Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-4 col-sm-6">
+                        <div class="stat-card total">
+                            <h5 class="mb-2">Total Staff</h5>
+                            <h3><?php echo count($staff); ?></h3>
+                            <small><i class="bi bi-people me-1"></i>All staff members</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="stat-card ready">
+                            <h5 class="mb-2">Active</h5>
+                            <h3><?php echo $active_count; ?></h3>
+                            <small><i class="bi bi-check-circle me-1"></i>Currently active</small>
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-6">
+                        <div class="stat-card cancelled">
+                            <h5 class="mb-2">Banned</h5>
+                            <h3><?php echo $banned_count; ?></h3>
+                            <small><i class="bi bi-ban me-1"></i>Suspended/Banned</small>
+                        </div>
+                    </div>
                 </div>
 
+                <!-- Filter Summary -->
+                <?php if ($filter !== 'all' || $search): ?>
+                <div class="alert alert-info mb-4">
+                    <i class="bi bi-funnel me-2"></i>
+                    <strong>Active Filters:</strong>
+                    <?php
+                    $filters = [];
+                    if ($filter !== 'all') $filters[] = "Status: " . ucfirst($filter);
+                    if ($search) $filters[] = "Search: \"" . htmlspecialchars($search) . "\"";
+                    echo implode(', ', $filters);
+                    ?>
+                    <a href="staff.php" class="float-end">Clear filters</a>
+                </div>
+                <?php endif; ?>
+
+                <!-- Staff Table -->
                 <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-table me-2"></i>Staff List
+                    </div>
                     <div class="card-body">
+                        <?php if (empty($staff)): ?>
+                        <div class="text-center text-muted py-5">
+                            <i class="bi bi-person-badge fs-1 d-block mb-3 opacity-25"></i>
+                            <h4 class="mt-3">No staff members found</h4>
+                            <p>Try adjusting your filters or add a new staff member.</p>
+                        </div>
+                        <?php else: ?>
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-hover table-striped">
                                 <thead class="table-light">
                                     <tr>
                                         <th>Avatar</th>
                                         <th>Username</th>
                                         <th>Email</th>
                                         <th>Status</th>
-                                        <th>Actions</th>
+                                        <th class="table-actions">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <?php
-                                    $filtered_staff = array_filter($staff, function($staff_member) use ($filter) {
-                                        if ($filter == 'active') return $staff_member['is_active'] == 1;
-                                        if ($filter == 'banned') return $staff_member['is_active'] == 0;
-                                        return true;
-                                    });
-                                    if (empty($filtered_staff)):
-                                    ?>
-                                    <tr>
-                                        <td colspan="5" class="text-center py-4">
-                                            <i class="bi bi-person-badge fs-1 d-block mb-3 text-muted"></i>
-                                            <p class="text-muted">No staff members found.</p>
-                                        </td>
-                                    </tr>
-                                    <?php else: ?>
-                                    <?php foreach ($filtered_staff as $staff_member): ?>
+                                    <?php foreach ($staff as $staff_member): ?>
                                     <tr class="<?php echo $staff_member['is_active'] == 0 ? 'banned-row' : ''; ?>">
                                         <td>
                                             <?php if (!empty($staff_member['profile_picture'])): ?>
@@ -290,21 +348,22 @@ $active_count = getActiveStaffCount($pdo);
                                             </span>
                                             <?php endif; ?>
                                         </td>
-                                        <td class="action-buttons">
-                                            <button type="button" class="btn btn-sm btn-warning"
+                                        <td class="table-actions">
+                                            <button type="button" class="btn btn-sm btn-outline-primary"
                                                 onclick="openEditModal(<?php echo htmlspecialchars(json_encode($staff_member)); ?>)"
                                                 data-bs-toggle="tooltip" title="Manage Staff">
-                                                <i class="bi bi-gear"></i> Manage Staff
+                                                <i class="bi bi-gear"></i> Manage
                                             </button>
                                         </td>
                                     </tr>
                                     <?php endforeach; ?>
-                                    <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
+                        <?php endif; ?>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
@@ -313,15 +372,15 @@ $active_count = getActiveStaffCount($pdo);
     <div class="modal fade" id="addStaffModal" tabindex="-1" data-bs-backdrop="static">
         <div class="modal-dialog">
             <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">
-                        <i class="bi bi-person-plus me-2"></i>Add New Staff Member
-                    </h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" action="" id="addStaffForm">
-                        <input type="hidden" name="add_staff" value="1">
+                <form method="POST" action="" id="addStaffForm">
+                    <input type="hidden" name="add_staff" value="1">
+                    <div class="modal-header">
+                        <h5 class="modal-title">
+                            <i class="bi bi-person-plus me-2"></i>Add New Staff Member
+                        </h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
                         <div class="info-box mb-3">
                             <i class="bi bi-info-circle me-2"></i>
                             Fill in the details to create a new staff account.
@@ -348,14 +407,14 @@ $active_count = getActiveStaffCount($pdo);
                             </div>
                             <small class="text-muted">Default password is "password". Staff can change it later.</small>
                         </div>
-                        <div class="text-end">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary">
-                                <i class="bi bi-plus-lg"></i> Add Staff
-                            </button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-sm">
+                            <i class="bi bi-plus-lg"></i> Add Staff
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -410,8 +469,8 @@ $active_count = getActiveStaffCount($pdo);
                                     <div id="current_status_display"></div>
                                 </div>
                                 <div class="text-end">
-                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                    <button type="submit" class="btn btn-primary">
+                                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary btn-sm">
                                         <i class="bi bi-check-circle"></i> Update Staff
                                     </button>
                                 </div>
@@ -435,7 +494,7 @@ $active_count = getActiveStaffCount($pdo);
                                             <i class="bi bi-info-circle"></i>
                                             New password will be: <strong>password</strong>
                                         </div>
-                                        <button type="submit" class="btn btn-warning" onclick="return confirm('Are you sure you want to reset this staff member\'s password?')">
+                                        <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('Are you sure you want to reset this staff member\'s password?')">
                                             <i class="bi bi-arrow-repeat"></i> Reset Password
                                         </button>
                                     </form>
@@ -455,14 +514,14 @@ $active_count = getActiveStaffCount($pdo);
                                             <textarea class="form-control" name="ban_reason" rows="2"
                                                 placeholder="Enter reason for banning this staff member..."></textarea>
                                         </div>
-                                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to ban this staff member?')">
+                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to ban this staff member?')">
                                             <i class="bi bi-ban"></i> Ban Staff
                                         </button>
                                     </form>
                                     <form method="POST" action="" id="unbanForm" style="display: none;">
                                         <input type="hidden" name="staff_id" id="unban_staff_id">
                                         <input type="hidden" name="unban_staff" value="1">
-                                        <button type="submit" class="btn btn-success" onclick="return confirm('Are you sure you want to restore this staff member?')">
+                                        <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Are you sure you want to restore this staff member?')">
                                             <i class="bi bi-check-circle"></i> Restore Staff
                                         </button>
                                     </form>
@@ -493,7 +552,7 @@ $active_count = getActiveStaffCount($pdo);
                                         <input type="text" class="form-control" id="confirm_delete"
                                             placeholder="Enter DELETE to confirm" required>
                                     </div>
-                                    <button type="submit" class="btn btn-danger" id="deleteButton" disabled>
+                                    <button type="submit" class="btn btn-danger btn-sm" id="deleteButton" disabled>
                                         <i class="bi bi-trash"></i> Permanently Delete Staff
                                     </button>
                                 </form>
@@ -507,70 +566,88 @@ $active_count = getActiveStaffCount($pdo);
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
+    // Filter Dropdown Toggle
+    const filterBtn = document.getElementById('filterBtn');
+    const filterDropdown = document.getElementById('filterDropdown');
+
+    if (filterBtn && filterDropdown) {
+        filterBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            filterDropdown.classList.toggle('show');
         });
 
-        let currentStaff = null;
-
-        function openEditModal(staff) {
-            currentStaff = staff;
-            document.getElementById('modal_staff_name').textContent = staff.username;
-            document.getElementById('edit_staff_id').value = staff.id;
-            document.getElementById('edit_username').value = staff.username;
-            document.getElementById('edit_email').value = staff.email;
-
-            const statusDisplay = document.getElementById('current_status_display');
-            if (staff.is_active == 1) {
-                statusDisplay.innerHTML = '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Active Account</span>';
-            } else {
-                statusDisplay.innerHTML = '<span class="badge bg-danger"><i class="bi bi-ban"></i> Banned Account</span>' +
-                    (staff.ban_reason ? `<br><small class="text-muted">Reason: ${staff.ban_reason}</small>` : '') +
-                    (staff.banned_at ? `<br><small class="text-muted">Banned at: ${new Date(staff.banned_at).toLocaleString()}</small>` : '');
+        document.addEventListener('click', function(e) {
+            if (!filterDropdown.contains(e.target) && e.target !== filterBtn) {
+                filterDropdown.classList.remove('show');
             }
+        });
+    }
 
-            document.getElementById('reset_staff_id').value = staff.id;
-            document.getElementById('ban_staff_id').value = staff.id;
-            document.getElementById('unban_staff_id').value = staff.id;
+    // Initialize tooltips
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+        return new bootstrap.Tooltip(tooltipTriggerEl)
+    });
 
-            const banStatus = document.getElementById('banStatus');
-            if (staff.is_active == 1) {
-                banStatus.innerHTML = '<div class="alert alert-success">Account is currently <strong>ACTIVE</strong></div>';
-                document.getElementById('banForm').style.display = 'block';
-                document.getElementById('unbanForm').style.display = 'none';
-            } else {
-                banStatus.innerHTML = '<div class="alert alert-danger">Account is currently <strong>BANNED</strong></div>';
-                document.getElementById('banForm').style.display = 'none';
-                document.getElementById('unbanForm').style.display = 'block';
-            }
+    let currentStaff = null;
 
-            document.getElementById('delete_staff_id').value = staff.id;
-            document.getElementById('confirm_delete').value = '';
-            document.getElementById('deleteButton').disabled = true;
+    function openEditModal(staff) {
+        currentStaff = staff;
+        document.getElementById('modal_staff_name').textContent = staff.username;
+        document.getElementById('edit_staff_id').value = staff.id;
+        document.getElementById('edit_username').value = staff.username;
+        document.getElementById('edit_email').value = staff.email;
 
-            var modal = new bootstrap.Modal(document.getElementById('manageStaffModal'));
-            modal.show();
+        const statusDisplay = document.getElementById('current_status_display');
+        if (staff.is_active == 1) {
+            statusDisplay.innerHTML = '<span class="badge bg-success"><i class="bi bi-check-circle"></i> Active Account</span>';
+        } else {
+            statusDisplay.innerHTML = '<span class="badge bg-danger"><i class="bi bi-ban"></i> Banned Account</span>' +
+                (staff.ban_reason ? `<br><small class="text-muted">Reason: ${staff.ban_reason}</small>` : '') +
+                (staff.banned_at ? `<br><small class="text-muted">Banned at: ${new Date(staff.banned_at).toLocaleString()}</small>` : '');
         }
 
-        document.getElementById('confirm_delete')?.addEventListener('input', function(e) {
-            const deleteButton = document.getElementById('deleteButton');
-            deleteButton.disabled = e.target.value !== 'DELETE';
-        });
+        document.getElementById('reset_staff_id').value = staff.id;
+        document.getElementById('ban_staff_id').value = staff.id;
+        document.getElementById('unban_staff_id').value = staff.id;
 
-        function confirmDelete() {
-            return confirm('⚠️ FINAL WARNING: Are you absolutely sure you want to permanently delete this staff member? This action cannot be undone!');
+        const banStatus = document.getElementById('banStatus');
+        if (staff.is_active == 1) {
+            banStatus.innerHTML = '<div class="alert alert-success">Account is currently <strong>ACTIVE</strong></div>';
+            document.getElementById('banForm').style.display = 'block';
+            document.getElementById('unbanForm').style.display = 'none';
+        } else {
+            banStatus.innerHTML = '<div class="alert alert-danger">Account is currently <strong>BANNED</strong></div>';
+            document.getElementById('banForm').style.display = 'none';
+            document.getElementById('unbanForm').style.display = 'block';
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-            const hash = window.location.hash;
-            if (hash) {
-                const tab = document.querySelector(`[data-bs-target="${hash}"]`);
-                if (tab) {
-                    new bootstrap.Tab(tab).show();
-                }
+        document.getElementById('delete_staff_id').value = staff.id;
+        document.getElementById('confirm_delete').value = '';
+        document.getElementById('deleteButton').disabled = true;
+
+        var modal = new bootstrap.Modal(document.getElementById('manageStaffModal'));
+        modal.show();
+    }
+
+    document.getElementById('confirm_delete')?.addEventListener('input', function(e) {
+        const deleteButton = document.getElementById('deleteButton');
+        deleteButton.disabled = e.target.value !== 'DELETE';
+    });
+
+    function confirmDelete() {
+        return confirm('⚠️ FINAL WARNING: Are you absolutely sure you want to permanently delete this staff member? This action cannot be undone!');
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        const hash = window.location.hash;
+        if (hash) {
+            const tab = document.querySelector(`[data-bs-target="${hash}"]`);
+            if (tab) {
+                new bootstrap.Tab(tab).show();
             }
-        });
+        }
+    });
     </script>
 </body>
 </html>

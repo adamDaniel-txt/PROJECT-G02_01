@@ -13,7 +13,6 @@ function getAllCustomers($pdo) {
             LEFT JOIN roles r ON u.role_id = r.id
             WHERE r.role_name = 'Customer'
             ORDER BY u.id DESC";
-
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -27,7 +26,6 @@ function getCustomerById($pdo, $id) {
             FROM users u
             LEFT JOIN roles r ON u.role_id = r.id
             WHERE u.id = :id";
-
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':id' => $id]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -42,7 +40,6 @@ function updateCustomer($pdo, $id, $data) {
                 username = :username,
                 email = :email
                 WHERE id = :id";
-
         $stmt = $pdo->prepare($sql);
         return $stmt->execute([
             ':id' => $id,
@@ -65,7 +62,6 @@ function banCustomer($pdo, $id, $reason = '') {
                 banned_at = NOW(),
                 ban_reason = :reason
                 WHERE id = :id AND role_id = 3";
-
         $stmt = $pdo->prepare($sql);
         return $stmt->execute([
             ':id' => $id,
@@ -87,7 +83,6 @@ function unbanCustomer($pdo, $id) {
                 banned_at = NULL,
                 ban_reason = NULL
                 WHERE id = :id AND role_id = 3";
-
         $stmt = $pdo->prepare($sql);
         return $stmt->execute([':id' => $id]);
     } catch (PDOException $e) {
@@ -112,43 +107,33 @@ function isCustomerBanned($pdo, $id) {
  */
 function deleteCustomer($pdo, $id) {
     try {
-        // Start transaction
         $pdo->beginTransaction();
 
-        // Delete customer's cart items
         $stmt = $pdo->prepare("DELETE FROM carts WHERE user_id = :id");
         $stmt->execute([':id' => $id]);
 
-        // Delete customer's feedback
         $stmt = $pdo->prepare("DELETE FROM feedbacks WHERE user_id = :id");
         $stmt->execute([':id' => $id]);
 
-        // Delete customer's order status logs (through orders)
         $stmt = $pdo->prepare("DELETE osl FROM order_status_logs osl
                                INNER JOIN orders o ON osl.order_id = o.id
                                WHERE o.user_id = :id");
         $stmt->execute([':id' => $id]);
 
-        // Delete customer's order items (through orders)
         $stmt = $pdo->prepare("DELETE oi FROM order_items oi
                                INNER JOIN orders o ON oi.order_id = o.id
                                WHERE o.user_id = :id");
         $stmt->execute([':id' => $id]);
 
-        // Delete customer's orders
         $stmt = $pdo->prepare("DELETE FROM orders WHERE user_id = :id");
         $stmt->execute([':id' => $id]);
 
-        // Finally delete the customer
         $stmt = $pdo->prepare("DELETE FROM users WHERE id = :id AND role_id = 3");
         $result = $stmt->execute([':id' => $id]);
 
-        // Commit transaction
         $pdo->commit();
         return $result;
-
     } catch (PDOException $e) {
-        // Rollback transaction on error
         $pdo->rollBack();
         error_log("Error deleting customer: " . $e->getMessage());
         return false;
@@ -165,9 +150,37 @@ function getCustomerOrders($pdo, $customer_id) {
             WHERE o.user_id = :user_id
             GROUP BY o.id
             ORDER BY o.created_at DESC";
-
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':user_id' => $customer_id]);
+    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+/**
+ * Get order details with items
+ */
+function getOrderDetails($pdo, $order_id) {
+    $sql = "SELECT
+                o.id,
+                o.total_amount,
+                o.status,
+                o.created_at,
+                o.payment_id,
+                o.pickup_code,
+                o.notes,
+                u.username,
+                u.email,
+                oi.menu_item_id,
+                oi.quantity,
+                oi.price,
+                mi.name as item_name
+            FROM orders o
+            LEFT JOIN users u ON o.user_id = u.id
+            JOIN order_items oi ON o.id = oi.order_id
+            JOIN menu_items mi ON oi.menu_item_id = mi.id
+            WHERE o.id = :order_id";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([':order_id' => $order_id]);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -175,9 +188,7 @@ function getCustomerOrders($pdo, $customer_id) {
  * Reset customer password (sets to default 'password')
  */
 function resetCustomerPassword($pdo, $id) {
-    // Default password 'password' hashed
     $default_password = hash('sha256', 'password');
-
     $sql = "UPDATE users SET password = :password WHERE id = :id";
     $stmt = $pdo->prepare($sql);
     return $stmt->execute([
@@ -206,5 +217,43 @@ function getActiveCustomersCount($pdo) {
     $stmt->execute();
     $result = $stmt->fetch(PDO::FETCH_ASSOC);
     return $result['count'];
+}
+
+/**
+ * Handle AJAX request for customer orders
+ */
+function handleCustomerOrdersAjax($pdo) {
+    header('Content-Type: application/json');
+    header('Cache-Control: no-cache, no-store, must-revalidate');
+
+    if (!isset($_GET['customer_id'])) {
+        echo json_encode(['error' => 'Customer ID required']);
+        exit();
+    }
+
+    $customer_id = intval($_GET['customer_id']);
+    $orders = getCustomerOrders($pdo, $customer_id);
+
+    echo json_encode($orders);
+    exit();
+}
+
+/**
+ * Handle AJAX request for order details
+ */
+function handleOrderDetailsAjax($pdo) {
+    header('Content-Type: application/json');
+    header('Cache-Control: no-cache, no-store, must-revalidate');
+
+    if (!isset($_GET['order_id'])) {
+        echo json_encode(['error' => 'Order ID required']);
+        exit();
+    }
+
+    $order_id = intval($_GET['order_id']);
+    $order_details = getOrderDetails($pdo, $order_id);
+
+    echo json_encode($order_details);
+    exit();
 }
 ?>

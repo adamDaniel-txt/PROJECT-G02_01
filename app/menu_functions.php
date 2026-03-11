@@ -122,4 +122,19 @@ function getMenuCategories($pdo) {
 function formatPrice($price) {
     return 'RM' . number_format($price, 2);
 }
+
+// Get menu summary statistics for dashboard
+function getMenuSummary($pdo) {
+    $sql = "SELECT
+                COUNT(*) as total_items,
+                SUM(CASE WHEN is_available = 1 THEN 1 ELSE 0 END) as available_items,
+                SUM(CASE WHEN is_available = 0 THEN 1 ELSE 0 END) as unavailable_items,
+                COUNT(DISTINCT category) as total_categories
+            FROM menu_items";
+
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 ?>

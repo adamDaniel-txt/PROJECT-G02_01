@@ -5,13 +5,16 @@ session_start();
 require 'app/db.php';
 require 'app/order_functions.php';
 require 'app/permission.php';
+
 // Check if user have permission
 if (!hasPermission('view_dashboard')) {
     header('Location: index.php');
     exit();
 }
+
 $message = '';
 $message_type = '';
+
 // Handle status updates
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['update_status'])) {
@@ -23,7 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message_type = 'success';
         } else {
             $message = 'Failed to update order status.';
-            $message_type = 'error';
+            $message_type = 'danger';
         }
     } elseif (isset($_POST['cancel_order'])) {
         $order_id = intval($_POST['order_id']);
@@ -33,17 +36,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message_type = 'success';
         } else {
             $message = 'Failed to cancel order.';
-            $message_type = 'error';
+            $message_type = 'danger';
         }
     }
 }
+
 // Get filter parameters
 $status_filter = $_GET['status'] ?? 'all';
 $date_from = $_GET['date_from'] ?? '';
 $date_to = $_GET['date_to'] ?? '';
 $search = $_GET['search'] ?? '';
+
 // Get orders with filters
 $orders = getOrdersWithFilters($pdo, $status_filter, $date_from, $date_to, $search);
+
 // Order statistics
 $total_orders = count($orders);
 $pending_count = 0;
@@ -51,6 +57,7 @@ $preparing_count = 0;
 $ready_count = 0;
 $completed_count = 0;
 $cancelled_count = 0;
+
 foreach ($orders as $order) {
     switch ($order['current_status']) {
         case 'pending': $pending_count++; break;
@@ -129,9 +136,10 @@ foreach ($orders as $order) {
                 </a>
             </div>
         </aside>
+
         <!-- Main Content -->
         <div class="main-content">
-            <div class="p-4">
+            <div class="col-md-13 col-lg-12 p-4">
                 <!-- Messages -->
                 <?php if ($message): ?>
                 <div class="alert alert-<?php echo $message_type === 'success' ? 'success' : 'danger'; ?> alert-dismissible fade show">
@@ -139,15 +147,56 @@ foreach ($orders as $order) {
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
                 <?php endif; ?>
+
                 <div class="top-bar d-flex justify-content-between align-items-center mb-4">
                     <h1 class="h3 mb-0">
                         <i class="bi bi-receipt me-2"></i>Order Management
                     </h1>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#filterModal">
-                        <i class="bi bi-funnel me-1"></i>Filter Orders
-                    </button>
+                    <div class="d-flex gap-2 align-items-center">
+                        <div class="filter-wrapper">
+                            <button class="btn btn-primary btn-sm" id="filterBtn" type="button">
+                                <i class="bi bi-funnel me-1"></i>Filter
+                            </button>
+                            <div class="filter-dropdown" id="filterDropdown">
+                                <form method="GET" class="row g-3">
+                                    <div class="col-12">
+                                        <label class="form-label">Status</label>
+                                        <select class="form-select" name="status">
+                                            <option value="all" <?php echo $status_filter === 'all' ? 'selected' : ''; ?>>All Statuses</option>
+                                            <option value="pending" <?php echo $status_filter === 'pending' ? 'selected' : ''; ?>>Pending</option>
+                                            <option value="confirmed" <?php echo $status_filter === 'confirmed' ? 'selected' : ''; ?>>Confirmed</option>
+                                            <option value="preparing" <?php echo $status_filter === 'preparing' ? 'selected' : ''; ?>>Preparing</option>
+                                            <option value="ready" <?php echo $status_filter === 'ready' ? 'selected' : ''; ?>>Ready</option>
+                                            <option value="completed" <?php echo $status_filter === 'completed' ? 'selected' : ''; ?>>Completed</option>
+                                            <option value="cancelled" <?php echo $status_filter === 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Date From</label>
+                                        <input type="date" class="form-control" name="date_from" value="<?php echo htmlspecialchars($date_from); ?>">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Date To</label>
+                                        <input type="date" class="form-control" name="date_to" value="<?php echo htmlspecialchars($date_to); ?>">
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label">Search</label>
+                                        <input type="text" class="form-control" name="search"
+                                               placeholder="Search orders..."
+                                               value="<?php echo htmlspecialchars($search); ?>">
+                                    </div>
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary w-100">
+                                            <i class="bi bi-search me-1"></i>Apply Filter
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-                <!-- Statistics Cards -->
+
+                <!-- Order Statistics Cards -->
                 <div class="row mb-4">
                     <div class="col-md-2">
                         <div class="stat-card pending">
@@ -216,6 +265,7 @@ foreach ($orders as $order) {
                         </div>
                     </div>
                 </div>
+
                 <!-- Filter Summary -->
                 <?php if ($status_filter !== 'all' || $date_from || $date_to || $search): ?>
                 <div class="alert alert-info mb-4">
@@ -232,8 +282,12 @@ foreach ($orders as $order) {
                     <a href="orders.php" class="float-end">Clear filters</a>
                 </div>
                 <?php endif; ?>
-                <!-- Orders Table/Cards -->
-                <div class="card mb-4">
+
+                <!-- Orders Table -->
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-table me-2"></i>Orders List
+                    </div>
                     <div class="card-body">
                         <?php if (empty($orders)): ?>
                         <div class="text-center text-muted py-5">
@@ -243,7 +297,7 @@ foreach ($orders as $order) {
                         </div>
                         <?php else: ?>
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-hover table-striped">
                                 <thead class="table-light">
                                     <tr>
                                         <th>Order ID</th>
@@ -252,7 +306,7 @@ foreach ($orders as $order) {
                                         <th>Total</th>
                                         <th>Status</th>
                                         <th>Order Time</th>
-                                        <th>Actions</th>
+                                        <th class="table-actions">Actions</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -261,27 +315,23 @@ foreach ($orders as $order) {
                                     $status_display = getOrderStatusDisplay($order['current_status']);
                                     $order_items = getOrderItems($pdo, $order['id']);
                                     ?>
-                                    <tr class="order-card <?php echo $order['current_status']; ?>">
-                                        <td>
-                                            <strong class="order-number">
-                                                #KTB-<?php echo str_pad($order['id'], 6, '0', STR_PAD_LEFT); ?>
-                                            </strong>
+                                    <tr class="<?php echo $order['current_status'] == 'cancelled' ? 'banned-row' : ''; ?>">
+                                        <td class="order-number">
+                                            <strong>#KTB-<?php echo str_pad($order['id'], 6, '0', STR_PAD_LEFT); ?></strong>
                                             <?php if ($order['pickup_code']): ?>
                                             <br>
-                                            <small class="text-muted">
-                                                Code: <?php echo $order['pickup_code']; ?>
-                                            </small>
+                                            <small class="text-muted">Code: <?php echo $order['pickup_code']; ?></small>
                                             <?php endif; ?>
                                         </td>
                                         <td>
                                             <div class="d-flex align-items-center">
                                                 <?php if ($order['profile_picture']): ?>
                                                 <img src="<?php echo htmlspecialchars($order['profile_picture']); ?>"
-                                                    alt="Customer"
-                                                    class="customer-avatar me-2">
+                                                     alt="Customer"
+                                                     class="customer-avatar me-2">
                                                 <?php else: ?>
-                                                <div class="customer-avatar bg-secondary d-flex align-items-center justify-content-center me-2">
-                                                    <i class="bi bi-person text-white"></i>
+                                                <div class="avatar-icon me-2">
+                                                    <i class="bi bi-person"></i>
                                                 </div>
                                                 <?php endif; ?>
                                                 <div>
@@ -319,24 +369,25 @@ foreach ($orders as $order) {
                                             <?php endif; ?>
                                         </td>
                                         <td>
-                                            <?php echo date('M j, Y', strtotime($order['created_at'])); ?><br>
+                                            <?php echo date('M j, Y', strtotime($order['created_at'])); ?>
+                                            <br>
                                             <small class="text-muted">
                                                 <?php echo date('g:i A', strtotime($order['created_at'])); ?>
                                             </small>
                                         </td>
                                         <td class="table-actions">
-                                            <button class="btn btn-sm btn-outline-success"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#updateStatusModal"
-                                                onclick="updateOrderStatusModal(<?php echo $order['id']; ?>, '<?php echo $order['current_status']; ?>')">
-                                                <i class="bi bi-pencil"></i> Status
+                                            <button class="btn btn-sm btn-outline-primary"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#updateStatusModal"
+                                                    onclick="updateOrderStatusModal(<?php echo $order['id']; ?>, '<?php echo $order['current_status']; ?>')">
+                                                <i class="bi bi-pencil"></i>
                                             </button>
                                             <?php if ($order['current_status'] !== 'cancelled' && $order['current_status'] !== 'completed'): ?>
                                             <button class="btn btn-sm btn-outline-danger"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#cancelOrderModal"
-                                                onclick="cancelOrderModal(<?php echo $order['id']; ?>)">
-                                                <i class="bi bi-x-circle"></i> Cancel
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#cancelOrderModal"
+                                                    onclick="cancelOrderModal(<?php echo $order['id']; ?>)">
+                                                <i class="bi bi-x-circle"></i>
                                             </button>
                                             <?php endif; ?>
                                         </td>
@@ -348,55 +399,11 @@ foreach ($orders as $order) {
                         <?php endif; ?>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
-    <!-- Filter Modal -->
-    <div class="modal fade" id="filterModal" tabindex="-1">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <form method="GET" action="orders.php">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Filter Orders</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                    </div>
-                    <div class="modal-body">
-                        <div class="mb-3">
-                            <label class="form-label">Status</label>
-                            <select class="form-select" name="status">
-                                <option value="all" <?php echo $status_filter === 'all' ? 'selected' : ''; ?>>All Statuses</option>
-                                <option value="pending" <?php echo $status_filter === 'pending' ? 'selected' : ''; ?>>Pending</option>
-                                <option value="confirmed" <?php echo $status_filter === 'confirmed' ? 'selected' : ''; ?>>Confirmed</option>
-                                <option value="preparing" <?php echo $status_filter === 'preparing' ? 'selected' : ''; ?>>Preparing</option>
-                                <option value="ready" <?php echo $status_filter === 'ready' ? 'selected' : ''; ?>>Ready</option>
-                                <option value="completed" <?php echo $status_filter === 'completed' ? 'selected' : ''; ?>>Completed</option>
-                                <option value="cancelled" <?php echo $status_filter === 'cancelled' ? 'selected' : ''; ?>>Cancelled</option>
-                            </select>
-                        </div>
-                        <div class="row">
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Date From</label>
-                                <input type="date" class="form-control" name="date_from" value="<?php echo htmlspecialchars($date_from); ?>">
-                            </div>
-                            <div class="col-md-6 mb-3">
-                                <label class="form-label">Date To</label>
-                                <input type="date" class="form-control" name="date_to" value="<?php echo htmlspecialchars($date_to); ?>">
-                            </div>
-                        </div>
-                        <div class="mb-3">
-                            <label class="form-label">Search (Order ID, Customer Name, Email)</label>
-                            <input type="text" class="form-control" name="search" value="<?php echo htmlspecialchars($search); ?>"
-                                placeholder="Search orders...">
-                        </div>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Apply Filters</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
+
     <!-- Update Status Modal -->
     <div class="modal fade" id="updateStatusModal" tabindex="-1">
         <div class="modal-dialog">
@@ -426,7 +433,7 @@ foreach ($orders as $order) {
                         <div class="mb-3">
                             <label class="form-label">Notes (Optional)</label>
                             <textarea class="form-control" name="notes" rows="3"
-                                placeholder="Add notes about this status change..."></textarea>
+                                      placeholder="Add notes about this status change..."></textarea>
                         </div>
                         <div class="alert alert-info">
                             <i class="bi bi-info-circle me-2"></i>
@@ -437,13 +444,14 @@ foreach ($orders as $order) {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" name="update_status" class="btn btn-primary">Update Status</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" name="update_status" class="btn btn-primary btn-sm">Update Status</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
     <!-- Cancel Order Modal -->
     <div class="modal fade" id="cancelOrderModal" tabindex="-1">
         <div class="modal-dialog">
@@ -462,7 +470,7 @@ foreach ($orders as $order) {
                         <div class="mb-3">
                             <label class="form-label">Reason for Cancellation *</label>
                             <textarea class="form-control" name="cancel_reason" rows="3" required
-                                placeholder="Enter reason for cancelling this order..."></textarea>
+                                      placeholder="Enter reason for cancelling this order..."></textarea>
                         </div>
                         <div class="alert alert-warning">
                             <i class="bi bi-exclamation-triangle me-2"></i>
@@ -470,26 +478,45 @@ foreach ($orders as $order) {
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Keep Order</button>
-                        <button type="submit" name="cancel_order" class="btn btn-danger">Cancel Order</button>
+                        <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Keep Order</button>
+                        <button type="submit" name="cancel_order" class="btn btn-danger btn-sm">Cancel Order</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function updateOrderStatusModal(orderId, currentStatus) {
-            const orderNumber = '#KTB-' + orderId.toString().padStart(6, '0');
-            document.getElementById('updateOrderId').value = orderId;
-            document.getElementById('updateOrderNumber').value = orderNumber;
-            document.getElementById('updateStatus').value = currentStatus;
-        }
-        function cancelOrderModal(orderId) {
-            const orderNumber = '#KTB-' + orderId.toString().padStart(6, '0');
-            document.getElementById('cancelOrderId').value = orderId;
-            document.getElementById('cancelOrderNumber').value = orderNumber;
-        }
+    // Filter Dropdown Toggle
+    const filterBtn = document.getElementById('filterBtn');
+    const filterDropdown = document.getElementById('filterDropdown');
+
+    if (filterBtn && filterDropdown) {
+        filterBtn.addEventListener('click', function(e) {
+            e.stopPropagation();
+            filterDropdown.classList.toggle('show');
+        });
+
+        document.addEventListener('click', function(e) {
+            if (!filterDropdown.contains(e.target) && e.target !== filterBtn) {
+                filterDropdown.classList.remove('show');
+            }
+        });
+    }
+
+    function updateOrderStatusModal(orderId, currentStatus) {
+        const orderNumber = '#KTB-' + orderId.toString().padStart(6, '0');
+        document.getElementById('updateOrderId').value = orderId;
+        document.getElementById('updateOrderNumber').value = orderNumber;
+        document.getElementById('updateStatus').value = currentStatus;
+    }
+
+    function cancelOrderModal(orderId) {
+        const orderNumber = '#KTB-' + orderId.toString().padStart(6, '0');
+        document.getElementById('cancelOrderId').value = orderId;
+        document.getElementById('cancelOrderNumber').value = orderNumber;
+    }
     </script>
 </body>
 </html>

@@ -3,13 +3,16 @@ session_start();
 require 'app/db.php';
 require 'app/menu_functions.php';
 require 'app/permission.php';
-// Check if user have permission
+
+// Check if user has permission
 if (!hasPermission('view_dashboard')) {
     header('Location: index.php');
     exit();
 }
+
 $message = '';
 $message_type = '';
+
 // Handle form submissions
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['add_item'])) {
@@ -26,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message_type = 'success';
         } else {
             $message = 'Failed to add menu item.';
-            $message_type = 'error';
+            $message_type = 'danger';
         }
     } elseif (isset($_POST['update_item'])) {
         $id = intval($_POST['item_id']);
@@ -43,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message_type = 'success';
         } else {
             $message = 'Failed to update menu item.';
-            $message_type = 'error';
+            $message_type = 'danger';
         }
     } elseif (isset($_POST['delete_item'])) {
         $id = intval($_POST['item_id']);
@@ -52,23 +55,28 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $message_type = 'success';
         } else {
             $message = 'Failed to delete menu item.';
-            $message_type = 'error';
+            $message_type = 'danger';
         }
     }
 }
+
 // Get all menu items for display
 $menu_items = getAllMenuItems($pdo, null, false);
 $categories = getMenuCategories($pdo);
+
+// Get menu summary statistics
+$menu_summary = getMenuSummary($pdo);
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Products</title>
+    <title>Menu Items</title>
     <link rel="stylesheet" href="assets/css/dashboard.css">
     <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet">
 </head>
 <body>
     <div class="app-container">
@@ -128,9 +136,10 @@ $categories = getMenuCategories($pdo);
                 </a>
             </div>
         </aside>
+
         <!-- Main Content -->
         <div class="main-content">
-            <div class="p-4">
+            <div class="col-md-13 col-lg-12 p-4">
                 <!-- Messages -->
                 <?php if ($message): ?>
                 <div class="alert alert-<?php echo $message_type === 'success' ? 'success' : 'danger'; ?> alert-dismissible fade show">
@@ -138,25 +147,67 @@ $categories = getMenuCategories($pdo);
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
                 <?php endif; ?>
+
                 <div class="top-bar d-flex justify-content-between align-items-center mb-4">
                     <h1 class="h3 mb-0">
                         <i class="bi bi-box me-2"></i>Menu Management
                     </h1>
-                    <a href="menu.php" target="_blank">
-                        <button class="btn btn-primary"> <i class="bi bi-eye me-1"></i>View Menu </button>
-                    </a>
-                    <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addItemModal">
-                        <i class="bi bi-plus-circle me-1"></i>Add New Item
-                    </button>
+                    <div class="d-flex gap-2">
+                        <a href="menu.php" target="_blank">
+                            <button class="btn btn-primary btn-sm">
+                                <i class="bi bi-eye me-1"></i>View Menu
+                            </button>
+                        </a>
+                        <button class="btn btn-success btn-sm" data-bs-toggle="modal" data-bs-target="#addItemModal">
+                            <i class="bi bi-plus-circle me-1"></i>Add New Item
+                        </button>
+                    </div>
                 </div>
+
+                <!-- Menu Summary Cards -->
+                <div class="row mb-4">
+                    <div class="col-md-3 col-sm-6">
+                        <div class="stat-card total">
+                            <h5 class="mb-2">Total Items</h5>
+                            <h3><?php echo $menu_summary['total_items'] ?? 0; ?></h3>
+                            <small><i class="bi bi-box-seam me-1"></i>All menu items</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="stat-card ready">
+                            <h5 class="mb-2">Available</h5>
+                            <h3><?php echo $menu_summary['available_items'] ?? 0; ?></h3>
+                            <small><i class="bi bi-check-circle me-1"></i>Active for sale</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="stat-card cancelled">
+                            <h5 class="mb-2">Unavailable</h5>
+                            <h3><?php echo $menu_summary['unavailable_items'] ?? 0; ?></h3>
+                            <small><i class="bi bi-x-circle me-1"></i>Currently hidden</small>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6">
+                        <div class="stat-card pending">
+                            <h5 class="mb-2">Categories</h5>
+                            <h3><?php echo $menu_summary['total_categories'] ?? 0; ?></h3>
+                            <small><i class="bi bi-tags me-1"></i>Different types</small>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Menu Items Table -->
-                <div class="card mb-4">
+                <div class="card">
+                    <div class="card-header">
+                        <i class="bi bi-table me-2"></i>Menu Items List
+                    </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-hover">
+                            <table class="table table-hover table-striped">
                                 <thead class="table-light">
                                     <tr>
                                         <th>ID</th>
+                                        <th>Image</th>
                                         <th>Name</th>
                                         <th>Category</th>
                                         <th>Price</th>
@@ -168,84 +219,95 @@ $categories = getMenuCategories($pdo);
                                 <tbody>
                                     <?php if (empty($menu_items)): ?>
                                     <tr>
-                                        <td colspan="7" class="text-center text-muted py-4">
-                                            No menu items found. Add your first item!
+                                        <td colspan="8" class="text-center text-muted py-4">
+                                            <i class="bi bi-inbox" style="font-size: 2rem;"></i>
+                                            <p class="mt-2">No menu items found. Add your first item!</p>
                                         </td>
                                     </tr>
                                     <?php else: ?>
-                                    <?php foreach ($menu_items as $item): ?>
-                                    <tr>
-                                        <td><?php echo $item['id']; ?></td>
-                                        <td>
-                                            <div class="d-flex align-items-center">
+                                        <?php foreach ($menu_items as $item): ?>
+                                        <tr class="<?php echo !$item['is_available'] ? 'banned-row' : ''; ?>">
+                                            <td class="order-number">#<?php echo $item['id']; ?></td>
+                                            <td>
                                                 <?php if ($item['image_url']): ?>
                                                 <img src="<?php echo htmlspecialchars($item['image_url']); ?>"
-                                                    alt="<?php echo htmlspecialchars($item['name']); ?>"
-                                                    class="menu-image me-3">
+                                                     alt="<?php echo htmlspecialchars($item['name']); ?>"
+                                                     class="menu-image"
+                                                     style="width: 60px; height: 60px; object-fit: cover;">
+                                                <?php else: ?>
+                                                <div class="avatar-icon" style="width: 60px; height: 60px;">
+                                                    <i class="bi bi-cup"></i>
+                                                </div>
                                                 <?php endif; ?>
+                                            </td>
+                                            <td>
                                                 <div>
                                                     <strong><?php echo htmlspecialchars($item['name']); ?></strong>
                                                     <?php if ($item['description']): ?>
-                                                    <div class="text-muted small">
-                                                        <?php echo htmlspecialchars(substr($item['description'], 0, 50)); ?>...
+                                                    <div class="text-muted small" style="font-size: 0.85rem;">
+                                                        <?php echo htmlspecialchars(substr($item['description'], 0, 40)); ?>
+                                                        <?php if (strlen($item['description']) > 40): ?>...<?php endif; ?>
                                                     </div>
                                                     <?php endif; ?>
                                                 </div>
-                                            </div>
-                                        </td>
-                                        <td>
-                                            <span class="badge bg-info"><?php echo htmlspecialchars($item['category']); ?></span>
-                                        </td>
-                                        <td class="fw-bold"><?php echo formatPrice($item['price']); ?></td>
-                                        <td>
-                                            <?php if ($item['is_available']): ?>
-                                            <span class="badge bg-success availability-badge">Available</span>
-                                            <?php else: ?>
-                                            <span class="badge bg-danger availability-badge">Unavailable</span>
-                                            <?php endif; ?>
-                                        </td>
-                                        <td class="text-muted small">
-                                            <?php echo date('M j, Y', strtotime($item['updated_at'])); ?>
-                                        </td>
-                                        <td class="table-actions">
-                                            <button class="btn btn-sm btn-outline-primary"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#editItemModal"
-                                                data-item-id="<?php echo $item['id']; ?>"
-                                                data-item-name="<?php echo htmlspecialchars($item['name']); ?>"
-                                                data-item-description="<?php echo htmlspecialchars($item['description']); ?>"
-                                                data-item-price="<?php echo $item['price']; ?>"
-                                                data-item-category="<?php echo htmlspecialchars($item['category']); ?>"
-                                                data-item-image="<?php echo htmlspecialchars($item['image_url']); ?>"
-                                                data-item-available="<?php echo $item['is_available']; ?>"
-                                                onclick="editItem(this)">
-                                                <i class="bi bi-pencil"></i>
-                                            </button>
-                                            <form method="POST" class="d-inline" onsubmit="return confirm('Delete this item?');">
-                                                <input type="hidden" name="item_id" value="<?php echo $item['id']; ?>">
-                                                <button type="submit" name="delete_item" class="btn btn-sm btn-outline-danger">
-                                                    <i class="bi bi-trash"></i>
+                                            </td>
+                                            <td>
+                                                <span class="badge bg-info"><?php echo htmlspecialchars($item['category']); ?></span>
+                                            </td>
+                                            <td class="fw-bold">$<?php echo number_format($item['price'], 2); ?></td>
+                                            <td>
+                                                <?php if ($item['is_available']): ?>
+                                                <span class="badge bg-success">Available</span>
+                                                <?php else: ?>
+                                                <span class="badge bg-danger">Unavailable</span>
+                                                <?php endif; ?>
+                                            </td>
+                                            <td class="text-muted small">
+                                                <?php echo date('M j, Y', strtotime($item['updated_at'])); ?>
+                                            </td>
+                                            <td class="table-actions">
+                                                <button class="btn btn-sm btn-outline-primary"
+                                                        data-bs-toggle="modal"
+                                                        data-bs-target="#editItemModal"
+                                                        data-item-id="<?php echo $item['id']; ?>"
+                                                        data-item-name="<?php echo htmlspecialchars($item['name']); ?>"
+                                                        data-item-description="<?php echo htmlspecialchars($item['description']); ?>"
+                                                        data-item-price="<?php echo $item['price']; ?>"
+                                                        data-item-category="<?php echo htmlspecialchars($item['category']); ?>"
+                                                        data-item-image="<?php echo htmlspecialchars($item['image_url']); ?>"
+                                                        data-item-available="<?php echo $item['is_available']; ?>"
+                                                        onclick="editItem(this)">
+                                                    <i class="bi bi-pencil"></i>
                                                 </button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                    <?php endforeach; ?>
+                                                <form method="POST" class="d-inline" onsubmit="return confirm('Delete this item?');">
+                                                    <input type="hidden" name="item_id" value="<?php echo $item['id']; ?>">
+                                                    <button type="submit" name="delete_item" class="btn btn-sm btn-outline-danger">
+                                                        <i class="bi bi-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                                        <?php endforeach; ?>
                                     <?php endif; ?>
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
+
     <!-- Add Item Modal -->
     <div class="modal fade" id="addItemModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form method="POST">
                     <div class="modal-header">
-                        <h5 class="modal-title">Add New Menu Item</h5>
+                        <h5 class="modal-title">
+                            <i class="bi bi-plus-circle me-2"></i>Add New Menu Item
+                        </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
@@ -260,7 +322,7 @@ $categories = getMenuCategories($pdo);
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Price (RM) *</label>
-                                <input type="number" class="form-control price-input" name="price" step="0.01" min="0" required>
+                                <input type="number" class="form-control" name="price" step="0.01" min="0" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Category *</label>
@@ -290,6 +352,7 @@ $categories = getMenuCategories($pdo);
             </div>
         </div>
     </div>
+
     <!-- Edit Item Modal -->
     <div class="modal fade" id="editItemModal" tabindex="-1">
         <div class="modal-dialog">
@@ -297,7 +360,9 @@ $categories = getMenuCategories($pdo);
                 <form method="POST">
                     <input type="hidden" name="item_id" id="editItemId">
                     <div class="modal-header">
-                        <h5 class="modal-title">Edit Menu Item</h5>
+                        <h5 class="modal-title">
+                            <i class="bi bi-pencil me-2"></i>Edit Menu Item
+                        </h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                     </div>
                     <div class="modal-body">
@@ -312,7 +377,7 @@ $categories = getMenuCategories($pdo);
                         <div class="row">
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Price (RM) *</label>
-                                <input type="number" class="form-control price-input" name="price" id="editItemPrice" step="0.01" min="0" required>
+                                <input type="number" class="form-control" name="price" id="editItemPrice" step="0.01" min="0" required>
                             </div>
                             <div class="col-md-6 mb-3">
                                 <label class="form-label">Category *</label>
@@ -342,24 +407,26 @@ $categories = getMenuCategories($pdo);
             </div>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        function editItem(button) {
-            const itemId = button.getAttribute('data-item-id');
-            const itemName = button.getAttribute('data-item-name');
-            const itemDescription = button.getAttribute('data-item-description');
-            const itemPrice = button.getAttribute('data-item-price');
-            const itemCategory = button.getAttribute('data-item-category');
-            const itemImage = button.getAttribute('data-item-image');
-            const itemAvailable = button.getAttribute('data-item-available') === '1';
-            document.getElementById('editItemId').value = itemId;
-            document.getElementById('editItemName').value = itemName;
-            document.getElementById('editItemDescription').value = itemDescription;
-            document.getElementById('editItemPrice').value = itemPrice;
-            document.getElementById('editItemCategory').value = itemCategory;
-            document.getElementById('editItemImage').value = itemImage;
-            document.getElementById('editItemAvailable').checked = itemAvailable;
-        }
+    function editItem(button) {
+        const itemId = button.getAttribute('data-item-id');
+        const itemName = button.getAttribute('data-item-name');
+        const itemDescription = button.getAttribute('data-item-description');
+        const itemPrice = button.getAttribute('data-item-price');
+        const itemCategory = button.getAttribute('data-item-category');
+        const itemImage = button.getAttribute('data-item-image');
+        const itemAvailable = button.getAttribute('data-item-available') === '1';
+
+        document.getElementById('editItemId').value = itemId;
+        document.getElementById('editItemName').value = itemName;
+        document.getElementById('editItemDescription').value = itemDescription;
+        document.getElementById('editItemPrice').value = itemPrice;
+        document.getElementById('editItemCategory').value = itemCategory;
+        document.getElementById('editItemImage').value = itemImage;
+        document.getElementById('editItemAvailable').checked = itemAvailable;
+    }
     </script>
 </body>
 </html>
