@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Mar 11, 2026 at 06:09 AM
+-- Host: 127.0.0.1
+-- Generation Time: Mar 11, 2026 at 01:22 PM
 -- Server version: 10.4.32-MariaDB
--- PHP Version: 8.0.30
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `tigaBelasCafe`
+-- Database: `tigabelascafe`
 --
 
 -- --------------------------------------------------------
@@ -27,7 +27,6 @@ SET time_zone = "+00:00";
 -- Table structure for table `carts`
 --
 
-DROP TABLE IF EXISTS `carts`;
 CREATE TABLE `carts` (
   `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
@@ -38,13 +37,21 @@ CREATE TABLE `carts` (
   `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data for table `carts`
+--
+
+INSERT INTO `carts` (`id`, `user_id`, `session_id`, `menu_item_id`, `quantity`, `created_at`, `updated_at`) VALUES
+(34, 60, NULL, 46, 1, '2026-03-11 08:55:14', '2026-03-11 08:55:14'),
+(35, 60, NULL, 42, 1, '2026-03-11 08:55:22', '2026-03-11 08:55:22'),
+(36, 60, NULL, 32, 2, '2026-03-11 08:55:25', '2026-03-11 08:55:29');
+
 -- --------------------------------------------------------
 
 --
 -- Table structure for table `feedbacks`
 --
 
-DROP TABLE IF EXISTS `feedbacks`;
 CREATE TABLE `feedbacks` (
   `id` int(11) NOT NULL,
   `feedback_text` text NOT NULL,
@@ -69,7 +76,6 @@ INSERT INTO `feedbacks` (`id`, `feedback_text`, `rating`, `created_at`, `user_id
 -- Table structure for table `menu_items`
 --
 
-DROP TABLE IF EXISTS `menu_items`;
 CREATE TABLE `menu_items` (
   `id` int(11) NOT NULL,
   `name` varchar(100) NOT NULL,
@@ -101,7 +107,28 @@ INSERT INTO `menu_items` (`id`, `name`, `description`, `price`, `category`, `ima
 (20, 'Sakura Grape Sparkling', 'A light and fizzy refresher with delicate floral notes and sweet grape', 12.00, 'Refreshing', 'https://mocktail.net/wp-content/uploads/2022/05/Homemade-Grape-Soda_1.jpg', 1, '2026-01-22 09:47:29', '2026-01-22 09:47:29'),
 (21, 'Peach Soda', 'A bright, bubbly iced drink bursting with juicy peach flavor', 12.00, 'Refreshing', 'https://img.freepik.com/premium-photo/refreshing-peach-ice-mint-tea-vegan-homemade-cold-summer-drink-tall-glass-orange-background-with-fresh-fruits_185452-6410.jpg?semt=ais_hybrid&w=740&q=80', 1, '2026-01-22 09:49:36', '2026-01-22 09:55:25'),
 (22, 'Mojito', 'A zesty and cooling blend of fresh lime and mint for a sparkling citrus kick', 12.00, 'Refreshing', 'https://www.saveur.com/uploads/2007/02/SAVEUR_Mojito_1149-Edit-scaled.jpg?auto=webp', 1, '2026-01-22 09:52:04', '2026-01-22 09:52:04'),
-(23, 'Earl Grey Tea', 'A classic black tea infused with the distinct citrus aroma of bergamot', 7.00, 'Tea', 'https://weeteacompany.com/wp-content/uploads/2024/11/Vanilla-Earl-Grey-Tea.webp', 1, '2026-01-22 09:53:26', '2026-01-22 09:53:26');
+(23, 'Earl Grey Tea', 'A classic black tea infused with the distinct citrus aroma of bergamot', 7.00, 'Tea', 'https://weeteacompany.com/wp-content/uploads/2024/11/Vanilla-Earl-Grey-Tea.webp', 1, '2026-01-22 09:53:26', '2026-01-22 09:53:26'),
+(26, 'Vietnamese Spanish Latte', 'hybrid coffee drink blending robust, dark-roasted Vietnamese coffee with the creamy sweetness of a Spanish latte', 14.00, 'Coffee', 'https://www.brighteyedbaker.com/wp-content/uploads/2024/03/Iced-Spanish-Latte-Recipe.jpg', 1, '2026-03-11 05:33:45', '2026-03-11 05:33:45'),
+(27, 'Decaf', 'A type of coffee with at least 97% of its caffeine removed. Suitable for light coffee lovers!', 12.00, 'Coffee', 'https://cdn.shopify.com/s/files/1/0530/5145/7703/files/Everything_you_need_to_know_about_decaf_coffee.jpg?v=1638514642', 1, '2026-03-11 05:49:31', '2026-03-11 05:49:31'),
+(28, 'Coconut milk latte', 'A creamy, dairy-free, and lightly sweet drink made by combining espresso or strong brewed coffee with steamed or iced coconut milk', 14.00, 'Coffee', 'https://thecoconutmama.com/wp-content/uploads/2021/06/Coconut-Milk-Coffee-Latte-Blog.png', 1, '2026-03-11 05:52:58', '2026-03-11 05:52:58'),
+(29, 'Oat milk latte', 'A creamy, dairy-free coffee drink made by mixing 1-2 shots of espresso with steamed oat milk', 12.00, 'Coffee', 'https://i0.wp.com/www.yesmooretea.com/wp-content/uploads/2022/03/Honey-Oatmilk-Latte-6.jpg?resize=1100%2C1243&ssl=1', 1, '2026-03-11 05:55:48', '2026-03-11 05:55:48'),
+(30, 'Cookie & Cream milkshakes', 'A luscious, creamy treat blending vanilla cream, milk, ice, and crumbled chocolate sandwich cookies into a thick shake', 16.00, 'Non-Coffee', 'https://thehungrykitchenblog.com/wp-content/uploads/2022/08/Boozy-Cookies-and-Cream-Milkshake-1-2.jpg', 1, '2026-03-11 06:00:24', '2026-03-11 06:00:24'),
+(31, 'Avocado milkshake', 'blending a ripe avocado with milk', 16.00, 'Non-Coffee', 'https://i0.wp.com/live.staticflickr.com/65535/48312184476_80434e85f6_h.jpg?resize=640%2C800&ssl=1', 1, '2026-03-11 06:03:59', '2026-03-11 06:03:59'),
+(32, 'Matcha frappe', 'A blended, icy green tea drink made by mixing matcha powder, milk, sweetener, and ice until smooth, topped with whipped cream', 14.00, 'Non-Coffee', 'https://cornercoffeestore.com/wp-content/uploads/2021/08/matcha-frappe_Atsushi-Hirao_Shutterstock-500x500.jpg', 1, '2026-03-11 06:06:29', '2026-03-11 06:06:29'),
+(33, 'Matcha Strawberry Latte', 'A trending, layered iced beverage combining sweet, fresh strawberry puree with earthy, high-quality whisked matcha and milk', 14.00, 'Non-Coffee', 'https://i.imgur.com/jGHkVNL.jpeg', 1, '2026-03-11 06:08:00', '2026-03-11 06:08:00'),
+(34, 'Hojicha latte', 'A creamy, comforting drink made from Japanese roasted green tea powder (hojicha), hot water, and steamed milk, offering a nutty, earthy, and slightly smoky caramel flavour', 14.00, 'Non-Coffee', 'https://www.justonecookbook.com/wp-content/uploads/2023/09/Iced-Hojicha-Latte-3647-II.jpg', 1, '2026-03-11 06:09:18', '2026-03-11 06:11:57'),
+(35, 'Genmaicha latte', 'A creamy, comforting, and nutty beverage made by mixing brewed or powdered roasted brown rice green tea (Genmaicha) with frothed milk', 14.00, 'Non-Coffee', 'https://snapcalorie-webflow-website.s3.us-east-2.amazonaws.com/media/food_pics_v2/medium/zus_coffee_japanese_genmaicha_latte.jpg', 1, '2026-03-11 06:11:08', '2026-03-11 06:11:08'),
+(36, 'Strawberry banana yoghurt milkshake', 'Blending of frozen bananas and strawberries with Greek yoghurt and vanilla ice cream until smooth and creamy', 16.00, 'Non-Coffee', 'https://gimmedelicious.com/wp-content/uploads/2024/08/Strawberry-Banana-Smoothie-SQ.jpg', 1, '2026-03-11 06:15:58', '2026-03-11 06:15:58'),
+(37, 'Lemonade', 'A refreshing beverage made by mixing fresh lemon juice, syrup, and water', 10.00, 'Refreshing', 'https://images.squarespace-cdn.com/content/v1/5ed13dd3465af021e2c1342b/a5b1e544-ee89-4268-b9af-ab49e9cc7006/IMG_1986+%281%29.jpg', 1, '2026-03-11 06:18:44', '2026-03-11 06:19:22'),
+(38, 'Fresh cherry limenade', 'Tart cherries blended with lime and soda', 12.00, 'Refreshing', 'https://images.squarespace-cdn.com/content/v1/525d98f0e4b0f07bb3deb091/1624895795115-QNQNRUMTN4KP4XSJYVF6/Cherry+Limeade+Gin+and+Tonic', 1, '2026-03-11 06:21:09', '2026-03-11 06:21:09'),
+(39, 'Coconut milkshake', 'A creamy and indulgent coconut milkshake with vanilla ice cream, coconut cream, and coconut milk', 12.00, 'Refreshing', 'https://www.simplystacie.net/wp-content/uploads/2016/07/CoconutCoffeeMilkshakeLoRes-21.jpg', 1, '2026-03-11 06:26:56', '2026-03-11 06:26:56'),
+(40, 'Virgin Colada', 'Pineapple juice, coconut cream, and ice', 14.00, 'Refreshing', 'https://platedcravings.com/wp-content/uploads/2022/06/Virgin-Pina-Colada-Plated-Cravings-9.jpg', 1, '2026-03-11 06:32:06', '2026-03-11 06:32:06'),
+(41, 'Shirley Temple', 'Ginger ale, grenadine, and a maraschino cherry', 14.00, 'Refreshing', 'https://www.sainsburysmagazine.co.uk/media/12445/download/shirley-temple.jpg?v=1', 1, '2026-03-11 06:35:07', '2026-03-11 06:35:07'),
+(42, 'Elderflower Mocktails', 'Combining elderflower cordial with fresh lemon juice and topping with sparkling water over ice, garnished with fresh mint', 12.00, 'Refreshing', 'https://images.squarespace-cdn.com/content/v1/5ff99138a24aef1e5b907732/1624875935102-XDFVHA1C5AZFHGAK5OE2/James-%26-Kerrie-Photography-107.jpg', 1, '2026-03-11 06:37:41', '2026-03-11 06:37:41'),
+(43, 'Oolong tea', 'A partially oxidized tea from China', 10.00, 'Tea', 'https://teashop.com/cdn/shop/files/oolong-salted-caramel.jpg?v=1752218216&width=1000', 1, '2026-03-11 06:40:53', '2026-03-11 06:40:53'),
+(44, 'Rose tea', 'caffeine-free herbal beverage made from rose petals and buds', 10.00, 'Tea', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQo9em1CkNBrNJW3iQ6aoeHobA0F15exBvZp54lTHERfc9RlA7Ucrmz4SPfprCbBkbAAhHLrgIWmXQ7CmlcxuHMeZIMrQlRhjNXiw7J1LdX&s=10', 1, '2026-03-11 06:42:12', '2026-03-11 06:42:12'),
+(45, 'Chamomile tea', 'A popular herbal tea known for its mild, floral flavour and naturally occurring antioxidants', 10.00, 'Tea', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSLQu1p0B_zkrbL7Ub7Ra7Ac7rnFIiVIhVllvvz5N-jsHLd1sso3ljPlq7BV4LlcPdkXueNPRKAyn8NO7i3L7vgne3B22SiP4u3EEHUMPzw&s=10', 1, '2026-03-11 06:43:25', '2026-03-11 06:43:25'),
+(46, 'Chrysanthemum tea', 'a fragrant, caffeine-free herbal drink using dried chrysanthemum flower', 10.00, 'Tea', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRo7M6wFcW6gEURSMeSDssgLOYOCMh4tRO1M41J7w8sEHxi0WlNdxuvprLcHF_wa4fYVrVtx9PxG5Gg8KmX6z2dPVUw9Ciao_hvVgAg3r2q&s=10', 1, '2026-03-11 06:46:04', '2026-03-11 06:46:04');
 
 -- --------------------------------------------------------
 
@@ -109,7 +136,6 @@ INSERT INTO `menu_items` (`id`, `name`, `description`, `price`, `category`, `ima
 -- Table structure for table `orders`
 --
 
-DROP TABLE IF EXISTS `orders`;
 CREATE TABLE `orders` (
   `id` int(11) NOT NULL,
   `user_id` int(11) DEFAULT NULL,
@@ -140,12 +166,7 @@ INSERT INTO `orders` (`id`, `user_id`, `total_amount`, `payment_id`, `status`, `
 (41, 60, 14.00, 'cs_test_a17CbEJ6za02Jy6EpnJYn5F178NVvucWvuFLuOZLY7KZ8JGDrR2LRIUyvF', 'cancelled', '2026-02-11 02:09:18', '2026-02-11 02:09:39', NULL, NULL, NULL),
 (42, 14, 70.00, 'cs_test_b17zv2WfLGD35MJyTjUexPtmQBmyGX2UlwQc00TLPMzfGTCZrVRplHahky', 'pending', '2026-02-22 15:24:39', '2026-02-22 15:24:39', NULL, NULL, NULL),
 (43, 14, 53.00, 'cs_test_b15M2H4ggJjzTd3eVXXScN7cvRATtPOTuGJ48LyM6jJxWxAl2Ao9wTBPKg', 'pending', '2026-02-22 15:26:18', '2026-02-22 15:26:18', NULL, NULL, NULL),
-(44, 15, 173.00, 'cs_test_b1UGP6Shc2CFonoLHbZ6HHJqdrUL55f3OQNa8Ny8cpCM8LAvu4lkNrsHCQ', 'pending', '2026-02-22 15:27:58', '2026-02-22 15:27:58', NULL, NULL, NULL),
-(45, 14, 83.00, 'cs_test_b13nI9pS7DHRYeY6dkh63hyWqwt5YSLFYzMq0UW8NeiKKu39RYpvTjkFhj', 'pending', '2026-02-25 08:46:41', '2026-02-25 08:46:41', NULL, NULL, NULL),
-(46, 14, 72.00, 'cs_test_b1VcuZAKF8grDk98WvfsOlL8QsYhPvRGpH10WQZibv2dN8lz7tF7XA9reR', 'pending', '2026-02-27 12:55:13', '2026-02-27 12:55:13', NULL, NULL, NULL),
-(47, 15, 75.00, 'cs_test_b1kHqiy441PuIEdAxncQReFAw9DxCoKSI8EZ2PnbGTowIPkQniAlYkqJrT', 'pending', '2026-02-27 12:56:14', '2026-02-27 12:56:14', NULL, NULL, NULL),
-(48, 14, 35.00, 'cs_test_b1cg3EHfWtY2tmrvqCmyzzl1ZyG5v4XxTt1PAjiFXJj9jMOvZHJU4uTYSf', 'pending', '2026-03-05 06:07:25', '2026-03-05 06:07:25', NULL, NULL, NULL),
-(50, 15, 73.00, 'cs_test_b1oxM4Y00dyhToHOAX802ID355FDmFM8avVt8TmO1fkWjA8l8fWpI6bK8A', 'pending', '2026-03-08 17:17:36', '2026-03-08 17:17:36', NULL, NULL, NULL);
+(44, 15, 173.00, 'cs_test_b1UGP6Shc2CFonoLHbZ6HHJqdrUL55f3OQNa8Ny8cpCM8LAvu4lkNrsHCQ', 'pending', '2026-02-22 15:27:58', '2026-02-22 15:27:58', NULL, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -153,7 +174,6 @@ INSERT INTO `orders` (`id`, `user_id`, `total_amount`, `payment_id`, `status`, `
 -- Table structure for table `order_items`
 --
 
-DROP TABLE IF EXISTS `order_items`;
 CREATE TABLE `order_items` (
   `id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
@@ -228,32 +248,7 @@ INSERT INTO `order_items` (`id`, `order_id`, `menu_item_id`, `quantity`, `price`
 (80, 44, 13, 1, 13.00),
 (81, 44, 14, 1, 14.00),
 (82, 44, 11, 1, 11.00),
-(83, 44, 10, 1, 10.00),
-(84, 45, 20, 1, 12.00),
-(85, 45, 18, 3, 13.00),
-(86, 45, 3, 1, 11.00),
-(87, 45, 11, 1, 11.00),
-(88, 45, 10, 1, 10.00),
-(89, 46, 5, 1, 7.00),
-(90, 46, 23, 1, 7.00),
-(91, 46, 20, 1, 12.00),
-(92, 46, 17, 1, 13.00),
-(93, 46, 19, 1, 12.00),
-(94, 46, 10, 1, 10.00),
-(95, 46, 11, 1, 11.00),
-(96, 47, 5, 2, 7.00),
-(97, 47, 20, 1, 12.00),
-(98, 47, 18, 1, 13.00),
-(99, 47, 12, 1, 13.00),
-(100, 47, 13, 1, 13.00),
-(101, 47, 10, 1, 10.00),
-(102, 48, 14, 1, 14.00),
-(103, 48, 11, 1, 11.00),
-(104, 48, 10, 1, 10.00),
-(105, 50, 21, 1, 12.00),
-(106, 50, 22, 1, 12.00),
-(107, 50, 13, 3, 13.00),
-(108, 50, 10, 1, 10.00);
+(83, 44, 10, 1, 10.00);
 
 -- --------------------------------------------------------
 
@@ -261,7 +256,6 @@ INSERT INTO `order_items` (`id`, `order_id`, `menu_item_id`, `quantity`, `price`
 -- Table structure for table `order_status_logs`
 --
 
-DROP TABLE IF EXISTS `order_status_logs`;
 CREATE TABLE `order_status_logs` (
   `id` int(11) NOT NULL,
   `order_id` int(11) NOT NULL,
@@ -305,12 +299,7 @@ INSERT INTO `order_status_logs` (`id`, `order_id`, `status`, `notes`, `created_a
 (59, 41, 'cancelled', 'tanak', '2026-02-11 02:09:39'),
 (60, 42, 'pending', 'Order created and payment confirmed', '2026-02-22 15:24:39'),
 (61, 43, 'pending', 'Order created and payment confirmed', '2026-02-22 15:26:18'),
-(62, 44, 'pending', 'Order created and payment confirmed', '2026-02-22 15:27:58'),
-(63, 45, 'pending', 'Order created and payment confirmed', '2026-02-25 08:46:41'),
-(64, 46, 'pending', 'Order created and payment confirmed', '2026-02-27 12:55:13'),
-(65, 47, 'pending', 'Order created and payment confirmed', '2026-02-27 12:56:14'),
-(66, 48, 'pending', 'Order created and payment confirmed', '2026-03-05 06:07:25'),
-(68, 50, 'pending', 'Order created and payment confirmed', '2026-03-08 17:17:36');
+(62, 44, 'pending', 'Order created and payment confirmed', '2026-02-22 15:27:58');
 
 -- --------------------------------------------------------
 
@@ -318,7 +307,6 @@ INSERT INTO `order_status_logs` (`id`, `order_id`, `status`, `notes`, `created_a
 -- Table structure for table `permissions`
 --
 
-DROP TABLE IF EXISTS `permissions`;
 CREATE TABLE `permissions` (
   `id` int(11) NOT NULL,
   `permission_name` varchar(50) NOT NULL
@@ -342,7 +330,6 @@ INSERT INTO `permissions` (`id`, `permission_name`) VALUES
 -- Table structure for table `roles`
 --
 
-DROP TABLE IF EXISTS `roles`;
 CREATE TABLE `roles` (
   `id` int(11) NOT NULL,
   `role_name` varchar(50) NOT NULL
@@ -364,7 +351,6 @@ INSERT INTO `roles` (`id`, `role_name`) VALUES
 -- Table structure for table `role_permissions`
 --
 
-DROP TABLE IF EXISTS `role_permissions`;
 CREATE TABLE `role_permissions` (
   `role_id` int(11) NOT NULL,
   `permission_id` int(11) NOT NULL
@@ -390,7 +376,6 @@ INSERT INTO `role_permissions` (`role_id`, `permission_id`) VALUES
 -- Table structure for table `users`
 --
 
-DROP TABLE IF EXISTS `users`;
 CREATE TABLE `users` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
@@ -414,7 +399,7 @@ INSERT INTO `users` (`id`, `username`, `email`, `password`, `role_id`, `email_ve
 (10, 'admin', 'admin@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_10_1770777506.jpeg', 1, NULL, NULL),
 (11, 'guest', 'guest@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 4, 1, NULL, NULL, NULL, 1, NULL, NULL),
 (12, 'customer', 'customer@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_12_1771774890.jpeg', 1, NULL, NULL),
-(13, 'staff', 'staff@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 2, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_13_1773071948.jpeg', 1, NULL, NULL),
+(13, 'staff', 'staff@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 2, 1, NULL, NULL, NULL, 1, NULL, NULL),
 (14, 'anon', 'anon@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_14_1770732219.jpg', 1, NULL, NULL),
 (15, 'karen', 'karen@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_15_1770737387.jpeg', 1, NULL, NULL),
 (60, 'dan', 'dan@example.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 3, 1, NULL, NULL, 'assets/uploads/profile_pics/profile_60_1770775982.jpeg', 1, NULL, NULL);
@@ -509,7 +494,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=59;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=37;
 
 --
 -- AUTO_INCREMENT for table `feedbacks`
@@ -521,25 +506,25 @@ ALTER TABLE `feedbacks`
 -- AUTO_INCREMENT for table `menu_items`
 --
 ALTER TABLE `menu_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=47;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=45;
 
 --
 -- AUTO_INCREMENT for table `order_items`
 --
 ALTER TABLE `order_items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=109;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
 
 --
 -- AUTO_INCREMENT for table `order_status_logs`
 --
 ALTER TABLE `order_status_logs`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT for table `permissions`
@@ -557,7 +542,7 @@ ALTER TABLE `roles`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=72;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
 
 --
 -- Constraints for dumped tables
