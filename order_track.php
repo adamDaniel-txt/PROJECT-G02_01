@@ -61,7 +61,24 @@ if ($tracking_code) {
       background-position: center;
       background-repeat: no-repeat;
       background-attachment: fixed; 
+      background-color: rgba(0, 0, 0, 0.5);
+      background-blend-mode: multiply;
+    }
 
+    .card {
+        background: #29261F;
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        box-shadow: #6D4C1E;
+    }
+
+    .tracking-card {
+        background: #29261F;
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 30px;
+        box-shadow: #6D4C1E;
     }
     </style>
 </head>
@@ -96,7 +113,7 @@ if ($tracking_code) {
                                required>
                     </div>
                     <div class="col-md-4">
-                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                        <button type="submit" class="btn btn-primary btn-lg w-100" >
                             <i class="bi bi-search me-2"></i>Track Order
                         </button>
                     </div>
@@ -215,7 +232,7 @@ if ($tracking_code) {
             <!-- Active Orders -->
             <?php if (empty($tracking_code) && !empty($active_orders)): ?>
             <div class="mt-5">
-                <h3 class="mb-4">Your Active Orders</h3>
+                <h3 class="mb-4" style="font-weight: bolder; color: rgba(232, 194, 133, 1); font-border:white">Your Active Orders</h3>
                 <div class="row">
                     <?php foreach ($active_orders as $order): ?>
                     <?php

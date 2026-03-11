@@ -36,7 +36,7 @@ $paged_orders = array_slice($orders, $offset, $limit);
     <link href="assets/css/main.css" rel="stylesheet">
 
 <style>
-    body{
+    body,footer{
       background-image:url('assets/img/bg2.jpg');
       background-size: cover;
       background-position: center;
@@ -51,7 +51,7 @@ $paged_orders = array_slice($orders, $offset, $limit);
     border: 1px solid rgba(255, 255, 255, 0.2);
     border-radius: 30px;
     box-shadow: 0 8px 32px 0 rgba(58, 61, 104, 0.1);
-}
+    }
 </style>
 
 </head>
