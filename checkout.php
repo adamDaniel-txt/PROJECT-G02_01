@@ -12,6 +12,12 @@ require __DIR__ . '/assets/vendor/stripe/stripe-php/init.php';
 require 'app/config.php';
 \Stripe\Stripe::setApiKey(STRIPE_SECRET_KEY);
 
+// Check if user is logged in
+if (!isset($_SESSION['user_id'])) {
+    header('Location: login.php?redirect=' . urlencode($_SERVER['REQUEST_URI']));
+    exit();
+}
+
 // URL encode the folder name
 $folder_name = 'MASTER PROJECT - KAFE TIGA BELAS ONLINE ORDERING SYSTEM';
 $encoded_folder = rawurlencode($folder_name);
