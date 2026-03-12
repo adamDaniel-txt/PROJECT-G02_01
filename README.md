@@ -1,4 +1,4 @@
-# Kafe Tiga Belas - Online Ordering System (SPRINT 2)
+# Kafe Tiga Belas - Online Ordering System (SPRINT 3)
 
 ## 🚀 Quick Start
 
