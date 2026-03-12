@@ -6,7 +6,7 @@ session_start();
 if (!empty($_SESSION['flash'])) {
     // Determine the color class (default to 'error' if type isn't set)
     $type = isset($_SESSION['flash_type']) ? $_SESSION['flash_type'] : 'error';
-    
+
     echo '<div class="flash flash-' . htmlspecialchars($type) . '">'.
             htmlspecialchars($_SESSION['flash']).
          '</div>';
@@ -130,6 +130,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="assets/css/main.css">
 
     <style>
@@ -190,12 +191,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 <div class="form-group">
                     <label for="password">Password</label>
-                    <input type="password" class="form-control" name="password" placeholder="Password" required>
+                    <div class="input-group">
+                        <input type="password" class="form-control" name="password" id="passwordInput" placeholder="Password" required>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary toggle-password-btn" type="button" id="togglePassword">
+                                <i class="bi bi-eye" id="toggleIcon"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
                     <label for="confirmPassword">Confirm Password</label>
-                    <input type="password" class="form-control" name="confirm_password" placeholder="Confirm Password" required>
+                    <div class="input-group">
+                        <input type="password" class="form-control" name="confirm_password" id="confirmPasswordInput" placeholder="Confirm Password" required>
+                        <div class="input-group-append">
+                            <button class="btn btn-outline-secondary toggle-password-btn" type="button" id="toggleConfirmPassword">
+                                <i class="bi bi-eye" id="toggleConfirmIcon"></i>
+                            </button>
+                        </div>
+                    </div>
                 </div>
 
                 <button type="submit" class="btn btn-primary btn-block">Sign Up</button>
@@ -207,5 +222,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </section>
     </section>
 </section>
+<script>
+    // Toggle Password Visibility
+    const togglePassword = document.querySelector('#togglePassword');
+    const passwordInput = document.querySelector('#passwordInput');
+    const toggleIcon = document.querySelector('#toggleIcon');
+
+    togglePassword.addEventListener('click', function () {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+
+        if (type === 'password') {
+            toggleIcon.classList.remove('bi-eye-slash');
+            toggleIcon.classList.add('bi-eye');
+        } else {
+            toggleIcon.classList.remove('bi-eye');
+            toggleIcon.classList.add('bi-eye-slash');
+        }
+    });
+
+    // Toggle Confirm Password Visibility
+    const toggleConfirmPassword = document.querySelector('#toggleConfirmPassword');
+    const confirmPasswordInput = document.querySelector('#confirmPasswordInput');
+    const toggleConfirmIcon = document.querySelector('#toggleConfirmIcon');
+
+    toggleConfirmPassword.addEventListener('click', function () {
+        const type = confirmPasswordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        confirmPasswordInput.setAttribute('type', type);
+
+        if (type === 'password') {
+            toggleConfirmIcon.classList.remove('bi-eye-slash');
+            toggleConfirmIcon.classList.add('bi-eye');
+        } else {
+            toggleConfirmIcon.classList.remove('bi-eye');
+            toggleConfirmIcon.classList.add('bi-eye-slash');
+        }
+    });
+</script>
 </body>
 </html>

@@ -63,18 +63,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
-        <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css">
+    <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="assets/css/main.css">
 
-        <style>
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-20px); }
-    to { opacity: 1; transform: translateY(0); }
-}
+    <style>
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-20px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
 
     .flash {
         color: #ffffff; /* White text for better contrast */
@@ -95,40 +96,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         25% { transform: translateX(-5px); }
         75% { transform: translateX(5px); }
     }
-        </style>
-    </head>
+    </style>
+</head>
 
-    <body>
-        <!--Login form starts-->
-        <section class="container-fluid">
-            <!--row justify-content-center is used for centering the login form-->
-            <section class="row justify-content-center">
-                <!--Making the form responsive-->
-                <section class="col-12 col-sm-6 col-md-4">
-                    <form class="form-container" method="POST" action="">
+<body>
+    <!--Login form starts-->
+    <section class="container-fluid">
+        <!--row justify-content-center is used for centering the login form-->
+        <section class="row justify-content-center">
+            <!--Making the form responsive-->
+            <section class="col-12 col-sm-6 col-md-4">
+                <form class="form-container" method="POST" action="">
 
-                        <div class="form-group">
-                            <h4 class="text-center font-weight-bold"> Login </h4>
-                            <label for="username">Username or Email</label>
-                            <input type="text" class="form-control" name="username" placeholder="Enter username or email" required>
+                    <div class="form-group">
+                        <h4 class="text-center font-weight-bold"> Login </h4>
+                        <label for="username">Username or Email</label>
+                        <input type="text" class="form-control" name="username" placeholder="Enter username or email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <div class="input-group">
+                            <input type="password" class="form-control" name="password" id="passwordInput" placeholder="Password" required>
+                            <div class="input-group-append">
+                                <button class="btn btn-outline-secondary" type="button" id="togglePassword">
+                                    <i class="bi bi-eye" id="toggleIcon"></i>
+                                </button>
+                            </div>
                         </div>
+                    </div>
 
-                        <div class="form-group">
-                            <label for="password">Password</label>
-                            <input type="password" class="form-control" name="password" placeholder="Password" required>
-                        </div>
+                    <div class="form-footer text-right mt-3">
+                        <p> <a href="forgot_password.php">Forgot Password?</a></p>
+                    </div>
 
-                        <div class="form-footer text-right mt-3">
-                            <p> <a href="forgot_password.php">Forgot Password?</a></p>
-                        </div>
-
-                        <button type="submit" class="btn btn-primary btn-block">Sign in</button>
-                        <div class="form-footer text-center mt-3">
-                            <p> Don't have an account? <a href="signup.php">Sign Up</a></p>
-                        </div>
-                    </form>
-                </section>
+                    <button type="submit" class="btn btn-primary btn-block">Sign in</button>
+                    <div class="form-footer text-center mt-3">
+                        <p> Don't have an account? <a href="signup.php">Sign Up</a></p>
+                    </div>
+                </form>
             </section>
         </section>
-    </body>
+    </section>
+    <script>
+    const togglePassword = document.querySelector('#togglePassword');
+    const passwordInput = document.querySelector('#passwordInput');
+    const toggleIcon = document.querySelector('#toggleIcon');
+
+    togglePassword.addEventListener('click', function () {
+        // Toggle the type attribute
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+
+        // Toggle the icon
+        if (type === 'password') {
+            toggleIcon.classList.remove('bi-eye-slash');
+            toggleIcon.classList.add('bi-eye');
+        } else {
+            toggleIcon.classList.remove('bi-eye');
+            toggleIcon.classList.add('bi-eye-slash');
+        }
+    });
+    </script>
+</body>
 </html>
